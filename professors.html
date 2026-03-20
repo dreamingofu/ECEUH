@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EE — Professor Ratings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #04050a;
+      --bg2:        #080a12;
+      --panel:      #0d1020;
+      --border:     #1a2040;
+      --border2:    #111830;
+      --blue:       #4d9fff;
+      --blue-dim:   #2a6bcc;
+      --blue-dark:  #080f28;
+      --blue-glow:  0 0 12px #4d9fff88, 0 0 30px #4d9fff30;
+      --blue-glow-lg: 0 0 20px #4d9fffaa, 0 0 60px #4d9fff44, 0 0 120px #4d9fff18;
+      --green:      #00ff41;
+      --green-glow: 0 0 10px #00ff4188;
+      --amber:      #ffb700;
+      --amber-glow: 0 0 10px #ffb70088;
+      --red:        #ff4d4d;
+      --red-glow:   0 0 10px #ff4d4d88;
+      --cyan:       #00ffe7;
+      --text:       #a0b4cc;
+      --text-dim:   #2e3f5a;
+      --text-mid:   #5a7a9a;
+      --glow-sm:    0 0 8px #4d9fff55;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── SCANLINES ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.16) 3px, rgba(0,0,0,0.16) 4px
+      );
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ── BG GLOW ── */
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%,  #4d9fff08 0%, transparent 70%),
+        radial-gradient(ellipse 35% 35% at 5%  50%,  #4d9fff05 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 95% 80%,  #00ffe705 0%, transparent 60%);
+    }
+
+    /* ── GRID ── */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0;
+      opacity: 0.03;
+      background-image:
+        linear-gradient(var(--blue) 1px, transparent 1px),
+        linear-gradient(90deg, var(--blue) 1px, transparent 1px);
+      background-size: 55px 55px;
+      animation: gridDrift 75s linear infinite;
+    }
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 55px 55px; }
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(4,5,10,0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 1.2rem; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .back-btn:hover { color: var(--blue); border-color: #4d9fff40; background: var(--blue-dark); }
+
+    .breadcrumb {
+      font-size: 0.68rem; color: var(--text-dim);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .breadcrumb span { color: var(--blue); }
+
+    .topbar-right {
+      display: flex; align-items: center; gap: 1.5rem;
+      font-size: 0.68rem; color: var(--text-dim);
+    }
+
+    .live { display: flex; align-items: center; gap: 0.4rem; color: var(--blue); }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue); box-shadow: var(--glow-sm);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 5rem 3rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(5rem, 16vw, 16rem);
+      font-weight: 900;
+      color: transparent;
+      -webkit-text-stroke: 1px #4d9fff06;
+      top: 50%; right: -1%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      pointer-events: none; user-select: none;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-inner { max-width: 680px; position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.68rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: inline-block;
+      width: 28px; height: 1px; background: var(--blue-dim);
+    }
+    .hero-eyebrow em { color: var(--blue-dim); font-style: normal; }
+
+    .hero-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 900; line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--blue); text-shadow: var(--blue-glow-lg);
+      margin-bottom: 0.8rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.3s;
+    }
+
+    .hero-title .sub {
+      display: block; font-size: 0.32em;
+      color: var(--text-dim); text-shadow: none;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      font-weight: 400; margin-bottom: 0.5rem;
+    }
+
+    .hero-sub {
+      font-family: 'VT323', monospace;
+      font-size: 1.35rem; color: var(--text-mid);
+      letter-spacing: 0.08em; margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s;
+    }
+
+    .hero-desc {
+      font-size: 0.8rem; line-height: 1.9;
+      color: var(--text-dim); max-width: 520px;
+      opacity: 0; animation: fadeUp 0.6s ease forwards 0.8s;
+    }
+    .hero-desc em { color: var(--text); font-style: normal; }
+
+    /* ── DISCLAIMER BANNER ── */
+    .disclaimer {
+      position: relative; z-index: 1;
+      margin: 0 3rem;
+      padding: 0.8rem 1.4rem;
+      background: #4d9fff08;
+      border: 1px solid #4d9fff20;
+      border-top: none;
+      font-size: 0.7rem; color: var(--text-dim);
+      display: flex; align-items: center; gap: 0.8rem;
+      opacity: 0; animation: fadeUp 0.5s ease forwards 1s;
+    }
+    .disclaimer .icon { color: var(--blue); font-size: 0.9rem; }
+    .disclaimer a { color: var(--blue); text-decoration: none; }
+    .disclaimer a:hover { text-shadow: var(--glow-sm); }
+
+    /* ── WRAPPER ── */
+    .wrapper { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+
+    /* ── SECTION ── */
+    .section { padding: 4.5rem 0; }
+
+    .sec-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .sec-header h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--blue); letter-spacing: 0.2em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .sec-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+    .sec-tag { font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; }
+
+    /* ── SEMESTER LABEL ── */
+    .semester-label-row {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .sem-badge {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim); border-radius: 2px;
+      background: var(--panel);
+    }
+    .sem-badge.active { border-color: #4d9fff30; color: var(--blue); background: #4d9fff08; }
+    .sem-line { flex: 1; height: 1px; background: var(--border2); }
+
+    /* ── PROFESSOR CARDS ── */
+    .prof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .prof-card {
+      background: var(--bg2);
+      padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    /* Corner brackets on hover */
+    .prof-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 0;
+      border-top: 2px solid var(--blue);
+      border-left: 2px solid var(--blue);
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+    .prof-card::after {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 0; height: 0;
+      border-bottom: 2px solid var(--blue);
+      border-right: 2px solid var(--blue);
+      transition: width 0.3s ease, height 0.3s ease;
+      transition-delay: 0.05s;
+    }
+    .prof-card:hover { background: var(--panel); }
+    .prof-card:hover::before,
+    .prof-card:hover::after { width: 32px; height: 32px; }
+
+    /* Avatar initials */
+    .prof-avatar {
+      width: 52px; height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      display: grid; place-items: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem; font-weight: 900;
+      color: var(--blue);
+      background: var(--blue-dark);
+      margin-bottom: 1.2rem;
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    .prof-card:hover .prof-avatar {
+      box-shadow: var(--blue-glow); border-color: #4d9fff50;
+    }
+
+    .prof-course-tag {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.18rem 0.55rem; border-radius: 2px;
+      margin-bottom: 0.6rem;
+    }
+    .tag-dld    { background: #00ff4110; color: var(--green);  border: 1px solid #00ff4125; }
+    .tag-c2     { background: #ffb70010; color: var(--amber);  border: 1px solid #ffb70025; }
+    .tag-cprog  { background: #00ffe710; color: var(--cyan);   border: 1px solid #00ffe725; }
+    .tag-tbd    { background: #ffffff07; color: var(--text-dim); border: 1px solid var(--border); }
+
+    .prof-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem; font-weight: 700;
+      color: var(--text); line-height: 1.2;
+      margin-bottom: 0.3rem;
+      transition: color 0.25s;
+    }
+    .prof-card:hover .prof-name { color: var(--blue); }
+
+    .prof-dept {
+      font-size: 0.7rem; color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── RATING METERS ── */
+    .ratings { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.6rem; }
+
+    .rating-row { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .rating-label-row {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .rating-label {
+      font-size: 0.62rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+    .rating-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.8rem; font-weight: 700;
+    }
+
+    .meter {
+      width: 100%; height: 4px;
+      background: var(--border); border-radius: 2px; overflow: hidden;
+    }
+    .meter-fill {
+      height: 100%; border-radius: 2px;
+      transition: width 1s ease;
+    }
+
+    /* color by score */
+    .fill-high   { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+    .fill-mid    { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
+    .fill-low    { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+    .fill-blue   { background: var(--blue);   box-shadow: 0 0 6px var(--blue); }
+    .fill-none   { background: var(--border2); box-shadow: none; }
+
+    .val-high { color: var(--green); }
+    .val-mid  { color: var(--amber); }
+    .val-low  { color: var(--red); }
+    .val-blue { color: var(--blue); }
+    .val-none { color: var(--text-dim); }
+
+    /* ── CARD FOOTER ── */
+    .prof-footer {
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .rmp-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.68rem; letter-spacing: 0.08em;
+      color: var(--blue); text-decoration: none;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid #4d9fff30;
+      border-radius: 2px;
+      background: #4d9fff08;
+      transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .rmp-link:hover {
+      background: #4d9fff16;
+      box-shadow: var(--glow-sm);
+      border-color: #4d9fff55;
+    }
+    .rmp-link.disabled {
+      color: var(--text-dim); border-color: var(--border);
+      background: transparent; pointer-events: none;
+    }
+
+    .overall-score {
+      display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .overall-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem; font-weight: 900;
+      line-height: 1;
+    }
+    .overall-label {
+      font-size: 0.55rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-top: 0.2rem;
+    }
+
+    /* ── PLACEHOLDER CARD ── */
+    .prof-card.empty {
+      opacity: 0.35; cursor: default;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; min-height: 280px;
+      gap: 0.8rem;
+    }
+    .prof-card.empty:hover { background: var(--bg2); }
+    .prof-card.empty::before,
+    .prof-card.empty::after { display: none; }
+
+    .empty-icon {
+      font-family: 'VT323', monospace;
+      font-size: 3rem; color: var(--text-dim);
+    }
+    .empty-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.72rem; color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+    .empty-sub { font-size: 0.65rem; color: var(--text-dim); }
+
+    /* ── HOW TO UPDATE ── */
+    .guide-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border2);
+      border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden;
+    }
+
+    .guide-card {
+      background: var(--bg2); padding: 1.6rem;
+      transition: background 0.2s;
+    }
+    .guide-card:hover { background: var(--panel); }
+
+    .guide-step {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--blue); text-shadow: var(--glow-sm);
+      margin-bottom: 0.6rem; display: block;
+    }
+    .guide-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.4rem;
+    }
+    .guide-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.65; }
+    .guide-desc code {
+      color: var(--blue); background: #4d9fff10;
+      padding: 0.1rem 0.3rem; border-radius: 2px;
+      font-size: 0.68rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 3rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      font-size: 0.68rem; color: var(--text-dim);
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-shadow: var(--glow-sm); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.d1 { transition-delay: 0.1s; }
+    .reveal.d2 { transition-delay: 0.2s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-dim); }
+
+    @media (max-width: 900px) {
+      .prof-grid, .guide-grid { grid-template-columns: 1fr; }
+      .topbar, .hero, .wrapper, .disclaimer, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="grid-bg"></div>
+
+  <!-- Topbar -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="index.html">← Home</a>
+      <div class="breadcrumb">
+        <span>EE Knowledge Base</span>
+        <span style="color:var(--border);">/</span>
+        <span>Professors</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="live"><span class="live-dot"></span> Spring 2026</span>
+      <span id="clock">--:--:--</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-bg-text">PROF</div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow"><em>Spring 2026</em> · Electrical Engineering · Year 03</p>
+      <h1 class="hero-title">
+        <span class="sub">Directory //</span>
+        Professor<br/>Ratings
+      </h1>
+      <p class="hero-sub">> sourced from RateMyProfessors.com_</p>
+      <p class="hero-desc">
+        Ratings manually sourced from <em>RateMyProfessors</em> for each professor
+        teaching a tracked course this semester. Includes overall rating, difficulty,
+        and would-take-again percentage. Click any card to view their full RMP profile.
+      </p>
+    </div>
+  </header>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <span class="icon">[i]</span>
+    <span>
+      Data sourced manually from
+      <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a>.
+      Ratings reflect community averages and may not represent your personal experience.
+      Updated each semester.
+    </span>
+  </div>
+
+  <div class="wrapper">
+
+    <!-- Current Semester -->
+    <section class="section reveal" id="professors">
+      <div class="sec-header">
+        <h2>// Spring 2026</h2>
+        <div class="sec-line"></div>
+        <span class="sec-tag">01 — CURRENT_SEMESTER</span>
+      </div>
+
+      <div class="semester-label-row">
+        <div class="sem-badge active">Active Semester</div>
+        <div class="sem-line"></div>
+        <span style="font-size:0.65rem; color:var(--text-dim);">3 courses tracked</span>
+      </div>
+
+      <div class="prof-grid">
+
+        <!-- Professor 1 — DLD -->
+        <div class="prof-card">
+          <div class="prof-avatar" id="av1">??</div>
+          <div class="prof-course-tag tag-dld">Digital Logic Design</div>
+          <div class="prof-name" id="name1">Prof. TBD</div>
+          <div class="prof-dept">Electrical Engineering Dept.</div>
+
+          <div class="ratings">
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Overall Rating</span>
+                <span class="rating-val val-none" id="r1-overall">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m1-overall" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Difficulty</span>
+                <span class="rating-val val-none" id="r1-diff">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m1-diff" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Would Take Again</span>
+                <span class="rating-val val-none" id="r1-wta">— %</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m1-wta" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="prof-footer">
+            <a class="rmp-link disabled" id="link1" href="#" target="_blank" rel="noopener">
+              View on RMP ↗
+            </a>
+            <div class="overall-score">
+              <span class="overall-num val-none" id="score1">—</span>
+              <span class="overall-label">/ 5.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professor 2 — Circuits 2 -->
+        <div class="prof-card">
+          <div class="prof-avatar" id="av2">??</div>
+          <div class="prof-course-tag tag-c2">Circuits 2</div>
+          <div class="prof-name" id="name2">Prof. TBD</div>
+          <div class="prof-dept">Electrical Engineering Dept.</div>
+
+          <div class="ratings">
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Overall Rating</span>
+                <span class="rating-val val-none" id="r2-overall">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m2-overall" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Difficulty</span>
+                <span class="rating-val val-none" id="r2-diff">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m2-diff" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Would Take Again</span>
+                <span class="rating-val val-none" id="r2-wta">— %</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m2-wta" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="prof-footer">
+            <a class="rmp-link disabled" id="link2" href="#" target="_blank" rel="noopener">
+              View on RMP ↗
+            </a>
+            <div class="overall-score">
+              <span class="overall-num val-none" id="score2">—</span>
+              <span class="overall-label">/ 5.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professor 3 — C Programming -->
+        <div class="prof-card">
+          <div class="prof-avatar" id="av3">??</div>
+          <div class="prof-course-tag tag-cprog">Programming with C</div>
+          <div class="prof-name" id="name3">Prof. TBD</div>
+          <div class="prof-dept">Computer Science Dept.</div>
+
+          <div class="ratings">
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Overall Rating</span>
+                <span class="rating-val val-none" id="r3-overall">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m3-overall" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Difficulty</span>
+                <span class="rating-val val-none" id="r3-diff">— / 5.0</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m3-diff" style="width:0%"></div></div>
+            </div>
+            <div class="rating-row">
+              <div class="rating-label-row">
+                <span class="rating-label">Would Take Again</span>
+                <span class="rating-val val-none" id="r3-wta">— %</span>
+              </div>
+              <div class="meter"><div class="meter-fill fill-none" id="m3-wta" style="width:0%"></div></div>
+            </div>
+          </div>
+
+          <div class="prof-footer">
+            <a class="rmp-link disabled" id="link3" href="#" target="_blank" rel="noopener">
+              View on RMP ↗
+            </a>
+            <div class="overall-score">
+              <span class="overall-num val-none" id="score3">—</span>
+              <span class="overall-label">/ 5.0</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- How to update -->
+    <section class="section reveal d1" id="guide">
+      <div class="sec-header">
+        <h2>// How to Update</h2>
+        <div class="sec-line"></div>
+        <span class="sec-tag">02 — EDIT_GUIDE</span>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <span class="guide-step">01</span>
+          <div class="guide-title">Find the Professor on RMP</div>
+          <p class="guide-desc">
+            Go to <code>ratemyprofessors.com</code>, search your professor's name and university.
+            Copy their overall rating, difficulty, would-take-again %, and profile URL.
+          </p>
+        </div>
+        <div class="guide-card">
+          <span class="guide-step">02</span>
+          <div class="guide-title">Edit professors.html</div>
+          <p class="guide-desc">
+            Open <code>professors.html</code> in VSCode. Find the
+            <code>PROFESSORS DATA</code> object in the script tag at the bottom
+            and fill in each field for the relevant card.
+          </p>
+        </div>
+        <div class="guide-card">
+          <span class="guide-step">03</span>
+          <div class="guide-title">Push to GitHub</div>
+          <p class="guide-desc">
+            Save the file, then run <code>git add .</code>,
+            <code>git commit -m "update prof ratings"</code>,
+            and <code>git push</code>. Vercel auto-deploys in ~30s.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <span>EE — <a href="professors.html">Professor Ratings</a> · Spring 2026</span>
+    <span>Data from <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a></span>
+    <a href="index.html">← Back to Home</a>
+  </footer>
+
+  <script>
+    // ════════════════════════════════════════════
+    //  PROFESSORS DATA — edit this object to update
+    // ════════════════════════════════════════════
+    const PROFESSORS = {
+      1: {
+        name:       "Prof. TBD",        // e.g. "Dr. Smith"
+        initials:   "??",               // e.g. "DS"
+        course:     "Digital Logic Design",
+        overall:    null,               // e.g. 4.2  (out of 5)
+        difficulty: null,               // e.g. 3.8  (out of 5)
+        wouldTake:  null,               // e.g. 85   (percentage 0–100)
+        rmpUrl:     null,               // e.g. "https://www.ratemyprofessors.com/professor/..."
+      },
+      2: {
+        name:       "Prof. TBD",
+        initials:   "??",
+        course:     "Circuits 2",
+        overall:    null,
+        difficulty: null,
+        wouldTake:  null,
+        rmpUrl:     null,
+      },
+      3: {
+        name:       "Prof. TBD",
+        initials:   "??",
+        course:     "Programming with C",
+        overall:    null,
+        difficulty: null,
+        wouldTake:  null,
+        rmpUrl:     null,
+      },
+    };
+
+    // ── Render logic (no need to edit below) ──
+    function getRatingClass(val, type) {
+      if (val === null) return { color: 'val-none', fill: 'fill-none' };
+      if (type === 'difficulty') {
+        if (val <= 2.5) return { color: 'val-high', fill: 'fill-high' };
+        if (val <= 3.5) return { color: 'val-mid',  fill: 'fill-mid'  };
+        return             { color: 'val-low',  fill: 'fill-low'  };
+      }
+      if (type === 'wta') {
+        if (val >= 75) return { color: 'val-high', fill: 'fill-high' };
+        if (val >= 50) return { color: 'val-mid',  fill: 'fill-mid'  };
+        return           { color: 'val-low',  fill: 'fill-low'  };
+      }
+      // overall
+      if (val >= 4.0) return { color: 'val-high', fill: 'fill-high' };
+      if (val >= 3.0) return { color: 'val-mid',  fill: 'fill-mid'  };
+      return            { color: 'val-low',  fill: 'fill-low'  };
+    }
+
+    function setMeter(meterId, valId, val, max, type, display) {
+      const meter = document.getElementById(meterId);
+      const valEl = document.getElementById(valId);
+      const cls   = getRatingClass(val, type);
+
+      meter.className  = 'meter-fill ' + cls.fill;
+      valEl.className  = 'rating-val ' + cls.color;
+      valEl.textContent = display;
+      meter.style.width = val !== null ? `${(val / max) * 100}%` : '0%';
+    }
+
+    function renderProfessors() {
+      Object.entries(PROFESSORS).forEach(([id, p]) => {
+        const i = id;
+
+        // Name & initials
+        document.getElementById(`name${i}`).textContent = p.name;
+        document.getElementById(`av${i}`).textContent   = p.initials;
+
+        // Overall rating meter
+        setMeter(`m${i}-overall`, `r${i}-overall`,
+          p.overall, 5, 'overall',
+          p.overall !== null ? `${p.overall.toFixed(1)} / 5.0` : '— / 5.0');
+
+        // Difficulty meter
+        setMeter(`m${i}-diff`, `r${i}-diff`,
+          p.difficulty, 5, 'difficulty',
+          p.difficulty !== null ? `${p.difficulty.toFixed(1)} / 5.0` : '— / 5.0');
+
+        // Would take again meter
+        setMeter(`m${i}-wta`, `r${i}-wta`,
+          p.wouldTake, 100, 'wta',
+          p.wouldTake !== null ? `${p.wouldTake}%` : '— %');
+
+        // Overall score badge
+        const scoreEl = document.getElementById(`score${i}`);
+        const oCls    = getRatingClass(p.overall, 'overall');
+        scoreEl.className  = 'overall-num ' + oCls.color;
+        scoreEl.textContent = p.overall !== null ? p.overall.toFixed(1) : '—';
+
+        // RMP link
+        const linkEl = document.getElementById(`link${i}`);
+        if (p.rmpUrl) {
+          linkEl.href      = p.rmpUrl;
+          linkEl.className = 'rmp-link';
+        }
+      });
+    }
+
+    renderProfessors();
+
+    // Clock
+    function tick() {
+      document.getElementById('clock').textContent =
+        new Date().toTimeString().slice(0, 8);
+    }
+    tick(); setInterval(tick, 1000);
+
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
