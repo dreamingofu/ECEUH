@@ -649,6 +649,7 @@
         <span class="live-dot"></span>
         <span>Semester Active</span>
       </span>
+      <a href="professors.html" style="color: #4d9fff; text-decoration: none; font-size: 0.68rem; letter-spacing: 0.05em; transition: text-shadow 0.2s;" onmouseover="this.style.textShadow='0 0 8px #4d9fff88'" onmouseout="this.style.textShadow='none'">Professors ↗</a>
       <span>Year 03</span>
       <span id="clock">--:--:--</span>
     </div>
@@ -685,7 +686,7 @@
   <!-- Divider -->
   <div class="divider reveal">
     <div class="divider-line"></div>
-    <span class="divider-label">// 01 — Current Semester</span>
+    <span class="divider-label">// 01 — Current Semester Courses</span>
     <div class="divider-line"></div>
   </div>
 
@@ -787,8 +788,53 @@
 
     </div>
 
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-label">// 02 — Professor Directory</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Professor Card -->
+  <section class="semester-section reveal reveal-delay-1" style="padding-top: 0;">
+    <div class="semester-header">
+      <div>
+        <div class="semester-label">Spring 2026 · 3 Courses</div>
+        <h2 class="semester-title">Professor <span>Ratings</span></h2>
+      </div>
+      <span class="semester-count">via RateMyProfessors</span>
+    </div>
+
+    <a class="course-card" href="professors.html"
+       style="--card-color: #4d9fff; --card-glow: 0 0 12px #4d9fff88, 0 0 30px #4d9fff30; display: block; border-radius: 6px; border: 1px solid var(--border); text-decoration: none;">
+      <div class="shimmer"></div>
+      <div class="card-top">
+        <div>
+          <div class="card-code">Spring 2026 · All Courses</div>
+          <div class="card-status-pill pill-active" style="background:#4d9fff12; color:#4d9fff; border:1px solid #4d9fff28;">
+            <span class="pill-dot" style="background:#4d9fff;"></span> 3 Professors
+          </div>
+        </div>
+        <div class="card-icon" style="color: #4d9fff;">[★]</div>
+      </div>
+      <h3 class="card-title" style="color: var(--text);">Professor Directory</h3>
+      <p class="card-desc">RateMyProfessors ratings, difficulty scores, and would-take-again percentages for every professor teaching a tracked course this semester.</p>
+      <div class="card-tags">
+        <span class="tag">Digital Logic Design</span>
+        <span class="tag">Circuits 2</span>
+        <span class="tag">Programming with C</span>
+      </div>
+      <div class="card-footer-row">
+        <span class="card-meta">Rating · Difficulty · Would Take Again</span>
+        <span class="card-arrow" style="color: #4d9fff;">→</span>
+      </div>
+    </a>
+
     <!-- Future placeholders row -->
-    <div class="future-row">
+    <div class="future-row" style="margin-top: 1px;">
       <div class="future-card">
         <div class="future-card-left">
           <span class="future-label">Fall 2026</span>
