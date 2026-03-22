@@ -603,6 +603,134 @@
       transform: translateY(0);
     }
 
+    /* ── FILE LIBRARY ── */
+    .file-filters {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    .filter-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s;
+    }
+
+    .filter-btn:hover  { border-color: var(--green); color: var(--green); }
+    .filter-btn.active { border-color: var(--green); color: var(--green); background: var(--green-dark); }
+
+    .file-grid {
+      display: flex; flex-direction: column;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .file-item {
+      background: var(--bg2);
+      padding: 1.4rem 1.8rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.4rem; align-items: center;
+      transition: background 0.2s;
+      position: relative; overflow: hidden;
+    }
+
+    .file-item::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--green);
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform 0.25s ease;
+    }
+
+    .file-item:hover { background: var(--panel); }
+    .file-item:hover::before { transform: scaleY(1); }
+
+    .file-item.hidden { display: none; }
+
+    .file-icon {
+      font-family: 'VT323', monospace;
+      font-size: 1.8rem; line-height: 1;
+      width: 44px; text-align: center;
+    }
+
+    .icon-quiz   { color: var(--green); text-shadow: var(--glow); }
+    .icon-exam   { color: var(--red);   text-shadow: 0 0 8px #ff3c3c80; }
+    .icon-formula{ color: var(--amber); text-shadow: 0 0 8px #ffb70080; }
+
+    .file-info { display: flex; flex-direction: column; gap: 0.35rem; }
+
+    .file-meta-row {
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    }
+
+    .file-type-badge {
+      font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.12rem 0.45rem; border-radius: 2px;
+    }
+
+    .badge-quiz    { background: #00ff4112; color: var(--green); border: 1px solid #00ff4128; }
+    .badge-exam    { background: #ff3c3c12; color: var(--red);   border: 1px solid #ff3c3c28; }
+    .badge-formula { background: #ffb70012; color: var(--amber); border: 1px solid #ffb70028; }
+
+    .file-topic {
+      font-size: 0.6rem; color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .file-name {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.88rem; color: var(--text);
+      transition: color 0.2s;
+    }
+
+    .file-item:hover .file-name { color: var(--green); }
+
+    .file-preview {
+      font-size: 0.72rem; color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .file-preview em { color: var(--text-dim); font-style: normal; }
+
+    .file-actions {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 0.5rem;
+    }
+
+    .file-date {
+      font-size: 0.6rem; color: var(--text-dim);
+      letter-spacing: 0.06em; white-space: nowrap;
+    }
+
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      color: var(--text-dim); text-decoration: none;
+      background: transparent;
+      transition: all 0.2s; white-space: nowrap;
+    }
+
+    .download-btn:hover {
+      border-color: var(--green); color: var(--green);
+      background: var(--green-dark); box-shadow: var(--glow);
+    }
+
+    .download-btn.coming-soon {
+      opacity: 0.4; pointer-events: none; cursor: default;
+    }
+
+    .file-count {
+      font-size: 0.65rem; color: var(--text-dim);
+      margin-left: auto;
+    }
+
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -643,6 +771,7 @@
     <ul class="topbar-nav">
       <li><a href="#topics">Topics</a></li>
       <li><a href="#progress">Progress</a></li>
+      <li><a href="#files">Files</a></li>
       <li><a href="#resources">Resources</a></li>
     </ul>
     <div class="topbar-right">EE_3XX // SPRING_2026</div>
@@ -824,12 +953,183 @@
       </div>
     </section>
 
+    <!-- File Library -->
+    <section class="section reveal" id="files">
+      <div class="section-header">
+        <h2>// File Library</h2>
+        <div class="line"></div>
+        <span class="tag">03 — PRACTICE_FILES</span>
+      </div>
+
+      <!-- Filter buttons -->
+      <div class="file-filters">
+        <button class="filter-btn active" onclick="filterFiles('all', this)">All Files</button>
+        <button class="filter-btn" onclick="filterFiles('quiz', this)">Quizzes</button>
+        <button class="filter-btn" onclick="filterFiles('exam', this)">Exams</button>
+        <button class="filter-btn" onclick="filterFiles('formula', this)">Formula Sheets</button>
+      </div>
+
+      <div class="file-grid" id="file-grid">
+
+        <!-- ─── QUIZZES ─── -->
+        <div class="file-item" data-type="quiz">
+          <div class="file-icon icon-quiz">[Q]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-quiz">Quiz</span>
+              <span class="file-topic">Boolean Algebra · Unit 01</span>
+            </div>
+            <div class="file-name">Quiz 01 — Boolean Algebra & Logic Laws</div>
+            <div class="file-preview">
+              Covers: Boolean identities, De Morgan's theorem, truth table construction, SOP/POS forms.
+              <em>~10 questions · 20 min</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Added Mar 2026</span>
+            <a class="download-btn" href="files/dld/quizzes/quiz-01-boolean-algebra.pdf" download>
+              ↓ Download PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="file-item" data-type="quiz">
+          <div class="file-icon icon-quiz">[Q]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-quiz">Quiz</span>
+              <span class="file-topic">Logic Gates · Unit 02</span>
+            </div>
+            <div class="file-name">Quiz 02 — Logic Gates & Two-Level Logic</div>
+            <div class="file-preview">
+              Covers: AND/OR/NOT/NAND/NOR/XOR gates, gate equivalence, two-level circuit simplification.
+              <em>~8 questions · 15 min</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Added Mar 2026</span>
+            <a class="download-btn coming-soon" href="#" download>
+              ↓ Coming Soon
+            </a>
+          </div>
+        </div>
+
+        <div class="file-item" data-type="quiz">
+          <div class="file-icon icon-quiz">[Q]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-quiz">Quiz</span>
+              <span class="file-topic">K-Maps · Unit 04</span>
+            </div>
+            <div class="file-name">Quiz 03 — Karnaugh Map Minimization</div>
+            <div class="file-preview">
+              Covers: 2/3/4-variable K-maps, prime implicants, essential prime implicants, don't-care conditions.
+              <em>~12 questions · 25 min</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Coming soon</span>
+            <a class="download-btn coming-soon" href="#" download>
+              ↓ Coming Soon
+            </a>
+          </div>
+        </div>
+
+        <!-- ─── EXAMS ─── -->
+        <div class="file-item" data-type="exam">
+          <div class="file-icon icon-exam">[E]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-exam">Exam</span>
+              <span class="file-topic">Units 01–04 · Midterm</span>
+            </div>
+            <div class="file-name">Midterm 01 — Practice Exam</div>
+            <div class="file-preview">
+              Full practice midterm covering Boolean algebra, logic gates, combinational logic, and K-maps.
+              <em>~25 questions · 75 min · with answer key</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Coming soon</span>
+            <a class="download-btn coming-soon" href="#" download>
+              ↓ Coming Soon
+            </a>
+          </div>
+        </div>
+
+        <div class="file-item" data-type="exam">
+          <div class="file-icon icon-exam">[E]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-exam">Exam</span>
+              <span class="file-topic">Units 01–02 · Past Exam</span>
+            </div>
+            <div class="file-name">Past Exam — Fall 2025 Midterm</div>
+            <div class="file-preview">
+              Real past exam from Fall 2025. Boolean algebra heavy, includes circuit diagram analysis questions.
+              <em>~20 questions · 60 min</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Added Mar 2026</span>
+            <a class="download-btn" href="files/dld/exams/midterm-fall2025.pdf" download>
+              ↓ Download PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- ─── FORMULA SHEETS ─── -->
+        <div class="file-item" data-type="formula">
+          <div class="file-icon icon-formula">[∑]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-formula">Formula Sheet</span>
+              <span class="file-topic">All Units · Master Reference</span>
+            </div>
+            <div class="file-name">DLD Master Formula Sheet</div>
+            <div class="file-preview">
+              Boolean identities, gate truth tables, K-map rules, flip-flop excitation tables, FSM notation.
+              <em>2 pages · print-friendly</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Added Mar 2026</span>
+            <a class="download-btn" href="files/dld/formula-sheets/dld-master-formula-sheet.pdf" download>
+              ↓ Download PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="file-item" data-type="formula">
+          <div class="file-icon icon-formula">[∑]</div>
+          <div class="file-info">
+            <div class="file-meta-row">
+              <span class="file-type-badge badge-formula">Formula Sheet</span>
+              <span class="file-topic">K-Maps · Unit 04</span>
+            </div>
+            <div class="file-name">K-Map Quick Reference Card</div>
+            <div class="file-preview">
+              2/3/4-variable K-map templates, grouping rules, prime implicant checklist, SOP/POS extraction steps.
+              <em>1 page · print-friendly</em>
+            </div>
+          </div>
+          <div class="file-actions">
+            <span class="file-date">Coming soon</span>
+            <a class="download-btn coming-soon" href="#" download>
+              ↓ Coming Soon
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- Resources -->
     <section class="section reveal" id="resources">
       <div class="section-header">
         <h2>// Resources</h2>
         <div class="line"></div>
-        <span class="tag">03 — REFERENCE_MATERIAL</span>
+        <span class="tag">04 — REFERENCE_MATERIAL</span>
       </div>
 
       <div class="resources">
@@ -878,6 +1178,16 @@
   </footer>
 
   <script>
+    // File filter
+    function filterFiles(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.file-item').forEach(item => {
+        const show = type === 'all' || item.dataset.type === type;
+        item.classList.toggle('hidden', !show);
+      });
+    }
+
     // Clock
     function updateClock() {
       const now = new Date();
