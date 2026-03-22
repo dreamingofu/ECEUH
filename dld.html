@@ -23,6 +23,43 @@
       --glow-lg:   0 0 16px #00ff4199, 0 0 40px #00ff4150, 0 0 80px #00ff4120;
     }
 
+    /* ── LIGHT MODE OVERRIDES ── */
+    html.light {
+      --bg:        #f0f5f0;
+      --bg2:       #e8ede8;
+      --panel:     #dde5dd;
+      --border:    #a0c0a0;
+      --green:     #007a1f;
+      --green-dim: #006018;
+      --green-dark:#c8e8c8;
+      --amber:     #8a6000;
+      --red:       #cc2020;
+      --cyan:      #006860;
+      --text:      #1a2e1a;
+      --text-dim:  #4a6b4a;
+      --glow:      none;
+      --glow-lg:   none;
+    }
+
+    html.light body::before  { display: none; }
+    html.light body::after   { display: none; }
+    html.light .circuit-bg   { opacity: 0.06; }
+    html.light .circuit-traces { display: none; }
+    html.light .topbar { background: rgba(240,245,240,0.96); }
+    html.light .card   { background: var(--bg2); }
+    html.light .card:hover { background: var(--panel); }
+    html.light .topbar-left .dot { box-shadow: none; }
+
+    .theme-toggle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; }
@@ -774,7 +811,10 @@
       <li><a href="#files">Files</a></li>
       <li><a href="#resources">Resources</a></li>
     </ul>
-    <div class="topbar-right">EE_3XX // SPRING_2026</div>
+    <div class="topbar-right">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+      EE_3XX // SPRING_2026
+    </div>
   </nav>
 
   <!-- Hero -->
@@ -1187,6 +1227,24 @@
         item.classList.toggle('hidden', !show);
       });
     }
+
+    // Theme toggle
+    const btn = document.getElementById('theme-toggle');
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.classList.add('light');
+        btn.textContent = '● Dark';
+      } else {
+        document.documentElement.classList.remove('light');
+        btn.textContent = '☀ Light';
+      }
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next);
+      applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
 
     // Clock
     function updateClock() {
