@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EE — Digital Logic Design</title>
@@ -60,6 +59,16 @@
       cursor: pointer; transition: all 0.2s;
     }
     .theme-toggle:hover { border-color: var(--green); color: var(--green); }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-dark); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -956,8 +965,10 @@
   <!-- Top bar -->
   <nav class="topbar">
     <div class="topbar-left">
+      <a class="back-btn" href="index.html">← Home</a>
+      <span style="color: var(--border);">|</span>
       <span class="dot"></span>
-      <span>SYS_ONLINE</span>
+      <span style="font-size:0.7rem; color:var(--text-dim);">Digital Logic Design</span>
       <span style="color: var(--border);">|</span>
       <span id="clock">--:--:--</span>
     </div>
@@ -1179,7 +1190,7 @@
               <div class="file-name">Quiz 01 — Boolean Algebra & Logic Laws</div>
               <div class="file-preview">
                 Covers: Boolean identities, De Morgan's theorem, truth table construction, SOP/POS forms.
-                <em>~4 questions · 40 min</em>
+                <em>~10 questions · 20 min</em>
               </div>
             </div>
             <div class="file-actions">
@@ -1188,9 +1199,9 @@
                 <span class="version-count">3 versions available</span>
                 <div class="version-select-row">
                   <select class="version-select" id="q01-select" onchange="updatePreview('q01')">
-                    <option value="files/dld/quizzes/Quiz1.V1_DLD_Practice.pdf">Version A</option>
-                    <option value="files/dld/quizzes/Quiz1.V2_DLD_Practice.pdf">Version B</option>
-                    <option value="files/dld/quizzes/Quiz1.V3_DLD_Practice.pdf">Version C</option>
+                    <option value="files/dld/quizzes/quiz-01-v1.pdf">Version A</option>
+                    <option value="files/dld/quizzes/quiz-01-v2.pdf">Version B</option>
+                    <option value="files/dld/quizzes/quiz-01-v3.pdf">Version C</option>
                   </select>
                   <a class="preview-action-btn" onclick="togglePreview('q01')" href="#">⊞ Preview</a>
                   <a class="version-download" onclick="downloadVersion('q01-select')" href="#">↓ Get</a>
@@ -1325,7 +1336,7 @@
             </div>
             <div class="file-actions">
               <span class="file-date">Added Mar 2026</span>
-              <a class="download-btn" href="files/dld/formula sheet/ECE3441_Quiz_CribSheet.pdf" download>↓ Download PDF</a>
+              <a class="download-btn" href="files/dld/formula-sheets/dld-master-formula-sheet.pdf" download>↓ Download PDF</a>
             </div>
           </div>
         </div>
