@@ -667,12 +667,16 @@
 
     .file-item {
       background: var(--bg2);
+      display: flex; flex-direction: column;
+      transition: background 0.2s;
+      position: relative; overflow: hidden;
+    }
+
+    .file-item-inner {
       padding: 1.4rem 1.8rem;
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 1.4rem; align-items: center;
-      transition: background 0.2s;
-      position: relative; overflow: hidden;
     }
 
     .file-item::before {
@@ -681,6 +685,7 @@
       width: 2px; background: var(--green);
       transform: scaleY(0); transform-origin: bottom;
       transition: transform 0.25s ease;
+      z-index: 1;
     }
 
     .file-item:hover { background: var(--panel); }
@@ -761,6 +766,156 @@
 
     .download-btn.coming-soon {
       opacity: 0.4; pointer-events: none; cursor: default;
+    }
+
+    /* ── VERSION DROPDOWN ── */
+    .version-wrapper {
+      position: relative; display: inline-flex; flex-direction: column;
+      align-items: flex-end; gap: 0.3rem;
+    }
+
+    .version-count {
+      font-size: 0.58rem; color: var(--text-dim);
+      letter-spacing: 0.1em; text-align: right;
+    }
+
+    .version-select-row {
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    .version-select {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.06em;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      background: var(--bg); color: var(--text-dim);
+      cursor: pointer; transition: border-color 0.2s, color 0.2s;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%234a6b4a'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.4rem center;
+      padding-right: 1.4rem;
+    }
+
+    .version-select:hover, .version-select:focus {
+      border-color: var(--green); color: var(--green); outline: none;
+    }
+
+    html.light .version-select { background-color: var(--bg2); }
+
+    .version-download {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      color: var(--text-dim); text-decoration: none;
+      background: transparent; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+
+    .version-download:hover {
+      border-color: var(--green); color: var(--green);
+      background: var(--green-dark); box-shadow: var(--glow);
+    }
+
+    /* ── PDF PREVIEW PANEL ── */
+    .preview-panel {
+      display: none;
+      flex-direction: column;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .preview-panel.open { display: flex; }
+
+    .preview-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+      flex-wrap: wrap; gap: 0.6rem;
+    }
+
+    .preview-toolbar-left {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.65rem; color: var(--text-dim);
+    }
+
+    .preview-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green);
+    }
+
+    .preview-toolbar-right {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .preview-action-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border: 1px solid var(--border); border-radius: 2px;
+      color: var(--text-dim); text-decoration: none;
+      background: transparent; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+
+    .preview-action-btn:hover {
+      border-color: var(--green); color: var(--green);
+      background: var(--green-dark);
+    }
+
+    .preview-action-btn.close-btn:hover {
+      border-color: var(--red); color: var(--red);
+      background: #ff3c3c10;
+    }
+
+    .preview-iframe-wrap {
+      position: relative;
+      width: 100%; height: 520px;
+      background: var(--bg2);
+    }
+
+    .preview-iframe-wrap iframe {
+      width: 100%; height: 100%;
+      border: none; display: block;
+    }
+
+    .preview-fallback {
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem; height: 100%;
+      font-size: 0.78rem; color: var(--text-dim); text-align: center;
+      padding: 2rem;
+    }
+
+    .preview-fallback.visible { display: flex; }
+
+    .preview-fallback-icon {
+      font-family: 'VT323', monospace;
+      font-size: 3rem; color: var(--text-dim);
+    }
+
+    .preview-fallback p { max-width: 320px; line-height: 1.7; }
+
+    .preview-resize-handle {
+      height: 6px; width: 100%;
+      background: var(--border2);
+      cursor: ns-resize;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .preview-resize-handle:hover { background: var(--green-dark); }
+
+    .preview-resize-handle::after {
+      content: '· · ·';
+      font-size: 0.5rem; color: var(--text-dim);
+      letter-spacing: 0.3em;
     }
 
     .file-count {
@@ -1013,151 +1168,185 @@
 
         <!-- ─── QUIZZES ─── -->
         <div class="file-item" data-type="quiz">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-quiz">Quiz</span>
-              <span class="file-topic">Boolean Algebra · Unit 01</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-quiz">[Q]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-quiz">Quiz</span>
+                <span class="file-topic">Boolean Algebra · Unit 01</span>
+              </div>
+              <div class="file-name">Quiz 01 — Boolean Algebra & Logic Laws</div>
+              <div class="file-preview">
+                Covers: Boolean identities, De Morgan's theorem, truth table construction, SOP/POS forms.
+                <em>~10 questions · 20 min</em>
+              </div>
             </div>
-            <div class="file-name">Quiz 01 — Boolean Algebra & Logic Laws</div>
-            <div class="file-preview">
-              Covers: Boolean identities, De Morgan's theorem, truth table construction, SOP/POS forms.
-              <em>~10 questions · 20 min</em>
+            <div class="file-actions">
+              <span class="file-date">Added Mar 2026</span>
+              <div class="version-wrapper">
+                <span class="version-count">3 versions available</span>
+                <div class="version-select-row">
+                  <select class="version-select" id="q01-select" onchange="updatePreview('q01')">
+                    <option value="files/dld/quizzes/quiz-01-v1.pdf">Version A</option>
+                    <option value="files/dld/quizzes/quiz-01-v2.pdf">Version B</option>
+                    <option value="files/dld/quizzes/quiz-01-v3.pdf">Version C</option>
+                  </select>
+                  <a class="preview-action-btn" onclick="togglePreview('q01')" href="#">⊞ Preview</a>
+                  <a class="version-download" onclick="downloadVersion('q01-select')" href="#">↓ Get</a>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="file-actions">
-            <span class="file-date">Added Mar 2026</span>
-            <a class="download-btn" href="files/dld/quizzes/quiz-01-boolean-algebra.pdf" download>
-              ↓ Download PDF
-            </a>
+          <!-- Preview panel -->
+          <div class="preview-panel" id="q01-panel">
+            <div class="preview-toolbar">
+              <div class="preview-toolbar-left">
+                <span class="preview-label">Preview</span>
+                <span id="q01-preview-label">Version A — quiz-01-v1.pdf</span>
+              </div>
+              <div class="preview-toolbar-right">
+                <a class="preview-action-btn" id="q01-newtab" href="files/dld/quizzes/quiz-01-v1.pdf" target="_blank" rel="noopener">↗ Open in Tab</a>
+                <a class="preview-action-btn" onclick="downloadVersion('q01-select')" href="#">↓ Download</a>
+                <button class="preview-action-btn close-btn" onclick="togglePreview('q01')">✕ Close</button>
+              </div>
+            </div>
+            <div class="preview-iframe-wrap" id="q01-iframe-wrap">
+              <iframe id="q01-iframe" src="" title="PDF Preview"></iframe>
+              <div class="preview-fallback" id="q01-fallback">
+                <div class="preview-fallback-icon">[PDF]</div>
+                <p>Your browser blocked the inline preview. Use the buttons above to open in a new tab or download directly.</p>
+                <a class="preview-action-btn" id="q01-fallback-tab" href="files/dld/quizzes/quiz-01-v1.pdf" target="_blank">↗ Open in New Tab</a>
+              </div>
+            </div>
+            <div class="preview-resize-handle" id="q01-handle"></div>
           </div>
         </div>
 
         <div class="file-item" data-type="quiz">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-quiz">Quiz</span>
-              <span class="file-topic">Logic Gates · Unit 02</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-quiz">[Q]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-quiz">Quiz</span>
+                <span class="file-topic">Logic Gates · Unit 02</span>
+              </div>
+              <div class="file-name">Quiz 02 — Logic Gates & Two-Level Logic</div>
+              <div class="file-preview">
+                Covers: AND/OR/NOT/NAND/NOR/XOR gates, gate equivalence, two-level circuit simplification.
+                <em>~8 questions · 15 min</em>
+              </div>
             </div>
-            <div class="file-name">Quiz 02 — Logic Gates & Two-Level Logic</div>
-            <div class="file-preview">
-              Covers: AND/OR/NOT/NAND/NOR/XOR gates, gate equivalence, two-level circuit simplification.
-              <em>~8 questions · 15 min</em>
+            <div class="file-actions">
+              <span class="file-date">Added Mar 2026</span>
+              <a class="download-btn coming-soon" href="#" download>↓ Coming Soon</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Added Mar 2026</span>
-            <a class="download-btn coming-soon" href="#" download>
-              ↓ Coming Soon
-            </a>
           </div>
         </div>
 
         <div class="file-item" data-type="quiz">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-quiz">Quiz</span>
-              <span class="file-topic">K-Maps · Unit 04</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-quiz">[Q]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-quiz">Quiz</span>
+                <span class="file-topic">K-Maps · Unit 04</span>
+              </div>
+              <div class="file-name">Quiz 03 — Karnaugh Map Minimization</div>
+              <div class="file-preview">
+                Covers: 2/3/4-variable K-maps, prime implicants, essential prime implicants, don't-care conditions.
+                <em>~12 questions · 25 min</em>
+              </div>
             </div>
-            <div class="file-name">Quiz 03 — Karnaugh Map Minimization</div>
-            <div class="file-preview">
-              Covers: 2/3/4-variable K-maps, prime implicants, essential prime implicants, don't-care conditions.
-              <em>~12 questions · 25 min</em>
+            <div class="file-actions">
+              <span class="file-date">Coming soon</span>
+              <a class="download-btn coming-soon" href="#" download>↓ Coming Soon</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Coming soon</span>
-            <a class="download-btn coming-soon" href="#" download>
-              ↓ Coming Soon
-            </a>
           </div>
         </div>
 
         <!-- ─── EXAMS ─── -->
         <div class="file-item" data-type="exam">
-          <div class="file-icon icon-exam">[E]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-exam">Exam</span>
-              <span class="file-topic">Units 01–04 · Midterm</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-exam">[E]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-exam">Exam</span>
+                <span class="file-topic">Units 01–04 · Midterm</span>
+              </div>
+              <div class="file-name">Midterm 01 — Practice Exam</div>
+              <div class="file-preview">
+                Full practice midterm covering Boolean algebra, logic gates, combinational logic, and K-maps.
+                <em>~25 questions · 75 min · with answer key</em>
+              </div>
             </div>
-            <div class="file-name">Midterm 01 — Practice Exam</div>
-            <div class="file-preview">
-              Full practice midterm covering Boolean algebra, logic gates, combinational logic, and K-maps.
-              <em>~25 questions · 75 min · with answer key</em>
+            <div class="file-actions">
+              <span class="file-date">Coming soon</span>
+              <a class="download-btn coming-soon" href="#" download>↓ Coming Soon</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Coming soon</span>
-            <a class="download-btn coming-soon" href="#" download>
-              ↓ Coming Soon
-            </a>
           </div>
         </div>
 
         <div class="file-item" data-type="exam">
-          <div class="file-icon icon-exam">[E]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-exam">Exam</span>
-              <span class="file-topic">Units 01–02 · Past Exam</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-exam">[E]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-exam">Exam</span>
+                <span class="file-topic">Units 01–02 · Past Exam</span>
+              </div>
+              <div class="file-name">Past Exam — Fall 2025 Midterm</div>
+              <div class="file-preview">
+                Real past exam from Fall 2025. Boolean algebra heavy, includes circuit diagram analysis questions.
+                <em>~20 questions · 60 min</em>
+              </div>
             </div>
-            <div class="file-name">Past Exam — Fall 2025 Midterm</div>
-            <div class="file-preview">
-              Real past exam from Fall 2025. Boolean algebra heavy, includes circuit diagram analysis questions.
-              <em>~20 questions · 60 min</em>
+            <div class="file-actions">
+              <span class="file-date">Added Mar 2026</span>
+              <a class="download-btn" href="files/dld/exams/midterm-fall2025.pdf" download>↓ Download PDF</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Added Mar 2026</span>
-            <a class="download-btn" href="files/dld/exams/midterm-fall2025.pdf" download>
-              ↓ Download PDF
-            </a>
           </div>
         </div>
 
         <!-- ─── FORMULA SHEETS ─── -->
         <div class="file-item" data-type="formula">
-          <div class="file-icon icon-formula">[∑]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-formula">Formula Sheet</span>
-              <span class="file-topic">All Units · Master Reference</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-formula">[∑]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-formula">Formula Sheet</span>
+                <span class="file-topic">All Units · Master Reference</span>
+              </div>
+              <div class="file-name">DLD Master Formula Sheet</div>
+              <div class="file-preview">
+                Boolean identities, gate truth tables, K-map rules, flip-flop excitation tables, FSM notation.
+                <em>2 pages · print-friendly</em>
+              </div>
             </div>
-            <div class="file-name">DLD Master Formula Sheet</div>
-            <div class="file-preview">
-              Boolean identities, gate truth tables, K-map rules, flip-flop excitation tables, FSM notation.
-              <em>2 pages · print-friendly</em>
+            <div class="file-actions">
+              <span class="file-date">Added Mar 2026</span>
+              <a class="download-btn" href="files/dld/formula-sheets/dld-master-formula-sheet.pdf" download>↓ Download PDF</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Added Mar 2026</span>
-            <a class="download-btn" href="files/dld/formula-sheets/dld-master-formula-sheet.pdf" download>
-              ↓ Download PDF
-            </a>
           </div>
         </div>
 
         <div class="file-item" data-type="formula">
-          <div class="file-icon icon-formula">[∑]</div>
-          <div class="file-info">
-            <div class="file-meta-row">
-              <span class="file-type-badge badge-formula">Formula Sheet</span>
-              <span class="file-topic">K-Maps · Unit 04</span>
+          <div class="file-item-inner">
+            <div class="file-icon icon-formula">[∑]</div>
+            <div class="file-info">
+              <div class="file-meta-row">
+                <span class="file-type-badge badge-formula">Formula Sheet</span>
+                <span class="file-topic">K-Maps · Unit 04</span>
+              </div>
+              <div class="file-name">K-Map Quick Reference Card</div>
+              <div class="file-preview">
+                2/3/4-variable K-map templates, grouping rules, prime implicant checklist, SOP/POS extraction steps.
+                <em>1 page · print-friendly</em>
+              </div>
             </div>
-            <div class="file-name">K-Map Quick Reference Card</div>
-            <div class="file-preview">
-              2/3/4-variable K-map templates, grouping rules, prime implicant checklist, SOP/POS extraction steps.
-              <em>1 page · print-friendly</em>
+            <div class="file-actions">
+              <span class="file-date">Coming soon</span>
+              <a class="download-btn coming-soon" href="#" download>↓ Coming Soon</a>
             </div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Coming soon</span>
-            <a class="download-btn coming-soon" href="#" download>
-              ↓ Coming Soon
-            </a>
           </div>
         </div>
 
@@ -1218,6 +1407,110 @@
   </footer>
 
   <script>
+    // Version dropdown download
+    function downloadVersion(selectId) {
+      const sel = document.getElementById(selectId);
+      if (!sel) return;
+      const url = sel.value;
+      const a = document.createElement('a');
+      a.href = url; a.download = url.split('/').pop(); a.click();
+    }
+
+    // Toggle inline preview panel
+    function togglePreview(id) {
+      const panel  = document.getElementById(`${id}-panel`);
+      const iframe = document.getElementById(`${id}-iframe`);
+      const isOpen = panel.classList.contains('open');
+
+      if (isOpen) {
+        panel.classList.remove('open');
+        iframe.src = ''; // unload to stop rendering
+        return;
+      }
+
+      // Open and load the selected version
+      panel.classList.add('open');
+      loadPreview(id);
+
+      // Smooth scroll so panel is visible
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
+
+    // Load selected version into preview iframe
+    function loadPreview(id) {
+      const sel      = document.getElementById(`${id}-select`);
+      const iframe   = document.getElementById(`${id}-iframe`);
+      const fallback = document.getElementById(`${id}-fallback`);
+      const label    = document.getElementById(`${id}-preview-label`);
+      const newtab   = document.getElementById(`${id}-newtab`);
+      const ftab     = document.getElementById(`${id}-fallback-tab`);
+      if (!sel || !iframe) return;
+
+      const url      = sel.value;
+      const filename = url.split('/').pop();
+      const version  = sel.options[sel.selectedIndex].text;
+
+      // Update label and new-tab links
+      if (label)  label.textContent  = `${version} — ${filename}`;
+      if (newtab) newtab.href        = url;
+      if (ftab)   ftab.href          = url;
+
+      // Try loading iframe; show fallback if blocked
+      iframe.style.display = 'block';
+      fallback.classList.remove('visible');
+      iframe.src = url;
+
+      iframe.onerror = () => {
+        iframe.style.display = 'none';
+        fallback.classList.add('visible');
+      };
+
+      // Fallback timeout — some browsers don't fire onerror for PDFs
+      setTimeout(() => {
+        try {
+          if (!iframe.contentDocument && !iframe.contentWindow?.document) {
+            iframe.style.display = 'none';
+            fallback.classList.add('visible');
+          }
+        } catch(e) {
+          // cross-origin — likely loaded fine, do nothing
+        }
+      }, 3000);
+    }
+
+    // Update preview when dropdown changes (if panel is already open)
+    function updatePreview(id) {
+      const panel = document.getElementById(`${id}-panel`);
+      if (panel && panel.classList.contains('open')) loadPreview(id);
+    }
+
+    // Resizable preview panel
+    document.querySelectorAll('.preview-resize-handle').forEach(handle => {
+      const panelId = handle.id.replace('-handle', '-iframe-wrap');
+      const wrap    = document.getElementById(panelId);
+      if (!wrap) return;
+
+      let startY, startH;
+
+      handle.addEventListener('mousedown', e => {
+        startY = e.clientY;
+        startH = wrap.offsetHeight;
+        document.body.style.userSelect = 'none';
+
+        const onMove = ev => {
+          const newH = Math.max(200, Math.min(900, startH + (ev.clientY - startY)));
+          wrap.style.height = newH + 'px';
+        };
+        const onUp = () => {
+          document.body.style.userSelect = '';
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    });
+
     // File filter
     function filterFiles(type, btn) {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
