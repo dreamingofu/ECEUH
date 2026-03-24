@@ -43,6 +43,22 @@
       cursor: crosshair;
     }
 
+    /* ── LIGHT MODE ── */
+    html.light {
+      --bg: #f0f2f8; --bg2: #e8eaf2; --panel: #dde0ee;
+      --border: #a0aad0; --border2: #b8c0dc;
+      --blue: #1a4fcc; --blue-dim: #0e3399; --blue-dark: #d8e0f8;
+      --blue-glow: none; --blue-glow-lg: none;
+      --green: #007a1f; --amber: #8a6000; --red: #cc2020;
+      --text: #0a1428; --text-dim: #3a4a6a; --text-mid: #2a3a5a;
+      --glow-sm: none;
+    }
+    html.light body::before { display: none; }
+    html.light .bg-glow     { display: none; }
+    html.light .grid-bg     { opacity: 0.05; }
+    html.light .topbar      { background: rgba(240,242,248,0.96); }
+    html.light .live-dot    { box-shadow: none; }
+
     /* ── SCANLINES ── */
     body::before {
       content: '';
@@ -55,7 +71,6 @@
       pointer-events: none; z-index: 9999;
     }
 
-    /* ── BG GLOW ── */
     .bg-glow {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
@@ -64,20 +79,15 @@
         radial-gradient(ellipse 30% 30% at 95% 80%,  #00ffe705 0%, transparent 60%);
     }
 
-    /* ── GRID ── */
     .grid-bg {
-      position: fixed; inset: 0; z-index: 0;
-      opacity: 0.03;
+      position: fixed; inset: 0; z-index: 0; opacity: 0.03;
       background-image:
         linear-gradient(var(--blue) 1px, transparent 1px),
         linear-gradient(90deg, var(--blue) 1px, transparent 1px);
       background-size: 55px 55px;
       animation: gridDrift 75s linear infinite;
     }
-    @keyframes gridDrift {
-      from { background-position: 0 0; }
-      to   { background-position: 55px 55px; }
-    }
+    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 55px 55px; } }
 
     /* ── TOPBAR ── */
     .topbar {
@@ -88,396 +98,161 @@
       background: rgba(4,5,10,0.94);
       backdrop-filter: blur(12px);
     }
-
     .topbar-left { display: flex; align-items: center; gap: 1.2rem; }
-
     .back-btn {
       display: inline-flex; align-items: center; gap: 0.5rem;
       font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--text-dim); text-decoration: none;
-      padding: 0.3rem 0.7rem;
-      border: 1px solid var(--border); border-radius: 2px;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 2px;
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
     .back-btn:hover { color: var(--blue); border-color: #4d9fff40; background: var(--blue-dark); }
-
-    .breadcrumb {
-      font-size: 0.68rem; color: var(--text-dim);
-      display: flex; align-items: center; gap: 0.5rem;
-    }
+    .breadcrumb { font-size: 0.68rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem; }
     .breadcrumb span { color: var(--blue); }
-
-    .topbar-right {
-      display: flex; align-items: center; gap: 1.5rem;
-      font-size: 0.68rem; color: var(--text-dim);
-    }
-
+    .topbar-right { display: flex; align-items: center; gap: 1.5rem; font-size: 0.68rem; color: var(--text-dim); }
     .live { display: flex; align-items: center; gap: 0.4rem; color: var(--blue); }
-    .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--blue); box-shadow: var(--glow-sm);
-      animation: blink 2s ease-in-out infinite;
-    }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: var(--glow-sm); animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .theme-toggle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 2px;
+      background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
 
     /* ── HERO ── */
-    .hero {
-      position: relative; z-index: 1;
-      padding: 5rem 3rem 3.5rem;
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-    }
-
+    .hero { position: relative; z-index: 1; padding: 5rem 3rem 3.5rem; border-bottom: 1px solid var(--border); overflow: hidden; }
     .hero-bg-text {
-      position: absolute;
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(5rem, 16vw, 16rem);
-      font-weight: 900;
-      color: transparent;
-      -webkit-text-stroke: 1px #4d9fff06;
-      top: 50%; right: -1%;
-      transform: translateY(-50%);
-      white-space: nowrap;
-      pointer-events: none; user-select: none;
-      letter-spacing: -0.04em;
+      position: absolute; font-family: 'Orbitron', monospace;
+      font-size: clamp(5rem, 16vw, 16rem); font-weight: 900;
+      color: transparent; -webkit-text-stroke: 1px #4d9fff06;
+      top: 50%; right: -1%; transform: translateY(-50%);
+      white-space: nowrap; pointer-events: none; user-select: none; letter-spacing: -0.04em;
     }
-
     .hero-inner { max-width: 680px; position: relative; z-index: 1; }
-
     .hero-eyebrow {
       display: flex; align-items: center; gap: 0.8rem;
-      font-size: 0.68rem; letter-spacing: 0.25em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-bottom: 1.2rem;
-      opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
     }
-    .hero-eyebrow::before {
-      content: ''; display: inline-block;
-      width: 28px; height: 1px; background: var(--blue-dim);
-    }
+    .hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--blue-dim); }
     .hero-eyebrow em { color: var(--blue-dim); font-style: normal; }
-
     .hero-title {
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(2.6rem, 6vw, 5rem);
-      font-weight: 900; line-height: 0.95;
-      letter-spacing: -0.03em;
-      color: var(--blue); text-shadow: var(--blue-glow-lg);
-      margin-bottom: 0.8rem;
+      font-family: 'Orbitron', monospace; font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 900; line-height: 0.95; letter-spacing: -0.03em;
+      color: var(--blue); text-shadow: var(--blue-glow-lg); margin-bottom: 0.8rem;
       opacity: 0; animation: fadeUp 0.7s ease forwards 0.3s;
     }
-
-    .hero-title .sub {
-      display: block; font-size: 0.32em;
-      color: var(--text-dim); text-shadow: none;
-      letter-spacing: 0.25em; text-transform: uppercase;
-      font-weight: 400; margin-bottom: 0.5rem;
-    }
-
-    .hero-sub {
-      font-family: 'VT323', monospace;
-      font-size: 1.35rem; color: var(--text-mid);
-      letter-spacing: 0.08em; margin-bottom: 1.2rem;
-      opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s;
-    }
-
-    .hero-desc {
-      font-size: 0.8rem; line-height: 1.9;
-      color: var(--text-dim); max-width: 520px;
-      opacity: 0; animation: fadeUp 0.6s ease forwards 0.8s;
-    }
+    .hero-title .sub { display: block; font-size: 0.32em; color: var(--text-dim); text-shadow: none; letter-spacing: 0.25em; text-transform: uppercase; font-weight: 400; margin-bottom: 0.5rem; }
+    .hero-sub { font-family: 'VT323', monospace; font-size: 1.35rem; color: var(--text-mid); letter-spacing: 0.08em; margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s; }
+    .hero-desc { font-size: 0.8rem; line-height: 1.9; color: var(--text-dim); max-width: 520px; opacity: 0; animation: fadeUp 0.6s ease forwards 0.8s; }
     .hero-desc em { color: var(--text); font-style: normal; }
 
-    /* ── DISCLAIMER BANNER ── */
+    /* ── DISCLAIMER ── */
     .disclaimer {
-      position: relative; z-index: 1;
-      margin: 0 3rem;
-      padding: 0.8rem 1.4rem;
-      background: #4d9fff08;
-      border: 1px solid #4d9fff20;
-      border-top: none;
-      font-size: 0.7rem; color: var(--text-dim);
-      display: flex; align-items: center; gap: 0.8rem;
+      position: relative; z-index: 1; margin: 0 3rem; padding: 0.8rem 1.4rem;
+      background: #4d9fff08; border: 1px solid #4d9fff20; border-top: none;
+      font-size: 0.7rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.8rem;
       opacity: 0; animation: fadeUp 0.5s ease forwards 1s;
     }
     .disclaimer .icon { color: var(--blue); font-size: 0.9rem; }
     .disclaimer a { color: var(--blue); text-decoration: none; }
     .disclaimer a:hover { text-shadow: var(--glow-sm); }
 
-    /* ── WRAPPER ── */
+    /* ── WRAPPER / SECTION ── */
     .wrapper { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
-
-    /* ── SECTION ── */
     .section { padding: 4.5rem 0; }
-
-    .sec-header {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .sec-header h2 {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.85rem; font-weight: 700;
-      color: var(--blue); letter-spacing: 0.2em;
-      text-transform: uppercase; white-space: nowrap;
-    }
+    .sec-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+    .sec-header h2 { font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 700; color: var(--blue); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
     .sec-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
     .sec-tag { font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; }
-
-    /* ── SEMESTER LABEL ── */
-    .semester-label-row {
-      display: flex; align-items: center; gap: 0.8rem;
-      margin-bottom: 1.5rem;
-    }
-    .sem-badge {
-      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
-      padding: 0.25rem 0.7rem;
-      border: 1px solid var(--border);
-      color: var(--text-dim); border-radius: 2px;
-      background: var(--panel);
-    }
+    .semester-label-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .sem-badge { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.7rem; border: 1px solid var(--border); color: var(--text-dim); border-radius: 2px; background: var(--panel); }
     .sem-badge.active { border-color: #4d9fff30; color: var(--blue); background: #4d9fff08; }
     .sem-line { flex: 1; height: 1px; background: var(--border2); }
 
-    /* ── PROFESSOR CARDS ── */
-    .prof-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
+    /* ── TABBED COURSE BLOCKS ── */
+    .course-block { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+    .course-block-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.8rem; background: var(--panel); border-bottom: 1px solid var(--border); }
+    .course-block-title { font-family: 'Orbitron', monospace; font-size: 0.82rem; font-weight: 700; color: var(--text); letter-spacing: 0.08em; }
+    .tab-row { display: flex; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .tab-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.65rem 1.6rem; background: var(--bg2); color: var(--text-dim);
+      border: none; border-right: 1px solid var(--border); cursor: pointer;
+      flex: 1; text-align: left; transition: background 0.2s, color 0.2s;
     }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn:hover { background: var(--panel); color: var(--text); }
+    .tab-btn.active { background: var(--bg); color: var(--blue); border-bottom: 2px solid var(--blue); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-    .prof-card {
-      background: var(--bg2);
-      padding: 2rem;
-      position: relative; overflow: hidden;
-      transition: background 0.3s;
-    }
-
-    /* Corner brackets on hover */
-    .prof-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0;
-      width: 0; height: 0;
-      border-top: 2px solid var(--blue);
-      border-left: 2px solid var(--blue);
-      transition: width 0.3s ease, height 0.3s ease;
-    }
-    .prof-card::after {
-      content: '';
-      position: absolute; bottom: 0; right: 0;
-      width: 0; height: 0;
-      border-bottom: 2px solid var(--blue);
-      border-right: 2px solid var(--blue);
-      transition: width 0.3s ease, height 0.3s ease;
-      transition-delay: 0.05s;
-    }
+    /* ── PROFESSOR CARD ── */
+    .prof-card { background: var(--bg2); padding: 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .prof-card::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); transition: width 0.3s ease, height 0.3s ease; }
+    .prof-card::after  { content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); transition: width 0.3s ease, height 0.3s ease; transition-delay: 0.05s; }
     .prof-card:hover { background: var(--panel); }
-    .prof-card:hover::before,
-    .prof-card:hover::after { width: 32px; height: 32px; }
+    .prof-card:hover::before, .prof-card:hover::after { width: 32px; height: 32px; }
 
-    /* Avatar initials */
-    .prof-avatar {
-      width: 52px; height: 52px;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      display: grid; place-items: center;
-      font-family: 'Orbitron', monospace;
-      font-size: 1rem; font-weight: 900;
-      color: var(--blue);
-      background: var(--blue-dark);
-      margin-bottom: 1.2rem;
-      transition: box-shadow 0.3s, border-color 0.3s;
-    }
-    .prof-card:hover .prof-avatar {
-      box-shadow: var(--blue-glow); border-color: #4d9fff50;
-    }
+    .prof-avatar { width: 52px; height: 52px; border: 1px solid var(--border); border-radius: 3px; display: grid; place-items: center; font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 900; color: var(--blue); background: var(--blue-dark); margin-bottom: 1.2rem; transition: box-shadow 0.3s, border-color 0.3s; }
+    .prof-card:hover .prof-avatar { box-shadow: var(--blue-glow); border-color: #4d9fff50; }
 
-    .prof-course-tag {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 0.18rem 0.55rem; border-radius: 2px;
-      margin-bottom: 0.6rem;
-    }
-    .tag-dld    { background: #00ff4110; color: var(--green);  border: 1px solid #00ff4125; }
-    .tag-c2     { background: #ffb70010; color: var(--amber);  border: 1px solid #ffb70025; }
-    .tag-cprog  { background: #00ffe710; color: var(--cyan);   border: 1px solid #00ffe725; }
-    .tag-tbd    { background: #ffffff07; color: var(--text-dim); border: 1px solid var(--border); }
+    .prof-course-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 2px; }
+    .tag-dld   { background: #00ff4110; color: var(--green);  border: 1px solid #00ff4125; }
+    .tag-c2    { background: #ffb70010; color: var(--amber);  border: 1px solid #ffb70025; }
+    .tag-cprog { background: #00ffe710; color: var(--cyan);   border: 1px solid #00ffe725; }
 
-    .prof-name {
-      font-family: 'Orbitron', monospace;
-      font-size: 1rem; font-weight: 700;
-      color: var(--text); line-height: 1.2;
-      margin-bottom: 0.3rem;
-      transition: color 0.25s;
-    }
+    .prof-name { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.3rem; transition: color 0.25s; }
     .prof-card:hover .prof-name { color: var(--blue); }
+    .prof-dept { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 1.5rem; }
 
-    .prof-dept {
-      font-size: 0.7rem; color: var(--text-dim);
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── RATING METERS ── */
+    /* ── METERS ── */
     .ratings { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.6rem; }
-
     .rating-row { display: flex; flex-direction: column; gap: 0.35rem; }
-
-    .rating-label-row {
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .rating-label {
-      font-size: 0.62rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--text-dim);
-    }
-    .rating-val {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.8rem; font-weight: 700;
-    }
-
-    .meter {
-      width: 100%; height: 4px;
-      background: var(--border); border-radius: 2px; overflow: hidden;
-    }
-    .meter-fill {
-      height: 100%; border-radius: 2px;
-      transition: width 1s ease;
-    }
-
-    /* color by score */
-    .fill-high   { background: var(--green);  box-shadow: 0 0 6px var(--green); }
-    .fill-mid    { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
-    .fill-low    { background: var(--red);    box-shadow: 0 0 6px var(--red); }
-    .fill-blue   { background: var(--blue);   box-shadow: 0 0 6px var(--blue); }
-    .fill-none   { background: var(--border2); box-shadow: none; }
-
+    .rating-label-row { display: flex; justify-content: space-between; align-items: center; }
+    .rating-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .rating-val { font-family: 'Orbitron', monospace; font-size: 0.8rem; font-weight: 700; }
+    .meter { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+    .fill-high { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+    .fill-mid  { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
+    .fill-low  { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+    .fill-none { background: var(--border2); box-shadow: none; }
     .val-high { color: var(--green); }
     .val-mid  { color: var(--amber); }
     .val-low  { color: var(--red); }
-    .val-blue { color: var(--blue); }
     .val-none { color: var(--text-dim); }
 
     /* ── CARD FOOTER ── */
-    .prof-footer {
-      padding-top: 1.2rem;
-      border-top: 1px solid var(--border2);
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .prof-footer { padding-top: 1.2rem; border-top: 1px solid var(--border2); display: flex; align-items: center; justify-content: space-between; }
+    .rmp-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--blue); text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid #4d9fff30; border-radius: 2px; background: #4d9fff08; transition: background 0.2s, box-shadow 0.2s, border-color 0.2s; }
+    .rmp-link:hover { background: #4d9fff16; box-shadow: var(--glow-sm); border-color: #4d9fff55; }
+    .rmp-link.disabled { color: var(--text-dim); border-color: var(--border); background: transparent; pointer-events: none; }
+    .overall-score { display: flex; flex-direction: column; align-items: flex-end; }
+    .overall-num { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; line-height: 1; }
+    .overall-label { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.2rem; }
 
-    .rmp-link {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.68rem; letter-spacing: 0.08em;
-      color: var(--blue); text-decoration: none;
-      padding: 0.3rem 0.7rem;
-      border: 1px solid #4d9fff30;
-      border-radius: 2px;
-      background: #4d9fff08;
-      transition: background 0.2s, box-shadow 0.2s, border-color 0.2s;
-    }
-    .rmp-link:hover {
-      background: #4d9fff16;
-      box-shadow: var(--glow-sm);
-      border-color: #4d9fff55;
-    }
-    .rmp-link.disabled {
-      color: var(--text-dim); border-color: var(--border);
-      background: transparent; pointer-events: none;
-    }
-
-    .overall-score {
-      display: flex; flex-direction: column; align-items: flex-end;
-    }
-    .overall-num {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.4rem; font-weight: 900;
-      line-height: 1;
-    }
-    .overall-label {
-      font-size: 0.55rem; letter-spacing: 0.15em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-top: 0.2rem;
-    }
-
-    /* ── PLACEHOLDER CARD ── */
-    .prof-card.empty {
-      opacity: 0.35; cursor: default;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; min-height: 280px;
-      gap: 0.8rem;
-    }
-    .prof-card.empty:hover { background: var(--bg2); }
-    .prof-card.empty::before,
-    .prof-card.empty::after { display: none; }
-
-    .empty-icon {
-      font-family: 'VT323', monospace;
-      font-size: 3rem; color: var(--text-dim);
-    }
-    .empty-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.72rem; color: var(--text-dim);
-      letter-spacing: 0.1em;
-    }
-    .empty-sub { font-size: 0.65rem; color: var(--text-dim); }
-
-    /* ── HOW TO UPDATE ── */
-    .guide-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--border2);
-      border: 1px solid var(--border);
-      border-radius: 6px; overflow: hidden;
-    }
-
-    .guide-card {
-      background: var(--bg2); padding: 1.6rem;
-      transition: background 0.2s;
-    }
+    /* ── GUIDE ── */
+    .guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .guide-card { background: var(--bg2); padding: 1.6rem; transition: background 0.2s; }
     .guide-card:hover { background: var(--panel); }
-
-    .guide-step {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.4rem; font-weight: 900;
-      color: var(--blue); text-shadow: var(--glow-sm);
-      margin-bottom: 0.6rem; display: block;
-    }
-    .guide-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.75rem; font-weight: 700;
-      color: var(--text); margin-bottom: 0.4rem;
-    }
+    .guide-step { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; color: var(--blue); text-shadow: var(--glow-sm); margin-bottom: 0.6rem; display: block; }
+    .guide-title { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
     .guide-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.65; }
-    .guide-desc code {
-      color: var(--blue); background: #4d9fff10;
-      padding: 0.1rem 0.3rem; border-radius: 2px;
-      font-size: 0.68rem;
-    }
+    .guide-desc code { color: var(--blue); background: #4d9fff10; padding: 0.1rem 0.3rem; border-radius: 2px; font-size: 0.68rem; }
 
     /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 1.8rem 3rem;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      font-size: 0.68rem; color: var(--text-dim);
-    }
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 1.8rem 3rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.68rem; color: var(--text-dim); }
     footer a { color: var(--blue); text-decoration: none; }
     footer a:hover { text-shadow: var(--glow-sm); }
 
     /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reveal {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
     .reveal.d1 { transition-delay: 0.1s; }
-    .reveal.d2 { transition-delay: 0.2s; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     ::-webkit-scrollbar { width: 4px; }
@@ -486,7 +261,7 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--blue-dim); }
 
     @media (max-width: 900px) {
-      .prof-grid, .guide-grid { grid-template-columns: 1fr; }
+      .guide-grid { grid-template-columns: 1fr; }
       .topbar, .hero, .wrapper, .disclaimer, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
     }
   </style>
@@ -496,7 +271,6 @@
   <div class="bg-glow"></div>
   <div class="grid-bg"></div>
 
-  <!-- Topbar -->
   <nav class="topbar">
     <div class="topbar-left">
       <a class="back-btn" href="index.html">← Home</a>
@@ -509,183 +283,164 @@
     <div class="topbar-right">
       <span class="live"><span class="live-dot"></span> Spring 2026</span>
       <span id="clock">--:--:--</span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
     </div>
   </nav>
 
-  <!-- Hero -->
   <header class="hero">
     <div class="hero-bg-text">PROF</div>
     <div class="hero-inner">
       <p class="hero-eyebrow"><em>Spring 2026</em> · Electrical Engineering · Year 03</p>
-      <h1 class="hero-title">
-        <span class="sub">Directory //</span>
-        Professor<br/>Ratings
-      </h1>
+      <h1 class="hero-title"><span class="sub">Directory //</span>Professor<br/>Ratings</h1>
       <p class="hero-sub">> sourced from RateMyProfessors.com_</p>
-      <p class="hero-desc">
-        Ratings manually sourced from <em>RateMyProfessors</em> for each professor
-        teaching a tracked course this semester. Includes overall rating, difficulty,
-        and would-take-again percentage. Click any card to view their full RMP profile.
-      </p>
+      <p class="hero-desc">Ratings manually sourced from <em>RateMyProfessors</em> for each professor teaching a tracked course this semester. Includes overall rating, difficulty, and would-take-again percentage. Click any card to view their full RMP profile.</p>
     </div>
   </header>
 
-  <!-- Disclaimer -->
   <div class="disclaimer">
     <span class="icon">[i]</span>
-    <span>
-      Data sourced manually from
-      <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a>.
-      Ratings reflect community averages and may not represent your personal experience.
-      Updated each semester.
-    </span>
+    <span>Data sourced manually from <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a>. Ratings reflect community averages and may not represent your personal experience. Updated each semester.</span>
   </div>
 
   <div class="wrapper">
-
-    <!-- Current Semester -->
     <section class="section reveal" id="professors">
       <div class="sec-header">
         <h2>// Spring 2026</h2>
         <div class="sec-line"></div>
         <span class="sec-tag">01 — CURRENT_SEMESTER</span>
       </div>
-
       <div class="semester-label-row">
         <div class="sem-badge active">Active Semester</div>
         <div class="sem-line"></div>
         <span style="font-size:0.65rem; color:var(--text-dim);">3 courses tracked</span>
       </div>
 
-      <div class="prof-grid">
-
-        <!-- Professor 1 — DLD -->
-        <div class="prof-card">
-          <div class="prof-avatar" id="av1">??</div>
-          <div class="prof-course-tag tag-dld">Digital Logic Design</div>
-          <div class="prof-name" id="name1">Prof. TBD</div>
-          <div class="prof-dept">Electrical Engineering Dept.</div>
-
-          <div class="ratings">
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Overall Rating</span>
-                <span class="rating-val val-none" id="r1-overall">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m1-overall" style="width:0%"></div></div>
+      <!-- ── DIGITAL LOGIC DESIGN ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Digital Logic Design</span>
+          <span class="prof-course-tag tag-dld">EE_3XX</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('dld', 0, this)">Sheth</button>
+          <button class="tab-btn"        onclick="switchTab('dld', 1, this)">Prof. TBD</button>
+        </div>
+        <div id="dld-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-dld-0">BS</div>
+            <div class="prof-name"   id="name-dld-0">Dr. Bhavin R. Sheth</div>
+            <div class="prof-dept"   id="dept-dld-0">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-wta" style="width:0%"></div></div></div>
             </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Difficulty</span>
-                <span class="rating-val val-none" id="r1-diff">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m1-diff" style="width:0%"></div></div>
-            </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Would Take Again</span>
-                <span class="rating-val val-none" id="r1-wta">— %</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m1-wta" style="width:0%"></div></div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-dld-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-dld-0">—</span><span class="overall-label">/ 5.0</span></div>
             </div>
           </div>
-
-          <div class="prof-footer">
-            <a class="rmp-link disabled" id="link1" href="#" target="_blank" rel="noopener">
-              View on RMP ↗
-            </a>
-            <div class="overall-score">
-              <span class="overall-num val-none" id="score1">—</span>
-              <span class="overall-label">/ 5.0</span>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-dld-1">??</div>
+            <div class="prof-name"   id="name-dld-1">Prof. TBD</div>
+            <div class="prof-dept"   id="dept-dld-1">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-dld-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-dld-1">—</span><span class="overall-label">/ 5.0</span></div>
             </div>
           </div>
         </div>
-
-        <!-- Professor 2 — Circuits 2 -->
-        <div class="prof-card">
-          <div class="prof-avatar" id="av2">??</div>
-          <div class="prof-course-tag tag-c2">Circuits 2</div>
-          <div class="prof-name" id="name2">Prof. TBD</div>
-          <div class="prof-dept">Electrical Engineering Dept.</div>
-
-          <div class="ratings">
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Overall Rating</span>
-                <span class="rating-val val-none" id="r2-overall">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m2-overall" style="width:0%"></div></div>
-            </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Difficulty</span>
-                <span class="rating-val val-none" id="r2-diff">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m2-diff" style="width:0%"></div></div>
-            </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Would Take Again</span>
-                <span class="rating-val val-none" id="r2-wta">— %</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m2-wta" style="width:0%"></div></div>
-            </div>
-          </div>
-
-          <div class="prof-footer">
-            <a class="rmp-link disabled" id="link2" href="#" target="_blank" rel="noopener">
-              View on RMP ↗
-            </a>
-            <div class="overall-score">
-              <span class="overall-num val-none" id="score2">—</span>
-              <span class="overall-label">/ 5.0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Professor 3 — C Programming -->
-        <div class="prof-card">
-          <div class="prof-avatar" id="av3">??</div>
-          <div class="prof-course-tag tag-cprog">Programming with C</div>
-          <div class="prof-name" id="name3">Prof. TBD</div>
-          <div class="prof-dept">Electrical Engineering Dept.</div>
-
-          <div class="ratings">
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Overall Rating</span>
-                <span class="rating-val val-none" id="r3-overall">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m3-overall" style="width:0%"></div></div>
-            </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Difficulty</span>
-                <span class="rating-val val-none" id="r3-diff">— / 5.0</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m3-diff" style="width:0%"></div></div>
-            </div>
-            <div class="rating-row">
-              <div class="rating-label-row">
-                <span class="rating-label">Would Take Again</span>
-                <span class="rating-val val-none" id="r3-wta">— %</span>
-              </div>
-              <div class="meter"><div class="meter-fill fill-none" id="m3-wta" style="width:0%"></div></div>
-            </div>
-          </div>
-
-          <div class="prof-footer">
-            <a class="rmp-link disabled" id="link3" href="#" target="_blank" rel="noopener">
-              View on RMP ↗
-            </a>
-            <div class="overall-score">
-              <span class="overall-num val-none" id="score3">—</span>
-              <span class="overall-label">/ 5.0</span>
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      <!-- ── CIRCUITS 2 ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Circuits 2</span>
+          <span class="prof-course-tag tag-c2">EE_2XX</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('c2', 0, this)">Shan</button>
+          <button class="tab-btn"        onclick="switchTab('c2', 1, this)">Prof. TBD</button>
+        </div>
+        <div id="c2-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-c2-0">XS</div>
+            <div class="prof-name"   id="name-c2-0">Dr. Xiaonan Shan</div>
+            <div class="prof-dept"   id="dept-c2-0">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-c2-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-c2-0">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-c2-1">??</div>
+            <div class="prof-name"   id="name-c2-1">Prof. TBD</div>
+            <div class="prof-dept"   id="dept-c2-1">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-c2-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-c2-1">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROGRAMMING WITH C ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Programming Apps with C</span>
+          <span class="prof-course-tag tag-cprog">CS_2XX</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('cprog', 0, this)">Joardar</button>
+          <button class="tab-btn"        onclick="switchTab('cprog', 1, this)">Prof. TBD</button>
+        </div>
+        <div id="cprog-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-cprog-0">BJ</div>
+            <div class="prof-name"   id="name-cprog-0">Dr. Biresh Kumar Joardar</div>
+            <div class="prof-dept"   id="dept-cprog-0">Computer Science Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-cprog-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-0">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-cprog-1">??</div>
+            <div class="prof-name"   id="name-cprog-1">Prof. TBD</div>
+            <div class="prof-dept"   id="dept-cprog-1">Computer Science Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-cprog-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-1">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- How to update -->
@@ -695,40 +450,26 @@
         <div class="sec-line"></div>
         <span class="sec-tag">02 — EDIT_GUIDE</span>
       </div>
-
       <div class="guide-grid">
         <div class="guide-card">
           <span class="guide-step">01</span>
           <div class="guide-title">Find the Professor on RMP</div>
-          <p class="guide-desc">
-            Go to <code>ratemyprofessors.com</code>, search your professor's name and university.
-            Copy their overall rating, difficulty, would-take-again %, and profile URL.
-          </p>
+          <p class="guide-desc">Go to <code>ratemyprofessors.com</code>, search your professor's name and university. Copy their overall rating, difficulty, would-take-again %, and profile URL.</p>
         </div>
         <div class="guide-card">
           <span class="guide-step">02</span>
           <div class="guide-title">Edit professors.html</div>
-          <p class="guide-desc">
-            Open <code>professors.html</code> in VSCode. Find the
-            <code>PROFESSORS DATA</code> object in the script tag at the bottom
-            and fill in each field for the relevant card.
-          </p>
+          <p class="guide-desc">Open <code>professors.html</code> in VSCode. Find the <code>COURSES</code> object in the script tag and fill in each field for the relevant course and professor slot.</p>
         </div>
         <div class="guide-card">
           <span class="guide-step">03</span>
           <div class="guide-title">Push to GitHub</div>
-          <p class="guide-desc">
-            Save the file, then run <code>git add .</code>,
-            <code>git commit -m "update prof ratings"</code>,
-            and <code>git push</code>. Vercel auto-deploys in ~30s.
-          </p>
+          <p class="guide-desc">Save the file, then run <code>git add .</code>, <code>git commit -m "update prof ratings"</code>, and <code>git push</code>. Vercel auto-deploys in ~30s.</p>
         </div>
       </div>
     </section>
-
   </div>
 
-  <!-- Footer -->
   <footer>
     <span>EE — <a href="professors.html">Professor Ratings</a> · Spring 2026</span>
     <span>Data from <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a></span>
@@ -737,39 +478,89 @@
 
   <script>
     // ════════════════════════════════════════════
-    //  PROFESSORS DATA — edit this object to update
+    //  COURSES DATA — edit this object to update
+    //  profs[0] = first tab, profs[1] = second tab
     // ════════════════════════════════════════════
-    const PROFESSORS = {
-      1: {
-        name:       "Dr. Bhavin R. Sheth",        // e.g. "Dr. Smith"
-        initials:   "??",               // e.g. "DS"
-        course:     "Digital Logic Design",
-        overall:    3,               // e.g. 4.2  (out of 5)
-        difficulty: 4,               // e.g. 3.8  (out of 5)
-        wouldTake:  70,               // e.g. 85   (percentage 0–100)
-        rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",               // e.g. "https://www.ratemyprofessors.com/professor/..."
+    const COURSES = {
+      dld: {
+        profs: [
+          {
+            name:       "Dr. Bhavin R. Sheth",
+            initials:   "BS",
+            dept:       "Electrical Engineering Dept.",
+            overall:    3.0,
+            difficulty: 4.0,
+            wouldTake:  70,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
+          },
+          {
+            name:       "Prof. TBD",
+            initials:   "??",
+            dept:       "Electrical Engineering Dept.",
+            overall:    null,
+            difficulty: null,
+            wouldTake:  null,
+            rmpUrl:     null,
+          },
+        ]
       },
-      2: {
-        name:       "Dr. Xiaonan Shan",
-        initials:   "??",
-        course:     "Circuits II",
-        overall:    4.5,
-        difficulty: 3.5,
-        wouldTake:  100,
-        rmpUrl:     "https://www.ratemyprofessors.com/professor/2991318",
+      c2: {
+        profs: [
+          {
+            name:       "Dr. Xiaonan Shan",
+            initials:   "XS",
+            dept:       "Electrical Engineering Dept.",
+            overall:    4.5,
+            difficulty: 3.5,
+            wouldTake:  100,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/2991318",
+          },
+          {
+            name:       "Prof. TBD",
+            initials:   "??",
+            dept:       "Electrical Engineering Dept.",
+            overall:    null,
+            difficulty: null,
+            wouldTake:  null,
+            rmpUrl:     null,
+          },
+        ]
       },
-      3: {
-        name:       "Dr. Biresh Kumar Joardar",
-        initials:   "??",
-        course:     "Programming with C",
-        overall:    5,
-        difficulty: 2,
-        wouldTake:  100,
-        rmpUrl:     "https://www.ratemyprofessors.com/professor/2894356",
+      cprog: {
+        profs: [
+          {
+            name:       "Dr. Biresh Kumar Joardar",
+            initials:   "BJ",
+            dept:       "Computer Science Dept.",
+            overall:    5.0,
+            difficulty: 2.0,
+            wouldTake:  100,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/2894356",
+          },
+          {
+            name:       "Prof. TBD",
+            initials:   "??",
+            dept:       "Computer Science Dept.",
+            overall:    null,
+            difficulty: null,
+            wouldTake:  null,
+            rmpUrl:     null,
+          },
+        ]
       },
     };
 
-    // ── Render logic (no need to edit below) ──
+    // ── Tab switching ──
+    function switchTab(course, idx, btn) {
+      btn.closest('.tab-row').querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll(`#${course}-panels .tab-panel`).forEach((p, i) => {
+        p.classList.toggle('active', i === idx);
+      });
+    }
+
+    // ── Rating helpers ──
     function getRatingClass(val, type) {
       if (val === null) return { color: 'val-none', fill: 'fill-none' };
       if (type === 'difficulty') {
@@ -782,7 +573,6 @@
         if (val >= 50) return { color: 'val-mid',  fill: 'fill-mid'  };
         return           { color: 'val-low',  fill: 'fill-low'  };
       }
-      // overall
       if (val >= 4.0) return { color: 'val-high', fill: 'fill-high' };
       if (val >= 3.0) return { color: 'val-mid',  fill: 'fill-mid'  };
       return            { color: 'val-low',  fill: 'fill-low'  };
@@ -791,66 +581,69 @@
     function setMeter(meterId, valId, val, max, type, display) {
       const meter = document.getElementById(meterId);
       const valEl = document.getElementById(valId);
-      const cls   = getRatingClass(val, type);
-
-      meter.className  = 'meter-fill ' + cls.fill;
-      valEl.className  = 'rating-val ' + cls.color;
+      if (!meter || !valEl) return;
+      const cls = getRatingClass(val, type);
+      meter.className   = 'meter-fill ' + cls.fill;
+      valEl.className   = 'rating-val ' + cls.color;
       valEl.textContent = display;
       meter.style.width = val !== null ? `${(val / max) * 100}%` : '0%';
     }
 
-    function renderProfessors() {
-      Object.entries(PROFESSORS).forEach(([id, p]) => {
-        const i = id;
+    // ── Render all ──
+    function renderAll() {
+      Object.entries(COURSES).forEach(([course, data]) => {
+        data.profs.forEach((p, idx) => {
+          const key = `${course}-${idx}`;
+          const nameEl = document.getElementById(`name-${key}`);
+          const avEl   = document.getElementById(`av-${key}`);
+          const deptEl = document.getElementById(`dept-${key}`);
+          if (nameEl) nameEl.textContent = p.name;
+          if (avEl)   avEl.textContent   = p.initials;
+          if (deptEl) deptEl.textContent = p.dept;
 
-        // Name & initials
-        document.getElementById(`name${i}`).textContent = p.name;
-        document.getElementById(`av${i}`).textContent   = p.initials;
+          setMeter(`m-${key}-overall`, `r-${key}-overall`, p.overall, 5, 'overall',
+            p.overall !== null ? `${p.overall.toFixed(1)} / 5.0` : '— / 5.0');
+          setMeter(`m-${key}-diff`, `r-${key}-diff`, p.difficulty, 5, 'difficulty',
+            p.difficulty !== null ? `${p.difficulty.toFixed(1)} / 5.0` : '— / 5.0');
+          setMeter(`m-${key}-wta`, `r-${key}-wta`, p.wouldTake, 100, 'wta',
+            p.wouldTake !== null ? `${p.wouldTake}%` : '— %');
 
-        // Overall rating meter
-        setMeter(`m${i}-overall`, `r${i}-overall`,
-          p.overall, 5, 'overall',
-          p.overall !== null ? `${p.overall.toFixed(1)} / 5.0` : '— / 5.0');
-
-        // Difficulty meter
-        setMeter(`m${i}-diff`, `r${i}-diff`,
-          p.difficulty, 5, 'difficulty',
-          p.difficulty !== null ? `${p.difficulty.toFixed(1)} / 5.0` : '— / 5.0');
-
-        // Would take again meter
-        setMeter(`m${i}-wta`, `r${i}-wta`,
-          p.wouldTake, 100, 'wta',
-          p.wouldTake !== null ? `${p.wouldTake}%` : '— %');
-
-        // Overall score badge
-        const scoreEl = document.getElementById(`score${i}`);
-        const oCls    = getRatingClass(p.overall, 'overall');
-        scoreEl.className  = 'overall-num ' + oCls.color;
-        scoreEl.textContent = p.overall !== null ? p.overall.toFixed(1) : '—';
-
-        // RMP link
-        const linkEl = document.getElementById(`link${i}`);
-        if (p.rmpUrl) {
-          linkEl.href      = p.rmpUrl;
-          linkEl.className = 'rmp-link';
-        }
+          const scoreEl = document.getElementById(`score-${key}`);
+          if (scoreEl) {
+            const cls = getRatingClass(p.overall, 'overall');
+            scoreEl.className   = 'overall-num ' + cls.color;
+            scoreEl.textContent = p.overall !== null ? p.overall.toFixed(1) : '—';
+          }
+          const linkEl = document.getElementById(`link-${key}`);
+          if (linkEl && p.rmpUrl) {
+            linkEl.href      = p.rmpUrl;
+            linkEl.className = 'rmp-link';
+          }
+        });
       });
     }
 
-    renderProfessors();
+    renderAll();
 
-    // Clock
-    function tick() {
-      document.getElementById('clock').textContent =
-        new Date().toTimeString().slice(0, 8);
+    // ── Theme toggle ──
+    const btn = document.getElementById('theme-toggle');
+    function applyTheme(theme) {
+      if (theme === 'light') { document.documentElement.classList.add('light'); btn.textContent = '● Dark'; }
+      else { document.documentElement.classList.remove('light'); btn.textContent = '☀ Light'; }
     }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next); applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
+
+    // ── Clock ──
+    function tick() { document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8); }
     tick(); setInterval(tick, 1000);
 
-    // Scroll reveal
+    // ── Scroll reveal ──
     const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-      });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
