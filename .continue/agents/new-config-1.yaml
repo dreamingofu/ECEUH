@@ -1,0 +1,9 @@
+name: Local LM Studio Config
+version: 1.0.0
+schema: v1
+
+models:
+  - name: Qwen 2.5 Coder 7B
+    provider: lmstudio
+    model: qwen2.5-coder-7b-instruct
+    apiBase: http://localhost:1234/v1
