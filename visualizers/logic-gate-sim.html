@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EE — Logic Gate Simulator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#050a05;--bg2:#080f08;--panel:#0b140b;--border:#1a3a1a;--border2:#0f2018;
+      --green:#00ff41;--green-dim:#00cc33;--green-dark:#003311;
+      --amber:#ffb700;--red:#ff3c3c;--cyan:#00fff7;--blue:#4d9fff;
+      --text:#b8d4b8;--text-dim:#4a6b4a;--text-mid:#6b9a6b;
+      --glow:0 0 8px #00ff4180,0 0 20px #00ff4130;
+      --glow-lg:0 0 16px #00ff4199,0 0 40px #00ff4150;
+      --signal-hi:#00ff41;--signal-lo:#ff3c3c;
+    }
+    html.light {
+      --bg:#f5f7f5;--bg2:#ffffff;--panel:#edf2ed;--border:#7aaa7a;--border2:#a0c4a0;
+      --green:#005c14;--green-dim:#004810;--green-dark:#d4eed4;
+      --amber:#6b4800;--red:#aa1a1a;--cyan:#005048;--blue:#0c2ea0;
+      --text:#0a150a;--text-dim:#2a4a2a;--text-mid:#1e3c1e;
+      --glow:none;--glow-lg:none;--signal-hi:#005c14;--signal-lo:#aa1a1a;
+    }
+    html.light body::before{display:none;}
+    html.light .bg-glow{display:none;}
+    html.light .grid-bg{opacity:0.07;filter:invert(1);}
+    html.light .topbar{background:rgba(245,247,245,0.98);border-bottom:1px solid var(--border);}
+    html.light #canvas{background:#f0f5f0;}
+    html.light .gate-btn{background:#ffffff;border-color:var(--border);color:var(--text);}
+    html.light .gate-btn:hover{background:var(--panel);border-color:var(--green);}
+    html.light .tt-row:nth-child(even){background:var(--panel);}
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow:hidden;cursor:default;}
+    body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,0.18) 3px,rgba(0,0,0,0.18) 4px);pointer-events:none;z-index:9999;}
+    .bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% -5%,#00ff4108 0%,transparent 70%);}
+    .grid-bg{position:fixed;inset:0;z-index:0;opacity:0.04;background-image:linear-gradient(var(--green) 1px,transparent 1px),linear-gradient(90deg,var(--green) 1px,transparent 1px);background-size:40px 40px;}
+
+    /* TOPBAR */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0.7rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(5,10,5,0.96);backdrop-filter:blur(10px);}
+    .topbar-left{display:flex;align-items:center;gap:0.8rem;}
+    .back-btn{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;padding:0.25rem 0.6rem;border:1px solid var(--border);border-radius:2px;transition:all 0.2s;}
+    .back-btn:hover{color:var(--green);border-color:var(--green);background:var(--green-dark);}
+    .breadcrumb{font-size:0.62rem;color:var(--text-dim);display:flex;align-items:center;gap:0.4rem;}
+    .breadcrumb span{color:var(--green);}
+    .topbar-right{display:flex;align-items:center;gap:0.8rem;font-size:0.62rem;color:var(--text-dim);}
+    .live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:var(--glow);animation:blink 2s ease-in-out infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+    .theme-toggle{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.6rem;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+    .theme-toggle:hover{border-color:var(--green);color:var(--green);}
+    .clear-btn{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+    .clear-btn:hover{border-color:var(--red);color:var(--red);}
+    .tt-btn{font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--border);border-radius:2px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+    .tt-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+    /* MAIN LAYOUT */
+    .app{position:fixed;top:42px;left:0;right:0;bottom:0;display:flex;z-index:1;}
+
+    /* SIDE PANEL */
+    .side-panel{width:160px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:0.8rem 0.6rem;gap:0.4rem;z-index:10;}
+    .panel-section{font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);padding:0.3rem 0.4rem;margin-top:0.4rem;}
+    .gate-btn{display:flex;align-items:center;gap:0.5rem;width:100%;padding:0.45rem 0.6rem;background:var(--panel);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:grab;transition:all 0.15s;user-select:none;}
+    .gate-btn:hover{background:var(--green-dark);border-color:var(--green);color:var(--green);}
+    .gate-btn:active{cursor:grabbing;}
+    .gate-icon{font-family:'VT323',monospace;font-size:1rem;color:var(--green);min-width:20px;text-align:center;}
+    .input-add-btn{display:flex;align-items:center;gap:0.5rem;width:100%;padding:0.45rem 0.6rem;background:var(--panel);border:1px solid var(--border2);border-radius:3px;color:var(--text-mid);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.15s;}
+    .input-add-btn:hover{background:var(--green-dark);border-color:var(--green);color:var(--green);}
+
+    /* CANVAS */
+    .canvas-wrap{flex:1;position:relative;overflow:hidden;}
+    #canvas{position:absolute;inset:0;width:100%;height:100%;background:var(--bg);cursor:crosshair;}
+
+    /* TRUTH TABLE OVERLAY */
+    .tt-overlay{position:absolute;top:10px;right:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:1rem;min-width:220px;max-height:calc(100vh - 80px);overflow-y:auto;display:none;z-index:100;}
+    .tt-overlay.visible{display:block;}
+    .tt-title{font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem;}
+    .tt-table{width:100%;border-collapse:collapse;font-size:0.72rem;}
+    .tt-table th{padding:0.4rem 0.6rem;text-align:center;background:var(--panel);color:var(--green);font-family:'Orbitron',monospace;font-size:0.6rem;border-bottom:1px solid var(--border);}
+    .tt-table td{padding:0.35rem 0.6rem;text-align:center;border-bottom:1px solid var(--border2);}
+    .tt-row-hi td:last-child{color:var(--green);}
+    .tt-row-lo td:last-child{color:var(--red);}
+    .tt-close{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--text-dim);background:none;border:none;cursor:pointer;float:right;margin-top:-0.2rem;}
+    .tt-close:hover{color:var(--red);}
+
+    /* STATUS BAR */
+    .status-bar{position:absolute;bottom:0;left:0;right:0;height:26px;background:var(--panel);border-top:1px solid var(--border2);display:flex;align-items:center;padding:0 1rem;gap:1.5rem;font-size:0.62rem;color:var(--text-dim);z-index:50;}
+    .status-bar span{display:flex;align-items:center;gap:0.3rem;}
+    .status-bar .key{color:var(--green);}
+  </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="grid-bg"></div>
+
+<nav class="topbar">
+  <div class="topbar-left">
+    <a class="back-btn" href="../dld.html">← DLD</a>
+    <div class="breadcrumb">
+      <span>DLD</span><span style="color:var(--border);">/</span><span>Logic Gate Simulator</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span style="display:flex;align-items:center;gap:0.4rem;color:var(--green);"><span class="live-dot"></span>Interactive</span>
+    <button class="tt-btn" onclick="toggleTruthTable()">⊞ Truth Table</button>
+    <button class="clear-btn" onclick="clearCanvas()">✕ Clear</button>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</nav>
+
+<div class="app">
+  <!-- Side panel -->
+  <div class="side-panel">
+    <div class="panel-section">// Inputs</div>
+    <button class="input-add-btn" onclick="addInput()"><span class="gate-icon">⚡</span>Add Input</button>
+
+    <div class="panel-section">// Gates</div>
+    <div class="gate-btn" draggable="true" data-type="AND"  ondragstart="onDragStart(event)"><span class="gate-icon">·</span>AND</div>
+    <div class="gate-btn" draggable="true" data-type="OR"   ondragstart="onDragStart(event)"><span class="gate-icon">≥1</span>OR</div>
+    <div class="gate-btn" draggable="true" data-type="NOT"  ondragstart="onDragStart(event)"><span class="gate-icon">¬</span>NOT</div>
+    <div class="gate-btn" draggable="true" data-type="NAND" ondragstart="onDragStart(event)"><span class="gate-icon">⊼</span>NAND</div>
+    <div class="gate-btn" draggable="true" data-type="NOR"  ondragstart="onDragStart(event)"><span class="gate-icon">⊽</span>NOR</div>
+    <div class="gate-btn" draggable="true" data-type="XOR"  ondragstart="onDragStart(event)"><span class="gate-icon">=1</span>XOR</div>
+    <div class="gate-btn" draggable="true" data-type="XNOR" ondragstart="onDragStart(event)"><span class="gate-icon">⊙</span>XNOR</div>
+    <div class="gate-btn" draggable="true" data-type="BUF"  ondragstart="onDragStart(event)"><span class="gate-icon">▷</span>BUF</div>
+
+    <div class="panel-section">// Output</div>
+    <div class="gate-btn" draggable="true" data-type="LED"  ondragstart="onDragStart(event)"><span class="gate-icon">◉</span>LED Out</div>
+
+    <div class="panel-section">// Help</div>
+    <div style="font-size:0.62rem;color:var(--text-dim);line-height:1.7;padding:0.3rem 0.4rem;">
+      Drag gates to canvas.<br/>
+      Click output port then input port to wire.<br/>
+      Click inputs to toggle.<br/>
+      Right-click to delete.
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="canvas-wrap">
+    <canvas id="canvas"></canvas>
+
+    <!-- Truth table overlay -->
+    <div class="tt-overlay" id="tt-overlay">
+      <div class="tt-title">Truth Table <button class="tt-close" onclick="toggleTruthTable()">✕</button></div>
+      <div id="tt-content"><div style="font-size:0.72rem;color:var(--text-dim);">Add inputs and an LED output, then wire them up to generate.</div></div>
+    </div>
+
+    <div class="status-bar">
+      <span><span class="key">Drag</span> gates from panel</span>
+      <span><span class="key">Click</span> port → port to wire</span>
+      <span><span class="key">Click</span> input to toggle 0/1</span>
+      <span><span class="key">Right-click</span> to delete</span>
+      <span id="status-msg" style="margin-left:auto;color:var(--green);"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Theme ──
+const toggleBtn = document.getElementById('theme-toggle');
+function applyTheme(t) {
+  document.documentElement.classList.toggle('light', t==='light');
+  toggleBtn.textContent = t==='light' ? '● Dark' : '☀ Light';
+  draw();
+}
+function toggleTheme() {
+  const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+  localStorage.setItem('ee-theme', next); applyTheme(next);
+}
+applyTheme(localStorage.getItem('ee-theme') || 'dark');
+
+// ── Canvas Setup ──
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width  = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  draw();
+}
+window.addEventListener('resize', resize);
+setTimeout(resize, 50);
+
+// ── State ──
+let nodes      = [];  // {id, type, x, y, inputs:[], value, label}
+let wires      = [];  // {from:{nodeId,port:'out'}, to:{nodeId,port:'in',idx}}
+let dragging   = null;
+let pendingPort= null; // {nodeId, portType, portIdx, x, y}
+let nextId     = 1;
+let mouseX=0, mouseY=0;
+let dragOffset = {x:0,y:0};
+let animFrame  = 0;
+
+const NODE_W  = 80;
+const NODE_H  = 54;
+const PORT_R  = 6;
+
+// Gate definitions
+const GATE_DEF = {
+  AND:  {label:'AND',  ins:2, symbol:'·',   eval: (a,b)=>a&b},
+  OR:   {label:'OR',   ins:2, symbol:'≥1',  eval: (a,b)=>a|b},
+  NOT:  {label:'NOT',  ins:1, symbol:'¬',   eval: (a)  =>a^1},
+  NAND: {label:'NAND', ins:2, symbol:'⊼',   eval: (a,b)=>(a&b)^1},
+  NOR:  {label:'NOR',  ins:2, symbol:'⊽',   eval: (a,b)=>(a|b)^1},
+  XOR:  {label:'XOR',  ins:1, symbol:'=1',  eval: (a,b)=>a^b, ins:2},
+  XNOR: {label:'XNOR', ins:2, symbol:'⊙',   eval: (a,b)=>(a^b)^1},
+  BUF:  {label:'BUF',  ins:1, symbol:'▷',   eval: (a)  =>a},
+  INPUT:{label:'IN',   ins:0, symbol:'⚡',   eval: ()   =>0},
+  LED:  {label:'LED',  ins:1, symbol:'◉',   eval: (a)  =>a},
+};
+
+// Colors
+function getColor(name) {
+  const style = getComputedStyle(document.documentElement);
+  return style.getPropertyValue(name).trim();
+}
+const C = () => ({
+  bg:       getColor('--bg2'),
+  panel:    getColor('--panel'),
+  border:   getColor('--border'),
+  green:    getColor('--green'),
+  text:     getColor('--text'),
+  textDim:  getColor('--text-dim'),
+  amber:    getColor('--amber'),
+  red:      getColor('--red'),
+  cyan:     getColor('--cyan'),
+  hi:       getColor('--signal-hi'),
+  lo:       getColor('--signal-lo'),
+});
+
+// ── Compute node value ──
+function computeValues() {
+  // Topological sort & evaluate
+  const visited = new Set();
+  function evalNode(id) {
+    if (visited.has(id)) return;
+    visited.add(id);
+    const node = nodes.find(n=>n.id===id);
+    if (!node) return;
+    if (node.type === 'INPUT') return; // value set by user
+
+    const def = GATE_DEF[node.type];
+    const inVals = [];
+    for (let i = 0; i < def.ins; i++) {
+      const wire = wires.find(w => w.to.nodeId===id && w.to.idx===i);
+      if (wire) {
+        evalNode(wire.from.nodeId);
+        const src = nodes.find(n=>n.id===wire.from.nodeId);
+        inVals.push(src ? src.value : 0);
+      } else {
+        inVals.push(0);
+      }
+    }
+    node.value = def.eval ? def.eval(...inVals) : 0;
+  }
+  nodes.forEach(n => evalNode(n.id));
+}
+
+// ── Port positions ──
+function getOutPort(node) {
+  return { x: node.x + NODE_W, y: node.y + NODE_H/2 };
+}
+function getInPort(node, idx) {
+  const def = GATE_DEF[node.type];
+  const ins  = def.ins;
+  if (ins === 0) return null;
+  const step = NODE_H / (ins + 1);
+  return { x: node.x, y: node.y + step * (idx + 1) };
+}
+
+// ── Draw ──
+function draw() {
+  const c = C();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Background dots
+  ctx.fillStyle = c.panel + '30';
+
+  // Draw wires
+  computeValues();
+  wires.forEach(w => {
+    const src  = nodes.find(n=>n.id===w.from.nodeId);
+    const dst  = nodes.find(n=>n.id===w.to.nodeId);
+    if (!src || !dst) return;
+    const p1 = getOutPort(src);
+    const p2 = getInPort(dst, w.to.idx);
+    if (!p2) return;
+    const val = src.value;
+    drawWire(p1, p2, val===1 ? c.hi : c.lo, val===1);
+  });
+
+  // Pending wire
+  if (pendingPort) {
+    const pp = pendingPort;
+    ctx.beginPath();
+    ctx.strokeStyle = c.amber;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5,4]);
+    ctx.moveTo(pp.x, pp.y);
+    ctx.lineTo(mouseX, mouseY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Draw nodes
+  nodes.forEach(node => drawNode(node, c));
+
+  // Animation pulse
+  animFrame++;
+  requestAnimationFrame(draw);
+}
+
+function drawWire(p1, p2, color, isHi) {
+  const cx = (p1.x + p2.x) / 2;
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = isHi ? 2.5 : 1.5;
+  ctx.shadowColor = isHi ? color : 'transparent';
+  ctx.shadowBlur  = isHi ? 6 : 0;
+  ctx.moveTo(p1.x, p1.y);
+  ctx.bezierCurveTo(cx, p1.y, cx, p2.y, p2.x, p2.y);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Signal dot animation
+  if (isHi) {
+    const t = ((animFrame * 0.018) % 1);
+    const bx = bezierPoint(p1.x, cx, cx, p2.x, t);
+    const by = bezierPoint(p1.y, p1.y, p2.y, p2.y, t);
+    ctx.beginPath();
+    ctx.arc(bx, by, 4, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur  = 8;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function bezierPoint(p0,p1,p2,p3,t) {
+  const u=1-t;
+  return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+}
+
+function drawNode(node, c) {
+  const def = GATE_DEF[node.type];
+  const isSelected = (dragging && dragging.id === node.id);
+  const glowColor  = node.value===1 ? c.hi : c.border;
+
+  ctx.save();
+
+  // Shadow / glow on active
+  if (node.value === 1 && node.type !== 'INPUT') {
+    ctx.shadowColor = c.hi;
+    ctx.shadowBlur  = 12;
+  }
+
+  // Box
+  ctx.fillStyle   = isSelected ? c.panel : c.bg;
+  ctx.strokeStyle = node.value===1 ? c.hi : c.border;
+  ctx.lineWidth   = node.value===1 ? 2 : 1;
+  ctx.beginPath();
+  ctx.roundRect(node.x, node.y, NODE_W, NODE_H, 4);
+  ctx.fill(); ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Label
+  ctx.fillStyle = c.text;
+  ctx.font = `bold 11px 'Orbitron', monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  if (node.type === 'INPUT') {
+    // Toggle switch look
+    const val = node.value;
+    ctx.fillStyle = val===1 ? c.hi : c.lo;
+    ctx.shadowColor = val===1 ? c.hi : 'transparent';
+    ctx.shadowBlur  = val===1 ? 8 : 0;
+    ctx.font = `bold 14px 'Orbitron',monospace`;
+    ctx.fillText(val===1 ? '1' : '0', node.x + NODE_W/2, node.y + NODE_H/2 - 6);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = c.textDim;
+    ctx.font = `9px 'Share Tech Mono',monospace`;
+    ctx.fillText(node.label || `IN`, node.x + NODE_W/2, node.y + NODE_H/2 + 10);
+  } else if (node.type === 'LED') {
+    // LED circle
+    const r = 14;
+    const cx2 = node.x + NODE_W/2;
+    const cy2 = node.y + NODE_H/2;
+    ctx.beginPath();
+    ctx.arc(cx2, cy2, r, 0, Math.PI*2);
+    ctx.fillStyle = node.value===1 ? c.hi : c.textDim + '44';
+    ctx.shadowColor = node.value===1 ? c.hi : 'transparent';
+    ctx.shadowBlur  = node.value===1 ? 16 : 0;
+    ctx.fill();
+    ctx.strokeStyle = node.value===1 ? c.hi : c.border;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = node.value===1 ? '#000' : c.textDim;
+    ctx.font = `bold 10px 'Orbitron',monospace`;
+    ctx.fillText(node.value===1 ? '1' : '0', cx2, cy2);
+  } else {
+    // Gate symbol
+    ctx.fillStyle = c.green;
+    ctx.font = `bold 13px 'VT323',monospace`;
+    ctx.fillText(def.symbol, node.x + NODE_W/2, node.y + NODE_H/2 - 5);
+    ctx.fillStyle = c.textDim;
+    ctx.font = `9px 'Share Tech Mono',monospace`;
+    ctx.fillText(def.label, node.x + NODE_W/2, node.y + NODE_H/2 + 10);
+  }
+
+  // Input ports
+  for (let i = 0; i < def.ins; i++) {
+    const p = getInPort(node, i);
+    if (!p) continue;
+    const wire = wires.find(w=>w.to.nodeId===node.id && w.to.idx===i);
+    const connected = !!wire;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, PORT_R, 0, Math.PI*2);
+    ctx.fillStyle = connected ? (wire && nodes.find(n=>n.id===wire.from.nodeId)?.value===1 ? c.hi : c.lo) : c.panel;
+    ctx.strokeStyle = connected ? c.green : c.border;
+    ctx.lineWidth = 1.5;
+    ctx.fill(); ctx.stroke();
+  }
+
+  // Output port
+  if (node.type !== 'LED') {
+    const op = getOutPort(node);
+    ctx.beginPath();
+    ctx.arc(op.x, op.y, PORT_R, 0, Math.PI*2);
+    ctx.fillStyle = node.value===1 ? c.hi : c.panel;
+    ctx.strokeStyle = node.value===1 ? c.hi : c.border;
+    ctx.shadowColor = node.value===1 ? c.hi : 'transparent';
+    ctx.shadowBlur  = node.value===1 ? 8 : 0;
+    ctx.lineWidth = 1.5;
+    ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  ctx.restore();
+}
+
+// ── Hit testing ──
+function hitPort(mx, my) {
+  for (const node of nodes) {
+    const def = GATE_DEF[node.type];
+    // Output port
+    if (node.type !== 'LED') {
+      const op = getOutPort(node);
+      if (dist(mx,my,op.x,op.y) < PORT_R+4) return {nodeId:node.id, portType:'out', idx:0, x:op.x, y:op.y};
+    }
+    // Input ports
+    for (let i=0;i<def.ins;i++) {
+      const ip = getInPort(node, i);
+      if (!ip) continue;
+      if (dist(mx,my,ip.x,ip.y) < PORT_R+4) return {nodeId:node.id, portType:'in', idx:i, x:ip.x, y:ip.y};
+    }
+  }
+  return null;
+}
+
+function hitNode(mx, my) {
+  for (let i=nodes.length-1;i>=0;i--) {
+    const n=nodes[i];
+    if (mx>=n.x && mx<=n.x+NODE_W && my>=n.y && my<=n.y+NODE_H) return n;
+  }
+  return null;
+}
+
+function dist(ax,ay,bx,by) { return Math.sqrt((ax-bx)**2+(ay-by)**2); }
+
+// ── Mouse events ──
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  mouseX = e.clientX - r.left;
+  mouseY = e.clientY - r.top;
+  if (dragging) {
+    dragging.x = mouseX - dragOffset.x;
+    dragging.y = mouseY - dragOffset.y;
+  }
+});
+
+canvas.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX - r.left;
+  const my = e.clientY - r.top;
+
+  // Check port first
+  const port = hitPort(mx, my);
+  if (port) {
+    if (!pendingPort) {
+      // Start wire
+      if (port.portType === 'out') {
+        pendingPort = port;
+        setStatus('Click an input port to complete the wire');
+      } else {
+        pendingPort = port;
+        setStatus('Click an output port to complete the wire');
+      }
+    } else {
+      // Complete wire
+      const from = pendingPort.portType==='out' ? pendingPort : port;
+      const to   = pendingPort.portType==='in'  ? pendingPort : port;
+      if (from.portType==='out' && to.portType==='in' && from.nodeId !== to.nodeId) {
+        // Remove existing wire to same input
+        wires = wires.filter(w => !(w.to.nodeId===to.nodeId && w.to.idx===to.idx));
+        wires.push({ from: {nodeId:from.nodeId}, to: {nodeId:to.nodeId, idx:to.idx} });
+        setStatus('Wire connected!');
+        updateTruthTable();
+      } else {
+        setStatus('Invalid connection — connect output → input');
+      }
+      pendingPort = null;
+    }
+    return;
+  }
+
+  // Cancel pending wire on empty click
+  if (pendingPort) { pendingPort = null; setStatus(''); return; }
+
+  // Check node
+  const node = hitNode(mx, my);
+  if (node) {
+    if (node.type === 'INPUT') {
+      node.value = node.value===1 ? 0 : 1;
+      updateTruthTable();
+      return;
+    }
+    dragging = node;
+    dragOffset = { x: mx-node.x, y: my-node.y };
+  }
+});
+
+canvas.addEventListener('mouseup', () => { dragging = null; });
+
+canvas.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX - r.left;
+  const my = e.clientY - r.top;
+  const node = hitNode(mx, my);
+  if (node) {
+    wires  = wires.filter(w => w.from.nodeId!==node.id && w.to.nodeId!==node.id);
+    nodes  = nodes.filter(n => n.id !== node.id);
+    setStatus('Node deleted');
+    updateTruthTable();
+  }
+});
+
+// ── Drag from panel ──
+let dragType = null;
+function onDragStart(e) {
+  dragType = e.currentTarget.dataset.type;
+}
+
+canvas.addEventListener('dragover', e => { e.preventDefault(); });
+canvas.addEventListener('drop', e => {
+  e.preventDefault();
+  if (!dragType) return;
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left - NODE_W/2;
+  const y = e.clientY - r.top  - NODE_H/2;
+  addNode(dragType, x, y);
+  dragType = null;
+});
+
+// ── Add nodes ──
+function addNode(type, x, y) {
+  const def = GATE_DEF[type];
+  const label = type==='INPUT' ? `IN${nodes.filter(n=>n.type==='INPUT').length+1}` : def.label;
+  nodes.push({ id:nextId++, type, x, y, value:0, label });
+  updateTruthTable();
+}
+
+function addInput() {
+  const r = canvas.getBoundingClientRect();
+  addNode('INPUT', 40, 60 + nodes.filter(n=>n.type==='INPUT').length * 80);
+}
+
+function clearCanvas() {
+  nodes=[]; wires=[]; pendingPort=null; dragging=null;
+  document.getElementById('tt-content').innerHTML = '<div style="font-size:0.72rem;color:var(--text-dim);">Add inputs and an LED output, then wire them up to generate.</div>';
+  setStatus('Canvas cleared');
+}
+
+// ── Truth Table ──
+function toggleTruthTable() {
+  const ov = document.getElementById('tt-overlay');
+  ov.classList.toggle('visible');
+  if (ov.classList.contains('visible')) updateTruthTable();
+}
+
+function updateTruthTable() {
+  const inputs = nodes.filter(n=>n.type==='INPUT');
+  const leds   = nodes.filter(n=>n.type==='LED');
+  const cont   = document.getElementById('tt-content');
+
+  if (inputs.length===0 || leds.length===0) {
+    cont.innerHTML = '<div style="font-size:0.72rem;color:var(--text-dim);">Add at least one Input and one LED output.</div>';
+    return;
+  }
+  if (inputs.length > 4) {
+    cont.innerHTML = '<div style="font-size:0.72rem;color:var(--text-dim);">Truth table supports up to 4 inputs.</div>';
+    return;
+  }
+
+  const savedVals = inputs.map(n=>n.value);
+  const rows = [];
+  const total = Math.pow(2, inputs.length);
+
+  for (let i=0;i<total;i++) {
+    inputs.forEach((inp,b) => { inp.value = (i >> (inputs.length-1-b)) & 1; });
+    computeValues();
+    rows.push({
+      inVals: inputs.map(n=>n.value),
+      outVals: leds.map(n=>n.value),
+    });
+  }
+
+  // Restore
+  inputs.forEach((n,i)=>{ n.value=savedVals[i]; });
+  computeValues();
+
+  // Render
+  const headers = [...inputs.map(n=>n.label||'IN'), ...leds.map((_,i)=>`OUT${leds.length>1?i+1:''}`)];
+  let html = `<table class="tt-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  rows.forEach(r => {
+    const outHi = r.outVals.some(v=>v===1);
+    html += `<tr class="${outHi?'tt-row-hi':'tt-row-lo'}">`;
+    html += r.inVals.map(v=>`<td style="color:${v?'var(--green)':'var(--red)'};">${v}</td>`).join('');
+    html += r.outVals.map(v=>`<td>${v}</td>`).join('');
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  cont.innerHTML = html;
+}
+
+function setStatus(msg) {
+  document.getElementById('status-msg').textContent = msg;
+  if (msg) setTimeout(()=>{ if(document.getElementById('status-msg').textContent===msg) document.getElementById('status-msg').textContent=''; },3000);
+}
+
+// Start render loop
+draw();
+</script>
+</body>
+</html>
