@@ -8,7 +8,7 @@ A personal academic knowledge base for Electrical Engineering coursework at the 
 
 ## Live Site
 
-🔗 [(https://eceuh.com/)](https://eceuh.com/)
+🔗 [https://eceuh.com/](https://eceuh.com/)
 
 ---
 
