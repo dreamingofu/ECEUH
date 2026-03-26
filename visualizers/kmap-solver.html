@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EE — K-Map Solver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #050a05;
+      --bg2:       #080f08;
+      --panel:     #0b140b;
+      --border:    #1a3a1a;
+      --border2:   #0f2018;
+      --green:     #00ff41;
+      --green-dim: #00cc33;
+      --green-dark:#003311;
+      --amber:     #ffb700;
+      --red:       #ff3c3c;
+      --cyan:      #00fff7;
+      --blue:      #4d9fff;
+      --text:      #b8d4b8;
+      --text-dim:  #4a6b4a;
+      --text-mid:  #6b9a6b;
+      --glow:      0 0 8px #00ff4180, 0 0 20px #00ff4130;
+      --glow-lg:   0 0 16px #00ff4199, 0 0 40px #00ff4150;
+    }
+
+    /* Group colors */
+    --g0: #ff3c3c; --g1: #4d9fff; --g2: #ffb700; --g3: #00fff7;
+    --g4: #cc44ff; --g5: #00ff41; --g6: #ff8844; --g7: #ff44aa;
+
+    html.light {
+      --bg: #f5f7f5; --bg2: #ffffff; --panel: #edf2ed;
+      --border: #7aaa7a; --border2: #a0c4a0;
+      --green: #005c14; --green-dim: #004810; --green-dark: #d4eed4;
+      --amber: #6b4800; --red: #aa1a1a; --cyan: #005048; --blue: #0c2ea0;
+      --text: #0a150a; --text-dim: #2a4a2a; --text-mid: #1e3c1e;
+      --glow: none; --glow-lg: none;
+    }
+    html.light body::before { display: none; }
+    html.light .bg-glow     { display: none; }
+    html.light .grid-bg     { opacity: 0.07; filter: invert(1); }
+    html.light .topbar      { background: rgba(245,247,245,0.98); border-bottom: 1px solid var(--border); }
+    html.light .kmap-cell   { background: #ffffff; border-color: var(--border); color: var(--text); }
+    html.light .kmap-cell.val-dc { color: var(--amber); }
+    html.light .kmap-cell.val-one { color: var(--green); }
+    html.light .kmap-cell.val-zero { color: var(--text-dim); }
+    html.light .kmap-label  { color: var(--text-dim); background: var(--panel); }
+    html.light .result-box  { background: #ffffff; border-color: var(--border); }
+    html.light .pi-item     { background: var(--panel); border-color: var(--border); }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh; overflow-x: hidden; cursor: crosshair;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px);
+      pointer-events: none; z-index: 9999;
+    }
+
+    .bg-glow { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 70% 50% at 50% -5%, #00ff4108 0%, transparent 70%); }
+    .grid-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.04; background-image: linear-gradient(var(--green) 1px, transparent 1px), linear-gradient(90deg, var(--green) 1px, transparent 1px); background-size: 40px 40px; animation: gridDrift 60s linear infinite; }
+    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+    /* ── TOPBAR ── */
+    .topbar { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 2.5rem; border-bottom: 1px solid var(--border); background: rgba(5,10,5,0.94); backdrop-filter: blur(10px); }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s; }
+    .back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-dark); }
+    .breadcrumb { font-size: 0.68rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem; }
+    .breadcrumb span { color: var(--green); }
+    .topbar-right { display: flex; align-items: center; gap: 1.2rem; font-size: 0.68rem; color: var(--text-dim); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: var(--glow); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .theme-toggle { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── LAYOUT ── */
+    .wrapper { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 3rem 2rem; }
+
+    .page-header { margin-bottom: 2.5rem; }
+    .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.6rem; }
+    .page-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--green-dim); }
+    .page-title { font-family: 'Orbitron', monospace; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--green); text-shadow: var(--glow-lg); letter-spacing: -0.02em; line-height: 1.1; }
+    .page-desc { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.8rem; line-height: 1.8; max-width: 600px; }
+    .page-desc em { color: var(--text); font-style: normal; }
+
+    /* ── CONTROLS ── */
+    .controls { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 1.6rem; margin-bottom: 1.5rem; }
+    .ctrl-title { font-family: 'Orbitron', monospace; font-size: 0.72rem; font-weight: 700; color: var(--green); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+    .ctrl-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+    .ctrl-row { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1rem; }
+    .ctrl-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .ctrl-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+
+    select.ctrl-sel {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.82rem;
+      padding: 0.55rem 2rem 0.55rem 0.8rem; background: var(--panel);
+      border: 1px solid var(--border); border-radius: 3px; color: var(--text);
+      outline: none; cursor: pointer; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6b4a'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 0.6rem center;
+      transition: border-color 0.2s;
+    }
+    select.ctrl-sel:focus { border-color: var(--green); }
+    html.light select.ctrl-sel { background-color: #ffffff; color: var(--text); }
+
+    .solve-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.6rem 1.8rem; border: 1px solid var(--green); border-radius: 3px; background: var(--green-dark); color: var(--green); cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .solve-btn:hover { background: var(--green); color: var(--bg); box-shadow: var(--glow); }
+    .reset-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1.2rem; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+    .reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+    .hint-row { font-size: 0.7rem; color: var(--text-dim); line-height: 1.8; background: var(--panel); border: 1px solid var(--border2); border-radius: 3px; padding: 0.7rem 1rem; }
+    .hint-row strong { color: var(--green); font-weight: normal; }
+
+    /* ── KMAP GRID ── */
+    .kmap-section { display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+    .kmap-wrap { position: relative; }
+
+    .kmap-title { font-family: 'Orbitron', monospace; font-size: 0.68rem; font-weight: 700; color: var(--text-mid); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+
+    .kmap-grid { display: inline-grid; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; position: relative; }
+
+    .kmap-label {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; color: var(--text-dim); background: var(--panel);
+      font-family: 'Orbitron', monospace; letter-spacing: 0.1em;
+      border: 1px solid var(--border2); padding: 0.4rem 0.5rem;
+      user-select: none;
+    }
+    .kmap-label.corner { background: var(--bg); font-size: 0.6rem; color: var(--text-dim); }
+
+    .kmap-cell {
+      width: 72px; height: 72px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900;
+      background: var(--bg2); border: 1px solid var(--border2);
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, transform 0.1s;
+      position: relative;
+    }
+    .kmap-cell:hover { background: var(--panel); transform: scale(1.05); z-index: 2; }
+    .kmap-cell:active { transform: scale(0.97); }
+    .kmap-cell.val-zero { color: var(--text-dim); }
+    .kmap-cell.val-one  { color: var(--green); text-shadow: var(--glow); }
+    .kmap-cell.val-dc   { color: var(--amber); text-shadow: 0 0 8px #ffb70080; }
+
+    /* Group overlay colors */
+    .kmap-cell.g0 { background: rgba(255,60,60,0.18) !important; }
+    .kmap-cell.g1 { background: rgba(77,159,255,0.18) !important; }
+    .kmap-cell.g2 { background: rgba(255,183,0,0.18) !important; }
+    .kmap-cell.g3 { background: rgba(0,255,247,0.18) !important; }
+    .kmap-cell.g4 { background: rgba(204,68,255,0.18) !important; }
+    .kmap-cell.g5 { background: rgba(0,255,65,0.18) !important; }
+    .kmap-cell.g6 { background: rgba(255,136,68,0.18) !important; }
+    .kmap-cell.g7 { background: rgba(255,68,170,0.18) !important; }
+
+    /* multiple groups — blend */
+    .kmap-cell.g0.g1 { background: rgba(200,100,200,0.22) !important; }
+
+    /* ── LEGEND ── */
+    .legend { display: flex; flex-direction: column; gap: 0.5rem; min-width: 160px; }
+    .legend-title { font-family: 'Orbitron', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; color: var(--text-dim); }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 2px; flex-shrink: 0; }
+
+    /* ── RESULTS ── */
+    .results { display: none; }
+    .results.visible { display: block; }
+
+    .result-section-title { font-family: 'Orbitron', monospace; font-size: 0.72rem; font-weight: 700; color: var(--green); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .result-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+    .result-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+    .result-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1.2rem 1.5rem; }
+    .result-box-label { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .result-expr { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--green); text-shadow: var(--glow); line-height: 1.4; word-break: break-all; }
+    .result-expr.amber { color: var(--amber); text-shadow: 0 0 8px #ffb70080; }
+
+    /* Prime implicants */
+    .pi-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .pi-item { background: var(--bg2); border: 1px solid var(--border2); border-radius: 3px; padding: 0.7rem 1.1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .pi-term { font-family: 'Orbitron', monospace; font-size: 0.82rem; font-weight: 700; min-width: 80px; }
+    .pi-minterms { font-size: 0.7rem; color: var(--text-dim); }
+    .pi-minterms span { color: var(--text-mid); }
+    .pi-size { font-size: 0.65rem; color: var(--text-dim); margin-left: auto; }
+    .pi-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
+
+    @media (max-width: 680px) {
+      .kmap-cell { width: 56px; height: 56px; font-size: 1rem; }
+      .result-boxes { grid-template-columns: 1fr; }
+      .wrapper { padding: 2rem 1rem; }
+      .topbar { padding: 0.9rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="grid-bg"></div>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="../dld.html">← DLD</a>
+      <div class="breadcrumb">
+        <span>DLD</span>
+        <span style="color:var(--border);">/</span>
+        <span>K-Map Solver</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span style="display:flex;align-items:center;gap:0.4rem;color:var(--green);">
+        <span class="live-dot"></span> Interactive
+      </span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </nav>
+
+  <div class="wrapper">
+    <div class="page-header">
+      <p class="page-eyebrow">Digital Logic Design · Unit 04</p>
+      <h1 class="page-title">K-Map Solver</h1>
+      <p class="page-desc">
+        Click cells to toggle between <em>0</em>, <em>1</em>, and <em>X</em> (don't-care).
+        The solver automatically finds prime implicants, groups them with color overlays,
+        and outputs the minimized <em>SOP</em> and <em>POS</em> expressions.
+      </p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="ctrl-title">// Configuration</div>
+      <div class="ctrl-row">
+        <div class="ctrl-group">
+          <label class="ctrl-label">Variables</label>
+          <select class="ctrl-sel" id="var-count" onchange="initKmap()">
+            <option value="2">2 Variables — A, B (2×2)</option>
+            <option value="3" selected>3 Variables — A, B, C (2×4)</option>
+            <option value="4">4 Variables — A, B, C, D (4×4)</option>
+          </select>
+        </div>
+        <button class="solve-btn" onclick="solve()">⟳ Solve</button>
+        <button class="reset-btn" onclick="resetKmap()">✕ Reset</button>
+      </div>
+      <div class="hint-row">
+        <strong>Click a cell</strong> to cycle: <strong style="color:var(--text-dim)">0</strong> → <strong style="color:var(--green)">1</strong> → <strong style="color:var(--amber)">X</strong> (don't-care) → <strong style="color:var(--text-dim)">0</strong>
+        &nbsp;·&nbsp; <strong>Solve</strong> automatically groups and minimizes &nbsp;·&nbsp; Gray code ordering is applied automatically
+      </div>
+    </div>
+
+    <!-- K-Map + Legend -->
+    <div class="kmap-section">
+      <div class="kmap-wrap">
+        <div class="kmap-title" id="kmap-title">K-Map — 3 Variables</div>
+        <div class="kmap-grid" id="kmap-grid"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-title">// Groups</div>
+        <div id="legend-items">
+          <div class="legend-item" style="color:var(--text-dim);font-size:0.68rem;">Solve to see groups</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results" id="results">
+      <div class="result-section-title">// Minimized Expressions</div>
+      <div class="result-boxes">
+        <div class="result-box">
+          <div class="result-box-label">SOP — Sum of Products</div>
+          <div class="result-expr" id="sop-result">—</div>
+        </div>
+        <div class="result-box">
+          <div class="result-box-label">POS — Product of Sums</div>
+          <div class="result-expr amber" id="pos-result">—</div>
+        </div>
+      </div>
+
+      <div class="result-section-title">// Prime Implicants</div>
+      <div class="pi-list" id="pi-list"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Theme ──
+    const toggleBtn = document.getElementById('theme-toggle');
+    function applyTheme(t) {
+      document.documentElement.classList.toggle('light', t === 'light');
+      toggleBtn.textContent = t === 'light' ? '● Dark' : '☀ Light';
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next); applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
+
+    // ── K-Map Config ──
+    // Gray code orderings
+    const GRAY2 = [0, 1];          // 1-bit: 0,1
+    const GRAY4 = [0, 1, 3, 2];    // 2-bit gray: 00,01,11,10
+
+    // For n vars: rows use first ceil(n/2) vars, cols use remaining
+    const CONFIGS = {
+      2: { vars: ['A','B'], rowBits: 1, colBits: 1, rowOrder: GRAY2, colOrder: GRAY2 },
+      3: { vars: ['A','B','C'], rowBits: 1, colBits: 2, rowOrder: GRAY2, colOrder: GRAY4 },
+      4: { vars: ['A','B','C','D'], rowBits: 2, colBits: 2, rowOrder: GRAY4, colOrder: GRAY4 },
+    };
+
+    const GROUP_COLORS = ['#ff3c3c','#4d9fff','#ffb700','#00fff7','#cc44ff','#00ff41','#ff8844','#ff44aa'];
+
+    let numVars = 3;
+    let cellValues = []; // 0, 1, 2 (don't-care)
+    let numCells = 0;
+
+    function cellIndex(row, col) {
+      const cfg = CONFIGS[numVars];
+      const rowGray = cfg.rowOrder[row];
+      const colGray = cfg.colOrder[col];
+      // combine: row bits are MSBs
+      return (rowGray << cfg.colBits) | colGray;
+    }
+
+    function initKmap() {
+      numVars  = parseInt(document.getElementById('var-count').value);
+      numCells = Math.pow(2, numVars);
+      cellValues = new Array(numCells).fill(0);
+      document.getElementById('kmap-title').textContent = `K-Map — ${numVars} Variable${numVars > 1 ? 's' : ''}`;
+      renderGrid();
+      document.getElementById('results').classList.remove('visible');
+      document.getElementById('legend-items').innerHTML = '<div class="legend-item" style="color:var(--text-dim);font-size:0.68rem;">Solve to see groups</div>';
+    }
+
+    function renderGrid(groupMap = {}) {
+      const cfg = CONFIGS[numVars];
+      const grid = document.getElementById('kmap-grid');
+      const rows = cfg.rowOrder.length;
+      const cols = cfg.colOrder.length;
+      const totalCols = cols + 1;
+      const totalRows = rows + 1;
+
+      grid.style.gridTemplateColumns = `repeat(${totalCols}, auto)`;
+      grid.innerHTML = '';
+
+      // Corner label
+      const corner = document.createElement('div');
+      corner.className = 'kmap-label corner';
+      const rowVars = cfg.vars.slice(0, cfg.rowBits).join('');
+      const colVars = cfg.vars.slice(cfg.rowBits).join('');
+      corner.textContent = `${rowVars} \\ ${colVars}`;
+      grid.appendChild(corner);
+
+      // Column headers
+      cfg.colOrder.forEach(g => {
+        const lbl = document.createElement('div');
+        lbl.className = 'kmap-label';
+        lbl.textContent = g.toString(2).padStart(cfg.colBits, '0');
+        grid.appendChild(lbl);
+      });
+
+      // Rows
+      cfg.rowOrder.forEach((rowGray, r) => {
+        // Row header
+        const rlbl = document.createElement('div');
+        rlbl.className = 'kmap-label';
+        rlbl.textContent = rowGray.toString(2).padStart(cfg.rowBits, '0');
+        grid.appendChild(rlbl);
+
+        // Cells
+        cfg.colOrder.forEach((colGray, c) => {
+          const idx = cellIndex(r, c);
+          const val = cellValues[idx];
+          const cell = document.createElement('div');
+          cell.className = 'kmap-cell';
+          cell.dataset.idx = idx;
+
+          // value class
+          if (val === 0) { cell.classList.add('val-zero'); cell.textContent = '0'; }
+          else if (val === 1) { cell.classList.add('val-one');  cell.textContent = '1'; }
+          else               { cell.classList.add('val-dc');   cell.textContent = 'X'; }
+
+          // group overlays
+          if (groupMap[idx] !== undefined) {
+            groupMap[idx].forEach(gi => cell.classList.add(`g${gi}`));
+          }
+
+          cell.addEventListener('click', () => {
+            cellValues[idx] = (cellValues[idx] + 1) % 3;
+            renderGrid();
+            document.getElementById('results').classList.remove('visible');
+            document.getElementById('legend-items').innerHTML = '<div class="legend-item" style="color:var(--text-dim);font-size:0.68rem;">Solve to see groups</div>';
+          });
+
+          grid.appendChild(cell);
+        });
+      });
+    }
+
+    function resetKmap() {
+      cellValues = new Array(numCells).fill(0);
+      renderGrid();
+      document.getElementById('results').classList.remove('visible');
+      document.getElementById('legend-items').innerHTML = '<div class="legend-item" style="color:var(--text-dim);font-size:0.68rem;">Solve to see groups</div>';
+    }
+
+    // ── K-Map Solving Logic ──
+
+    // Get all minterms (cells with value 1)
+    function getMinterms() { return cellValues.map((v,i) => v===1 ? i : -1).filter(i => i>=0); }
+    function getDontCares() { return cellValues.map((v,i) => v===2 ? i : -1).filter(i => i>=0); }
+    function getMaxterms() { return cellValues.map((v,i) => v===0 ? i : -1).filter(i => i>=0); }
+
+    // Check if two minterms can be combined (differ by exactly 1 bit)
+    function canCombine(a, b) {
+      const xor = a ^ b;
+      return xor > 0 && (xor & (xor - 1)) === 0;
+    }
+
+    // Check if a set of minterms forms a valid group (power of 2, wrap-around aware)
+    function isValidGroup(minterms, n) {
+      const size = minterms.length;
+      if (size === 0 || (size & (size-1)) !== 0) return false; // must be power of 2
+      if (size > numCells) return false;
+      return true;
+    }
+
+    // Find all prime implicants using Quine-McCluskey style grouping
+    function findPrimeImplicants(minterms, dontCares) {
+      const all = [...minterms, ...dontCares].sort((a,b)=>a-b);
+      if (all.length === 0) return [];
+
+      // Generate all possible groups (sizes 1,2,4,8,16)
+      const primeImplicants = [];
+      const covered = new Set();
+
+      // Try groups of size 1, 2, 4, 8, 16
+      for (let size = numCells; size >= 1; size >>= 1) {
+        const groups = findGroupsOfSize(size, minterms, dontCares);
+        groups.forEach(g => {
+          // Only keep groups that cover at least one real minterm
+          const realCovered = g.filter(i => minterms.includes(i));
+          if (realCovered.length > 0) {
+            primeImplicants.push({ cells: g, realCells: realCovered, size });
+          }
+        });
+      }
+
+      // Remove redundant PIs (those whose minterms are already covered by larger groups)
+      return selectEssentialPIs(primeImplicants, minterms);
+    }
+
+    function findGroupsOfSize(size, minterms, dontCares) {
+      const all = new Set([...minterms, ...dontCares]);
+      const groups = [];
+
+      if (size === 1) {
+        minterms.forEach(m => groups.push([m]));
+        return groups;
+      }
+
+      // For K-map, valid groups must be rectangular blocks in the grid
+      const cfg = CONFIGS[numVars];
+      const rows = cfg.rowOrder.length;
+      const cols = cfg.colOrder.length;
+
+      // Try all possible rectangle sizes that multiply to `size`
+      for (let rSize = 1; rSize <= rows; rSize <<= 1) {
+        for (let cSize = 1; cSize <= cols; cSize <<= 1) {
+          if (rSize * cSize !== size) continue;
+
+          // Try all starting positions
+          for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+              const group = [];
+              let valid = true;
+
+              for (let dr = 0; dr < rSize; dr++) {
+                for (let dc = 0; dc < cSize; dc++) {
+                  const wr = (r + dr) % rows;
+                  const wc = (c + dc) % cols;
+                  const idx = cellIndex(wr, wc);
+                  if (!all.has(idx)) { valid = false; break; }
+                  group.push(idx);
+                }
+                if (!valid) break;
+              }
+
+              if (valid && group.length === size) {
+                // Deduplicate
+                const sorted = [...new Set(group)].sort((a,b)=>a-b);
+                if (sorted.length === size) {
+                  const key = sorted.join(',');
+                  if (!groups.some(g => g.join(',') === key)) {
+                    groups.push(sorted);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return groups;
+    }
+
+    function selectEssentialPIs(pis, minterms) {
+      if (pis.length === 0) return [];
+
+      // Sort by size descending (prefer larger groups)
+      pis.sort((a,b) => b.size - a.size);
+
+      const selected = [];
+      const covered = new Set();
+
+      // First pass: find essential PIs (only cover for some minterm)
+      minterms.forEach(m => {
+        const covering = pis.filter(pi => pi.realCells.includes(m));
+        if (covering.length === 1) {
+          if (!selected.includes(covering[0])) {
+            selected.push(covering[0]);
+            covering[0].realCells.forEach(c => covered.add(c));
+          }
+        }
+      });
+
+      // Second pass: greedily cover remaining minterms
+      const remaining = minterms.filter(m => !covered.has(m));
+      remaining.forEach(m => {
+        if (covered.has(m)) return;
+        const covering = pis.filter(pi => pi.realCells.includes(m) && !selected.includes(pi));
+        if (covering.length > 0) {
+          covering.sort((a,b) => b.size - a.size);
+          selected.push(covering[0]);
+          covering[0].realCells.forEach(c => covered.add(c));
+        }
+      });
+
+      return selected;
+    }
+
+    // Convert a group of cells to a Boolean term
+    function groupToTerm(cells, forSOP = true) {
+      const cfg = CONFIGS[numVars];
+      const vars = cfg.vars;
+      let term = '';
+
+      for (let bit = numVars - 1; bit >= 0; bit--) {
+        const vals = cells.map(c => (c >> bit) & 1);
+        const allOne  = vals.every(v => v === 1);
+        const allZero = vals.every(v => v === 0);
+        const varName = vars[numVars - 1 - bit];
+
+        if (forSOP) {
+          if (allOne)  term += varName;
+          else if (allZero) term += `${varName}'`;
+          // else: variable is eliminated
+        } else {
+          // POS: sum term — opposite logic
+          if (allZero) term += varName;
+          else if (allOne)  term += `${varName}'`;
+        }
+      }
+
+      return term || (forSOP ? '1' : '0');
+    }
+
+    function solve() {
+      const minterms  = getMinterms();
+      const dontCares = getDontCares();
+      const maxterms  = getMaxterms();
+
+      // Edge cases
+      if (minterms.length === 0 && dontCares.length === numCells) {
+        showResult('X (All Don\'t Care)', 'X', [], {});
+        return;
+      }
+      if (minterms.length === 0) {
+        showResult('0 (Always False)', '1 (Always True)', [], {});
+        return;
+      }
+      if (minterms.length + dontCares.length === numCells) {
+        showResult('1 (Always True)', '0 (Always False)', [], {});
+        return;
+      }
+
+      // SOP
+      const sopPIs = findPrimeImplicants(minterms, dontCares);
+      const sopExpr = sopPIs.length === 0 ? '0'
+        : sopPIs.map(pi => groupToTerm(pi.cells, true)).join(' + ') || '1';
+
+      // POS — work with maxterms
+      const posPIs = findPrimeImplicants(maxterms, dontCares);
+      const posExpr = posPIs.length === 0 ? '1'
+        : posPIs.map(pi => {
+            const t = groupToTerm(pi.cells, false);
+            return t.length > 1 ? `(${t})` : t;
+          }).join(' · ') || '0';
+
+      // Build group map for coloring
+      const groupMap = {};
+      sopPIs.forEach((pi, gi) => {
+        pi.cells.forEach(c => {
+          if (!groupMap[c]) groupMap[c] = [];
+          groupMap[c].push(gi % GROUP_COLORS.length);
+        });
+      });
+
+      renderGrid(groupMap);
+      showResult(sopExpr, posExpr, sopPIs, groupMap);
+    }
+
+    function showResult(sopExpr, posExpr, pis, groupMap) {
+      document.getElementById('sop-result').textContent = sopExpr;
+      document.getElementById('pos-result').textContent = posExpr;
+
+      // Prime implicants list
+      const piList = document.getElementById('pi-list');
+      if (pis.length === 0) {
+        piList.innerHTML = '<div style="font-size:0.75rem;color:var(--text-dim);padding:0.5rem 0;">No prime implicants — expression is constant.</div>';
+      } else {
+        piList.innerHTML = pis.map((pi, i) => {
+          const color = GROUP_COLORS[i % GROUP_COLORS.length];
+          const term  = groupToTerm(pi.cells, true);
+          const mintermStr = pi.realCells.sort((a,b)=>a-b).join(', ');
+          const sizeLabel = pi.size === 1 ? '1 cell' : `${pi.size} cells`;
+          return `
+            <div class="pi-item">
+              <div class="pi-swatch" style="background:${color};"></div>
+              <div class="pi-term" style="color:${color};">${term}</div>
+              <div class="pi-minterms">Covers: <span>m(${mintermStr})</span></div>
+              <div class="pi-size">${sizeLabel}</div>
+            </div>`;
+        }).join('');
+      }
+
+      // Legend
+      const legendItems = document.getElementById('legend-items');
+      if (pis.length === 0) {
+        legendItems.innerHTML = '<div class="legend-item" style="font-size:0.68rem;">No groups found</div>';
+      } else {
+        legendItems.innerHTML = pis.map((pi, i) => {
+          const color = GROUP_COLORS[i % GROUP_COLORS.length];
+          const term  = groupToTerm(pi.cells, true);
+          return `<div class="legend-item"><div class="legend-swatch" style="background:${color};opacity:0.8;"></div><span style="color:${color};">${term}</span><span style="margin-left:auto;font-size:0.65rem;">${pi.size}c</span></div>`;
+        }).join('');
+      }
+
+      document.getElementById('results').classList.add('visible');
+      setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    }
+
+    // Init on load
+    initKmap();
+  </script>
+</body>
+</html>
