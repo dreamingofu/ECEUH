@@ -980,7 +980,7 @@
     </ul>
     <div class="topbar-right">
       <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
-      ECE_3441 // SPRING_2026
+      EE_3XX // SPRING_2026
     </div>
   </nav>
 
@@ -1199,9 +1199,9 @@
                 <span class="version-count">3 versions available</span>
                 <div class="version-select-row">
                   <select class="version-select" id="q01-select" onchange="updatePreview('q01')">
-                    <option value="files/dld/quizzes/Quiz1.V1_DLD_Practice.pdf">Version A</option>
-                    <option value="files/dld/quizzes/Quiz1.V2_DLD_Practice.pdf">Version B</option>
-                    <option value="files/dld/quizzes/Quiz1.V3_DLD_Practice.pdf">Version C</option>
+                    <option value="files/dld/quizzes/quiz-01-v1.pdf">Version A</option>
+                    <option value="files/dld/quizzes/quiz-01-v2.pdf">Version B</option>
+                    <option value="files/dld/quizzes/quiz-01-v3.pdf">Version C</option>
                   </select>
                   <a class="preview-action-btn" onclick="togglePreview('q01')" href="#">⊞ Preview</a>
                   <a class="version-download" onclick="downloadVersion('q01-select')" href="#">↓ Get</a>
@@ -1217,7 +1217,7 @@
                 <span id="q01-preview-label">Version A — quiz-01-v1.pdf</span>
               </div>
               <div class="preview-toolbar-right">
-                <a class="preview-action-btn" id="q01-newtab" href="files/dld/quizzes/ECE3441_Quiz_CribSheet.pdf" target="_blank" rel="noopener">↗ Open in Tab</a>
+                <a class="preview-action-btn" id="q01-newtab" href="files/dld/quizzes/quiz-01-v1.pdf" target="_blank" rel="noopener">↗ Open in Tab</a>
                 <a class="preview-action-btn" onclick="downloadVersion('q01-select')" href="#">↓ Download</a>
                 <button class="preview-action-btn close-btn" onclick="togglePreview('q01')">✕ Close</button>
               </div>
@@ -1227,7 +1227,7 @@
               <div class="preview-fallback" id="q01-fallback">
                 <div class="preview-fallback-icon">[PDF]</div>
                 <p>Your browser blocked the inline preview. Use the buttons above to open in a new tab or download directly.</p>
-                <a class="preview-action-btn" id="q01-fallback-tab" href="files/dld/quizzes/Quiz1.V1_DLD_Practice.pdf" target="_blank">↗ Open in New Tab</a>
+                <a class="preview-action-btn" id="q01-fallback-tab" href="files/dld/quizzes/quiz-01-v1.pdf" target="_blank">↗ Open in New Tab</a>
               </div>
             </div>
             <div class="preview-resize-handle" id="q01-handle"></div>
@@ -1373,37 +1373,32 @@
         <span class="tag">04 — REFERENCE_MATERIAL</span>
       </div>
 
-      <div class="resources">
-        <div class="resource">
-          <span class="resource-icon">[TB]</span>
-          <h4>Primary Textbook</h4>
-          <p>Digital Design — Mano & Ciletti. Core reference for all units. Chapter notes linked per topic.</p>
+      <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; position: relative; overflow: hidden;">
+
+        <!-- Left side -->
+        <div style="position: relative; z-index: 1;">
+          <div style="font-family: 'VT323', monospace; font-size: 3rem; color: var(--green); opacity: 0.15; position: absolute; top: -1rem; left: -0.5rem; pointer-events: none; user-select: none;">[RES]</div>
+          <p style="font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem;">DLD Resources Hub</p>
+          <h3 style="font-family: 'Orbitron', monospace; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.6rem;">Visualizers, Files & References</h3>
+          <p style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.75; max-width: 480px;">
+            All DLD tools in one place — interactive visualizers, downloadable quizzes and exams, formula sheets, and curated external links.
+          </p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+            <span style="font-size: 0.6rem; padding: 0.18rem 0.55rem; border: 1px solid #00ff4128; background: #00ff4112; color: var(--green); border-radius: 2px;">3 Visualizers</span>
+            <span style="font-size: 0.6rem; padding: 0.18rem 0.55rem; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); border-radius: 2px;">Quizzes & Exams</span>
+            <span style="font-size: 0.6rem; padding: 0.18rem 0.55rem; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); border-radius: 2px;">Formula Sheets</span>
+            <span style="font-size: 0.6rem; padding: 0.18rem 0.55rem; border: 1px solid var(--border); background: var(--panel); color: var(--text-dim); border-radius: 2px;">External Links</span>
+          </div>
         </div>
-        <div class="resource">
-          <span class="resource-icon">[HW]</span>
-          <h4>Homework Walkthroughs</h4>
-          <p>Step-by-step solutions with commentary on reasoning, common mistakes, and alternative approaches.</p>
-        </div>
-        <div class="resource">
-          <span class="resource-icon">[PX]</span>
-          <h4>Practice Problems</h4>
-          <p>Exam-style problems with full solutions. Organized by topic and difficulty level.</p>
-        </div>
-        <div class="resource">
-          <span class="resource-icon">[∑]</span>
-          <h4>Formula Sheets</h4>
-          <p>Condensed reference cards — Boolean identities, gate symbols, K-map templates, FSM notation.</p>
-        </div>
-        <div class="resource">
-          <span class="resource-icon">[SIM]</span>
-          <h4>Interactive Sims</h4>
-          <p>Logic tools built into the site — <a href="visualizers/truth-table.html" style="color:var(--green);">Truth Table Generator</a>, K-map solvers, and more coming soon.</p>
-        </div>
-        <div class="resource">
-          <span class="resource-icon">[//]</span>
-          <h4>External Links</h4>
-          <p>Curated external resources — lectures, simulators, and reference docs used throughout the semester.</p>
-        </div>
+
+        <!-- Right side — button -->
+        <a href="dld-resources.html"
+           style="display: inline-flex; align-items: center; gap: 0.6rem; font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.85rem 2rem; border: 1px solid var(--green); border-radius: 3px; background: var(--green-dark); color: var(--green); text-decoration: none; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;"
+           onmouseover="this.style.background='var(--green)';this.style.color='var(--bg)';this.style.boxShadow='var(--glow)';"
+           onmouseout="this.style.background='var(--green-dark)';this.style.color='var(--green)';this.style.boxShadow='none';">
+          Open Resources Hub →
+        </a>
+
       </div>
     </section>
   </div>
