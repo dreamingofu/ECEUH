@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EE — Truth Table Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #050a05;
+      --bg2:       #080f08;
+      --panel:     #0b140b;
+      --border:    #1a3a1a;
+      --border2:   #0f2018;
+      --green:     #00ff41;
+      --green-dim: #00cc33;
+      --green-dark:#003311;
+      --amber:     #ffb700;
+      --red:       #ff3c3c;
+      --cyan:      #00fff7;
+      --text:      #b8d4b8;
+      --text-dim:  #4a6b4a;
+      --text-mid:  #6b9a6b;
+      --glow:      0 0 8px #00ff4180, 0 0 20px #00ff4130;
+      --glow-lg:   0 0 16px #00ff4199, 0 0 40px #00ff4150, 0 0 80px #00ff4120;
+      --glow-red:  0 0 8px #ff3c3c80;
+      --glow-amber:0 0 8px #ffb70080;
+    }
+
+    /* ── LIGHT MODE ── */
+    html.light {
+      --bg:        #f5f7f5;
+      --bg2:       #ffffff;
+      --panel:     #edf2ed;
+      --border:    #7aaa7a;
+      --border2:   #a0c4a0;
+      --green:     #005c14;
+      --green-dim: #004810;
+      --green-dark:#d4eed4;
+      --amber:     #6b4800;
+      --red:       #aa1a1a;
+      --cyan:      #005048;
+      --text:      #0a150a;
+      --text-dim:  #2a4a2a;
+      --text-mid:  #1e3c1e;
+      --glow:      none; --glow-lg: none; --glow-red: none; --glow-amber: none;
+    }
+    html.light body::before  { display: none; }
+    html.light .bg-glow      { display: none; }
+    html.light .grid-bg      { opacity: 0.07; filter: invert(1); }
+    html.light .topbar       { background: rgba(245,247,245,0.98); border-bottom: 1px solid var(--border); }
+    html.light .live-dot     { box-shadow: none; }
+    html.light .input-box    { background: #ffffff; border-color: var(--border); color: var(--text); }
+    html.light .input-box:focus { border-color: var(--green); }
+    html.light select        { background: #ffffff; border-color: var(--border); color: var(--text); }
+    html.light .tt-header    { background: var(--panel); }
+    html.light .tt-row-one   { background: #d4eed4; }
+    html.light .tt-row-zero  { background: #ffffff; }
+    html.light .step-block   { background: #ffffff; border-color: var(--border); }
+    html.light .sop-box      { background: #d4eed4; border-color: var(--border); }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom, transparent 0px, transparent 3px,
+        rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none; z-index: 9999;
+    }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 50% at 50% -5%, #00ff4108 0%, transparent 70%);
+    }
+
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; opacity: 0.04;
+      background-image: linear-gradient(var(--green) 1px, transparent 1px), linear-gradient(90deg, var(--green) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridDrift 60s linear infinite;
+    }
+    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,10,5,0.94);
+      backdrop-filter: blur(10px);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-dark); }
+    .breadcrumb { font-size: 0.68rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem; }
+    .breadcrumb span { color: var(--green); }
+    .topbar-right { display: flex; align-items: center; gap: 1.2rem; font-size: 0.68rem; color: var(--text-dim); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: var(--glow); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .theme-toggle {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 2px;
+      background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
+
+    /* ── LAYOUT ── */
+    .wrapper { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom: 2.5rem; }
+    .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.6rem; }
+    .page-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--green-dim); }
+    .page-title { font-family: 'Orbitron', monospace; font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--green); text-shadow: var(--glow-lg); letter-spacing: -0.02em; line-height: 1.1; }
+    .page-desc { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.8rem; line-height: 1.8; max-width: 580px; }
+    .page-desc em { color: var(--text); font-style: normal; }
+
+    /* ── INPUT PANEL ── */
+    .input-panel {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.8rem; margin-bottom: 1.5rem;
+    }
+
+    .input-panel-title {
+      font-family: 'Orbitron', monospace; font-size: 0.72rem; font-weight: 700;
+      color: var(--green); letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 1.4rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .input-panel-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+    .input-row { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1rem; }
+
+    .input-group { display: flex; flex-direction: column; gap: 0.4rem; flex: 1; min-width: 200px; }
+    .input-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+
+    .input-box {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.9rem;
+      padding: 0.6rem 0.9rem; background: var(--panel);
+      border: 1px solid var(--border); border-radius: 3px;
+      color: var(--text); outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-box:focus { border-color: var(--green); box-shadow: var(--glow); }
+    .input-box::placeholder { color: var(--text-dim); }
+
+    select.input-box {
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6b4a'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 0.7rem center; padding-right: 2rem;
+    }
+
+    .generate-btn {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.65rem 1.8rem; border: 1px solid var(--green); border-radius: 3px;
+      background: var(--green-dark); color: var(--green);
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .generate-btn:hover { background: var(--green); color: var(--bg); box-shadow: var(--glow); }
+
+    .clear-btn {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.65rem 1.2rem; border: 1px solid var(--border); border-radius: 3px;
+      background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── SYNTAX HINT ── */
+    .syntax-hint {
+      background: var(--panel); border: 1px solid var(--border2);
+      border-radius: 4px; padding: 1rem 1.4rem;
+      font-size: 0.72rem; color: var(--text-dim); line-height: 1.9;
+    }
+    .syntax-hint strong { color: var(--green); font-weight: normal; }
+    .syntax-hint .op { color: var(--amber); }
+    .syntax-hint .ex { color: var(--cyan); }
+
+    /* ── ERROR ── */
+    .error-msg {
+      display: none; background: #ff3c3c10; border: 1px solid #ff3c3c30;
+      border-radius: 3px; padding: 0.7rem 1rem;
+      font-size: 0.75rem; color: var(--red); margin-top: 0.8rem;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ── OUTPUT SECTION ── */
+    .output-section { display: none; }
+    .output-section.visible { display: block; }
+
+    /* ── SOP BOX ── */
+    .sop-box {
+      background: #00ff4108; border: 1px solid #00ff4128;
+      border-radius: 4px; padding: 1.2rem 1.6rem;
+      margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.8rem;
+    }
+    .sop-label { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.3rem; }
+    .sop-expr { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--green); text-shadow: var(--glow); letter-spacing: 0.05em; }
+    .sop-minterms { font-size: 0.7rem; color: var(--text-dim); }
+    .sop-minterms span { color: var(--text-mid); }
+
+    /* ── TRUTH TABLE ── */
+    .table-wrap { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 1.5rem; overflow-x: auto; }
+
+    .tt-table { width: 100%; border-collapse: collapse; }
+
+    .tt-header th {
+      background: var(--panel); padding: 0.75rem 1.2rem;
+      font-family: 'Orbitron', monospace; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.15em; color: var(--green); text-align: center;
+      border-bottom: 1px solid var(--border); border-right: 1px solid var(--border2);
+      white-space: nowrap;
+    }
+    .tt-header th:last-child { border-right: none; color: var(--amber); }
+    .tt-header th.output-col { color: var(--amber); }
+
+    .tt-row td {
+      padding: 0.6rem 1.2rem; text-align: center;
+      font-size: 0.85rem; border-bottom: 1px solid var(--border2);
+      border-right: 1px solid var(--border2);
+      transition: background 0.15s;
+    }
+    .tt-row td:last-child { border-right: none; font-weight: 700; }
+    .tt-row:last-child td { border-bottom: none; }
+
+    .tt-row-one { background: #00ff4112; }
+    .tt-row-one td:last-child { color: var(--green); text-shadow: var(--glow); font-family: 'Orbitron', monospace; }
+    .tt-row-zero td:last-child { color: var(--red); font-family: 'Orbitron', monospace; }
+    .tt-row:hover td { background: var(--panel); }
+
+    .row-num { color: var(--text-dim); font-size: 0.7rem; }
+
+    /* ── STEP-BY-STEP ── */
+    .steps-section { margin-top: 1.5rem; }
+    .steps-header {
+      font-family: 'Orbitron', monospace; font-size: 0.72rem; font-weight: 700;
+      color: var(--green); letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .steps-header::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+
+    .steps-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .step-block {
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 4px; padding: 0.9rem 1.2rem;
+      display: grid; grid-template-columns: auto 1fr auto;
+      gap: 1rem; align-items: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .step-block:hover { background: var(--panel); border-color: var(--border); }
+    .step-block.result-one { border-left: 3px solid var(--green); }
+    .step-block.result-zero { border-left: 3px solid var(--red); }
+
+    .step-num { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; }
+    .step-vars { font-size: 0.78rem; color: var(--text-mid); }
+    .step-vars span { color: var(--text); }
+    .step-eval { font-size: 0.78rem; color: var(--text-dim); font-style: italic; }
+    .step-result {
+      font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 700;
+      min-width: 24px; text-align: center;
+    }
+    .step-result.one { color: var(--green); text-shadow: var(--glow); }
+    .step-result.zero { color: var(--red); text-shadow: var(--glow-red); }
+
+    /* stats row */
+    .stats-row {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .stat-chip {
+      padding: 0.4rem 0.9rem; border-radius: 3px;
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .chip-green { background: #00ff4112; color: var(--green); border: 1px solid #00ff4128; }
+    .chip-red   { background: #ff3c3c12; color: var(--red);   border: 1px solid #ff3c3c28; }
+    .chip-dim   { background: var(--panel); color: var(--text-dim); border: 1px solid var(--border); }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
+
+    @media (max-width: 600px) {
+      .input-row { flex-direction: column; }
+      .wrapper { padding: 2rem 1rem; }
+      .topbar { padding: 0.9rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+  <div class="grid-bg"></div>
+
+  <!-- Topbar -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="../dld.html">← DLD</a>
+      <div class="breadcrumb">
+        <span>DLD</span>
+        <span style="color:var(--border);">/</span>
+        <span>Truth Table Generator</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span style="display:flex;align-items:center;gap:0.4rem;color:var(--green);">
+        <span class="live-dot"></span> Interactive
+      </span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </nav>
+
+  <div class="wrapper">
+
+    <!-- Header -->
+    <div class="page-header">
+      <p class="page-eyebrow">Digital Logic Design · Unit 01</p>
+      <h1 class="page-title">Truth Table<br/>Generator</h1>
+      <p class="page-desc">
+        Enter a <em>Boolean expression</em> and select the number of variables.
+        The generator will produce the full truth table, highlight minterms,
+        derive the SOP expression, and walk through each row step by step.
+      </p>
+    </div>
+
+    <!-- Input Panel -->
+    <div class="input-panel">
+      <div class="input-panel-title">// Input</div>
+
+      <div class="input-row">
+        <div class="input-group" style="flex:2;">
+          <label class="input-label" for="expr-input">Boolean Expression</label>
+          <input class="input-box" id="expr-input" type="text"
+            placeholder="e.g.  (A AND B) OR (NOT C)"
+            autocomplete="off" autocorrect="off" spellcheck="false"/>
+        </div>
+        <div class="input-group" style="flex:0; min-width:130px;">
+          <label class="input-label" for="var-select">Variables</label>
+          <select class="input-box" id="var-select">
+            <option value="2">2 — A, B</option>
+            <option value="3" selected>3 — A, B, C</option>
+            <option value="4">4 — A, B, C, D</option>
+          </select>
+        </div>
+        <button class="generate-btn" onclick="generate()">⟳ Generate</button>
+        <button class="clear-btn" onclick="clearAll()">✕ Clear</button>
+      </div>
+
+      <div class="syntax-hint">
+        <strong>Operators:</strong>
+        <span class="op"> AND </span> or <span class="op">&amp;&amp;</span> or <span class="op">*</span> &nbsp;·&nbsp;
+        <span class="op"> OR </span> or <span class="op">||</span> or <span class="op">+</span> &nbsp;·&nbsp;
+        <span class="op"> NOT </span> or <span class="op">!</span> &nbsp;·&nbsp;
+        <span class="op"> XOR </span> or <span class="op">^</span> &nbsp;·&nbsp;
+        <span class="op"> NAND </span> &nbsp;·&nbsp;
+        <span class="op"> NOR </span>
+        <br/>
+        <strong>Examples:</strong>
+        <span class="ex"> (A AND B) OR C </span> &nbsp;·&nbsp;
+        <span class="ex"> NOT A AND (B XOR C) </span> &nbsp;·&nbsp;
+        <span class="ex"> A NAND B </span> &nbsp;·&nbsp;
+        <span class="ex"> !A &amp;&amp; (B || C) </span>
+      </div>
+
+      <div class="error-msg" id="error-msg"></div>
+    </div>
+
+    <!-- Output -->
+    <div class="output-section" id="output-section">
+
+      <!-- SOP -->
+      <div class="sop-box" id="sop-box">
+        <div>
+          <div class="sop-label">Sum of Products (SOP)</div>
+          <div class="sop-expr" id="sop-expr">—</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="sop-label">Minterms</div>
+          <div class="sop-minterms" id="sop-minterms">—</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row" id="stats-row"></div>
+
+      <!-- Truth Table -->
+      <div class="table-wrap">
+        <table class="tt-table">
+          <thead class="tt-header" id="tt-head"></thead>
+          <tbody id="tt-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Step by step -->
+      <div class="steps-section">
+        <div class="steps-header">// Step-by-Step Evaluation</div>
+        <div class="steps-list" id="steps-list"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // ── Theme ──
+    const toggleBtn = document.getElementById('theme-toggle');
+    function applyTheme(t) {
+      document.documentElement.classList.toggle('light', t === 'light');
+      toggleBtn.textContent = t === 'light' ? '● Dark' : '☀ Light';
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next); applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
+
+    // ── Variables ──
+    const VARS_MAP = { 2: ['A','B'], 3: ['A','B','C'], 4: ['A','B','C','D'] };
+
+    // ── Expression Parser ──
+    function normalizeExpr(expr) {
+      return expr
+        .toUpperCase()
+        .replace(/NAND/g, ' NAND ')
+        .replace(/NOR/g,  ' NOR ')
+        .replace(/XNOR/g, ' XNOR ')
+        .replace(/XOR/g,  ' XOR ')
+        .replace(/AND/g,  ' && ')
+        .replace(/OR/g,   ' || ')
+        .replace(/NOT\s+/g, '!')
+        .replace(/\*/g, ' && ')
+        .replace(/\+/g, ' || ')
+        .replace(/\^/g, ' XOR ')
+        .replace(/NAND/g, ' NAND ')
+        .replace(/NOR/g,  ' NOR ');
+    }
+
+    function buildEvalFn(expr, vars) {
+      // Handle NAND and NOR specially
+      let e = expr.toUpperCase();
+
+      // Replace NAND(x, y) style — handled inline
+      // Normalize operators
+      e = e
+        .replace(/XNOR/gi, '__XNOR__')
+        .replace(/NAND/gi, '__NAND__')
+        .replace(/NOR/gi,  '__NOR__')
+        .replace(/XOR/gi,  '__XOR__')
+        .replace(/AND/gi,  '&&')
+        .replace(/OR/gi,   '||')
+        .replace(/NOT\s*/gi, '!')
+        .replace(/\*/g, '&&')
+        .replace(/\+/g, '||')
+        .replace(/\^/g, '__XOR__');
+
+      // Now handle binary ops token by token is complex — use a simpler approach:
+      // Replace __XOR__ with JS XOR
+      e = e.replace(/([^_\s(]+|\([^)]+\))\s*__XOR__\s*([^_\s(]+|\([^)]+\))/g, '(($1)!==($2)?1:0)');
+      e = e.replace(/([^_\s(]+|\([^)]+\))\s*__XNOR__\s*([^_\s(]+|\([^)]+\))/g, '(($1)===($2)?1:0)');
+      e = e.replace(/([^_\s(]+|\([^)]+\))\s*__NAND__\s*([^_\s(]+|\([^)]+\))/g, '(!($1&&$2)?1:0)');
+      e = e.replace(/([^_\s(]+|\([^)]+\))\s*__NOR__\s*([^_\s(]+|\([^)]+\))/g,  '(!($1||$2)?1:0)');
+
+      const args = vars.join(',');
+      try {
+        // eslint-disable-next-line no-new-func
+        return new Function(args, `return (${e}) ? 1 : 0;`);
+      } catch {
+        return null;
+      }
+    }
+
+    function evaluateRow(fn, vals) {
+      try { return fn(...vals); }
+      catch { return null; }
+    }
+
+    // ── Build human-readable step ──
+    function buildStepDesc(expr, vars, vals) {
+      let desc = expr;
+      // Replace each variable with its value
+      vars.forEach((v, i) => {
+        desc = desc.replace(new RegExp(`\\b${v}\\b`, 'gi'), `<span>${vals[i]}</span>`);
+      });
+      return desc;
+    }
+
+    // ── Build SOP ──
+    function buildSOP(vars, rows) {
+      const minterms = rows.filter(r => r.out === 1);
+      if (minterms.length === 0) return { sop: '0 (Always False)', minterms: 'None' };
+      if (minterms.length === rows.length) return { sop: '1 (Always True)', minterms: 'All' };
+
+      const terms = minterms.map(r => {
+        return vars.map((v, i) => r.vals[i] === 1 ? v : `${v}'`).join('');
+      });
+
+      const mintermNums = minterms.map(r => `m${r.index}`).join(', ');
+      return {
+        sop: terms.join(' + '),
+        minterms: `Σ(${minterms.map(r => r.index).join(', ')})`
+      };
+    }
+
+    // ── Main Generate ──
+    function generate() {
+      const exprRaw = document.getElementById('expr-input').value.trim();
+      const numVars = parseInt(document.getElementById('var-select').value);
+      const vars    = VARS_MAP[numVars];
+      const errEl   = document.getElementById('error-msg');
+      const outEl   = document.getElementById('output-section');
+
+      errEl.classList.remove('visible');
+
+      if (!exprRaw) {
+        errEl.textContent = 'Please enter a Boolean expression.';
+        errEl.classList.add('visible'); return;
+      }
+
+      const fn = buildEvalFn(exprRaw, vars);
+      if (!fn) {
+        errEl.textContent = `Could not parse expression "${exprRaw}". Check your syntax and try again.`;
+        errEl.classList.add('visible'); return;
+      }
+
+      // Generate all combinations
+      const rows = [];
+      const total = Math.pow(2, numVars);
+      for (let i = 0; i < total; i++) {
+        const vals = [];
+        for (let b = numVars - 1; b >= 0; b--) vals.unshift((i >> b) & 1);
+        const out = evaluateRow(fn, vals);
+        if (out === null) {
+          errEl.textContent = `Expression error on row ${i}. Check syntax.`;
+          errEl.classList.add('visible'); return;
+        }
+        rows.push({ index: i, vals, out });
+      }
+
+      // Render
+      renderTable(vars, rows);
+      renderSOP(vars, rows);
+      renderStats(rows, total);
+      renderSteps(vars, rows, exprRaw);
+
+      outEl.classList.add('visible');
+      setTimeout(() => outEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+
+    function renderTable(vars, rows) {
+      const head = document.getElementById('tt-head');
+      const body = document.getElementById('tt-body');
+
+      // Header
+      head.innerHTML = `<tr>${vars.map(v => `<th>${v}</th>`).join('')}<th class="output-col">F</th></tr>`;
+
+      // Rows
+      body.innerHTML = rows.map(r => {
+        const cls = r.out === 1 ? 'tt-row tt-row-one' : 'tt-row tt-row-zero';
+        const cells = r.vals.map(v => `<td>${v}</td>`).join('');
+        return `<tr class="${cls}">${cells}<td>${r.out}</td></tr>`;
+      }).join('');
+    }
+
+    function renderSOP(vars, rows) {
+      const { sop, minterms } = buildSOP(vars, rows);
+      document.getElementById('sop-expr').textContent = sop;
+      document.getElementById('sop-minterms').innerHTML = `<span>${minterms}</span>`;
+    }
+
+    function renderStats(rows, total) {
+      const ones  = rows.filter(r => r.out === 1).length;
+      const zeros = total - ones;
+      document.getElementById('stats-row').innerHTML = `
+        <div class="stat-chip chip-dim">${total} rows</div>
+        <div class="stat-chip chip-green">✓ ${ones} output 1</div>
+        <div class="stat-chip chip-red">✕ ${zeros} output 0</div>
+      `;
+    }
+
+    function renderSteps(vars, rows, exprRaw) {
+      const list = document.getElementById('steps-list');
+      list.innerHTML = rows.map(r => {
+        const assign = vars.map((v, i) => `${v}=${r.vals[i]}`).join(', ');
+        const evalDesc = buildStepDesc(exprRaw, vars, r.vals);
+        const resCls = r.out === 1 ? 'one' : 'zero';
+        const blockCls = r.out === 1 ? 'step-block result-one' : 'step-block result-zero';
+        return `
+          <div class="${blockCls}">
+            <span class="step-num">Row ${r.index}</span>
+            <div>
+              <div class="step-vars">${assign}</div>
+              <div class="step-eval">${evalDesc} → ${r.out}</div>
+            </div>
+            <span class="step-result ${resCls}">${r.out}</span>
+          </div>`;
+      }).join('');
+    }
+
+    function clearAll() {
+      document.getElementById('expr-input').value = '';
+      document.getElementById('output-section').classList.remove('visible');
+      document.getElementById('error-msg').classList.remove('visible');
+      document.getElementById('expr-input').focus();
+    }
+
+    // Enter key support
+    document.getElementById('expr-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') generate();
+    });
+
+    // Auto-generate on var change if expression exists
+    document.getElementById('var-select').addEventListener('change', () => {
+      if (document.getElementById('expr-input').value.trim()) generate();
+    });
+  </script>
+</body>
+</html>
