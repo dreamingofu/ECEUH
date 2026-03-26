@@ -8,7 +8,7 @@ A personal academic knowledge base for Electrical Engineering coursework at the 
 
 ## Live Site
 
-🔗 [ece-uh.vercel.app](https://ece-uh.vercel.app)
+🔗 [ece-uh.vercel.app](https://eceuh.com/)
 
 ---
 
@@ -19,9 +19,9 @@ A personal academic knowledge base for Electrical Engineering coursework at the 
 | Page | File | Description |
 |------|------|-------------|
 | Home Hub | `index.html` | Course directory and navigation landing page |
-| Digital Logic Design | `dld.html` | EE_3XX — Boolean algebra, gates, K-maps, FSMs |
-| Circuits 2 | `circuits2.html` | EE_2XX — AC analysis, phasors, Bode plots, filters |
-| Programming with C | `cprog.html` | CS_2XX — Pointers, memory, structs, algorithms |
+| Digital Logic Design | `dld.html` | ECE_3441 — Boolean algebra, gates, K-maps, FSMs |
+| Circuits 2 | `circuits2.html` | ECE_2202 — AC analysis, phasors, Bode plots, filters |
+| Programming with C | `cprog.html` | ECE_3331 — Pointers, memory, structs, algorithms |
 | Professor Ratings | `professors.html` | RateMyProfessors data for all tracked courses |
 
 ### Features
@@ -85,9 +85,9 @@ ee-knowledge-base/
 
 | Course | Code | Professor(s) |
 |--------|------|-------------|
-| Digital Logic Design | EE_3XX | Dr. Bhavin R. Sheth · Dr. Deepa Ramachandran |
-| Circuits 2 | EE_2XX | Dr. Xiaonan Shan · TBD |
-| Programming Apps with C | CS_2XX | Dr. Biresh Kumar Joardar · TBD |
+| Digital Logic Design | ECE_3441 | Dr. Bhavin R. Sheth · Dr. Deepa Ramachandran |
+| Circuits 2 | ECE_2202 | Dr. Xiaonan Shan · TBD |
+| Programming Apps with C | ECE_3331 | Dr. Biresh Kumar Joardar · TBD |
 
 ### Professor Ratings (Spring 2026)
 
@@ -100,63 +100,9 @@ ee-knowledge-base/
 
 > Ratings sourced manually from [RateMyProfessors.com](https://www.ratemyprofessors.com) and averaged from class-specific reviews.
 
----
-
-## How to Add Files
-
-1. Drop the PDF into the correct folder under `/files/`
-2. Open the relevant HTML page in VSCode
-3. Find the file library section and add or update a card
-4. Push to GitHub — Vercel auto-deploys in ~30 seconds
-
-```bash
-git add .
-git commit -m "add quiz 01 version B"
-git push
-```
 
 ---
 
-## How to Update Professor Ratings
-
-Open `professors.html` and find the `COURSES` object in the `<script>` tag:
-
-```javascript
-const COURSES = {
-  dld: {
-    profs: [
-      {
-        name:       "Dr. Bhavin R. Sheth",
-        initials:   "BS",
-        dept:       "Electrical Engineering Dept.",
-        overall:    3.0,      // out of 5
-        difficulty: 4.0,      // out of 5
-        wouldTake:  70,       // percentage
-        rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
-      },
-      ...
-    ]
-  },
-  ...
-};
-```
-
-Update the values, save, and push.
-
----
-
-## Roadmap
-
-- [ ] Programming with C — add real quiz and exam files
-- [ ] DLD — complete file library with answer keys
-- [ ] Circuits 2 — add Bode plot and phasor practice problems
-- [ ] Interactive logic gate simulator (DLD)
-- [ ] Interactive phasor diagram visualizer (Circuits 2)
-- [ ] Pointer memory diagram visualizer (C Programming)
-- [ ] Light mode contrast polish across all pages
-- [ ] Fall 2026 semester courses
-
----
 
 ## Disclaimer
 
