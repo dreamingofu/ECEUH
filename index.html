@@ -917,16 +917,20 @@
          '--border','--border-2'].forEach(p => root.style.removeProperty(p));
       }
     }
-    const saved = localStorage.getItem('eceuh-theme') || 'dark';
+    const THEME_KEY = 'ee-theme';
+    const saved = localStorage.getItem(THEME_KEY) || 'dark';
     applyTheme(saved);
     if (themeBtn) {
       themeBtn.addEventListener('click', () => {
-        const cur = localStorage.getItem('eceuh-theme') || 'dark';
+        const cur = localStorage.getItem(THEME_KEY) || 'dark';
         const next = cur === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('eceuh-theme', next);
+        localStorage.setItem(THEME_KEY, next);
         applyTheme(next);
       });
     }
+    window.addEventListener('storage', (e) => {
+      if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue);
+    });
 
     // Cmd+K focuses the palette
     const palette = document.querySelector('.palette input');

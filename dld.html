@@ -1672,6 +1672,9 @@
       applyTheme(next);
     }
     applyTheme(localStorage.getItem('ee-theme') || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+    });
 
     // Clock
     function updateClock() {

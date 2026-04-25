@@ -699,6 +699,9 @@
     localStorage.setItem('ee-theme', next); applyTheme(next);
   }
   applyTheme(localStorage.getItem('ee-theme') || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+    });
 
   // Clock
   function tick() { document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8); }
