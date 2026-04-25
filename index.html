@@ -2,1033 +2,948 @@
 <html lang="en">
 <head>
   <script defer src="/_vercel/insights/script.js"></script>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EE Knowledge Base</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE Knowledge Base · UH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
+    /* ── BASE ── */
     :root {
-      --bg:         #030806;
-      --bg2:        #060e08;
-      --panel:      #0a1410;
-      --border:     #143020;
-      --border2:    #0f2018;
-      --green:      #00ff41;
-      --green-dim:  #00cc33;
-      --green-dark: #002a10;
-      --green-mid:  #00ff4140;
-      --amber:      #ffb700;
-      --cyan:       #00ffe7;
-      --red:        #ff4444;
-      --blue:       #4488ff;
-      --text:       #a8cca8;
-      --text-dim:   #3d5c3d;
-      --text-mid:   #6b9a6b;
-      --glow-sm:    0 0 8px #00ff4166;
-      --glow:       0 0 12px #00ff4188, 0 0 30px #00ff4130;
-      --glow-lg:    0 0 20px #00ff41aa, 0 0 60px #00ff4155, 0 0 120px #00ff4120;
-      --glow-amber: 0 0 12px #ffb70088, 0 0 30px #ffb70030;
-      --glow-cyan:  0 0 12px #00ffe788, 0 0 30px #00ffe730;
-      --glow-blue:  0 0 12px #4488ff88, 0 0 30px #4488ff30;
+      --bg:           #1A1A2E;
+      --bg-card:      #261817;
+      --bg-overlay:   rgba(42, 42, 62, 0.6);
+      --bg-overlay-2: rgba(42, 42, 62, 0.4);
+      --bg-overlay-3: rgba(42, 42, 62, 0.5);
+      --bg-active:    #2A2A3E;
+      --accent:       #FF6363;
+      --accent-deep:  #67000E;
+      --text:         #FFFFFF;
+      --text-cream:   #F6DDDB;
+      --text-mute:    #E1BFBC;
+      --text-muted:   #94A3B8;
+      --text-dim:     #64748B;
+      --text-faint:   #475569;
+      --text-soft:    #CBD5E1;
+      --good:         #4ADE80;
+      --warn:         #FBBF24;
+      --good-bg:      rgba(34, 197, 94, 0.1);
+      --warn-bg:      rgba(245, 158, 11, 0.1);
+      --border:       rgba(255, 255, 255, 0.05);
+      --border-2:     rgba(255, 255, 255, 0.1);
+      --shadow-card:  0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --shadow-bar:   0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --shadow-fab:   0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      --serif:        'Lora', 'Liberation Serif', Georgia, serif;
+      --sans:         'Inter', system-ui, -apple-system, sans-serif;
+      --mono:         'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace;
     }
-
-    /* ── LIGHT MODE OVERRIDES ── */
-    html.light {
-      --bg:         #f0f4f0;
-      --bg2:        #e8ede8;
-      --panel:      #dde5dd;
-      --border:     #b0c8b0;
-      --border2:    #c4d8c4;
-      --green:      #007a1f;
-      --green-dim:  #006018;
-      --green-dark: #c8e8c8;
-      --green-mid:  #007a1f40;
-      --amber:      #8a6000;
-      --cyan:       #006860;
-      --red:        #cc2020;
-      --blue:       #1a4fcc;
-      --text:       #1a2e1a;
-      --text-dim:   #4a6b4a;
-      --text-mid:   #2d5c2d;
-      --glow-sm:    none;
-      --glow:       none;
-      --glow-lg:    none;
-      --glow-amber: none;
-      --glow-cyan:  none;
-      --glow-blue:  none;
-    }
-
-    html.light body::before { display: none; }
-    html.light body::after  { display: none; }
-    html.light .bg-glow     { display: none; }
-    html.light .grid-bg     { opacity: 0.06; }
-    html.light .particles   { display: none; }
-
-    html.light .topbar {
-      background: rgba(240,244,240,0.96);
-      border-bottom-color: var(--border);
-    }
-
-    html.light .hero-bg-text { -webkit-text-stroke-color: #007a1f0a; }
-
-    html.light .brand-mark {
-      box-shadow: none;
-      border-color: var(--green);
-    }
-
-    html.light .course-card,
-    html.light .future-card  { background: var(--bg2); }
-    html.light .course-card:hover { background: var(--panel); }
-
-    html.light .status-bar  { background: var(--panel); }
-    html.light footer        { background: var(--bg); }
-
-    html.light .live-dot     { box-shadow: none; }
-
-    /* Toggle button */
-    .theme-toggle {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.3rem 0.75rem;
-      border: 1px solid var(--border); border-radius: 2px;
-      background: transparent; color: var(--text-dim);
-      cursor: pointer; transition: all 0.2s;
-    }
-    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Share Tech Mono', monospace;
+      font-family: var(--sans);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
-      cursor: crosshair;
     }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
+    img { max-width: 100%; display: block; }
 
-    /* ── SCANLINES ── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0px, transparent 3px,
-        rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px
-      );
-      pointer-events: none;
-      z-index: 9999;
+    /* ── LAYOUT SHELL ── */
+    .shell {
+      position: relative;
+      min-height: 100vh;
+      padding-top: 56px;
+      padding-left: 256px;
     }
-
-    /* ── RADIAL GLOW BG ── */
-    .bg-glow {
-      position: fixed; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, #00ff4108 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 15% 80%, #00ffe705 0%, transparent 60%),
-        radial-gradient(ellipse 30% 30% at 85% 70%, #4488ff04 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* ── GRID BG ── */
-    .grid-bg {
-      position: fixed; inset: 0; z-index: 0;
-      opacity: 0.045;
-      background-image:
-        linear-gradient(var(--green) 1px, transparent 1px),
-        linear-gradient(90deg, var(--green) 1px, transparent 1px);
-      background-size: 60px 60px;
-      animation: gridDrift 80s linear infinite;
-    }
-
-    @keyframes gridDrift {
-      from { background-position: 0 0; }
-      to   { background-position: 60px 60px; }
-    }
-
-    /* ── FLOATING PARTICLES ── */
-    .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-
-    .particle {
-      position: absolute;
-      width: 2px; height: 2px;
-      background: var(--green);
-      border-radius: 50%;
-      opacity: 0;
-      animation: floatUp linear infinite;
-    }
-
-    @keyframes floatUp {
-      0%   { transform: translateY(100vh) translateX(0);   opacity: 0; }
-      10%  { opacity: 0.4; }
-      90%  { opacity: 0.2; }
-      100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
-    }
-
     /* ── TOPBAR ── */
     .topbar {
-      position: sticky; top: 0; z-index: 100;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.9rem 3rem;
-      border-bottom: 1px solid var(--border);
-      background: rgba(3,8,6,0.94);
-      backdrop-filter: blur(12px);
+      padding: 0 24px;
+      background: rgba(26, 26, 46, 0.8);
+      border-bottom: 1px solid var(--border-2);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: var(--shadow-bar);
+      z-index: 100;
     }
-
     .topbar-brand {
-      display: flex; align-items: center; gap: 0.8rem;
-    }
-
-    .brand-mark {
-      width: 28px; height: 28px;
-      border: 1px solid var(--green);
-      display: grid; place-items: center;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.6rem;
+      font-family: var(--sans);
       font-weight: 900;
-      color: var(--green);
-      box-shadow: var(--glow-sm);
-      animation: brandPulse 4s ease-in-out infinite;
-    }
-
-    @keyframes brandPulse {
-      0%, 100% { box-shadow: var(--glow-sm); }
-      50%       { box-shadow: var(--glow); }
-    }
-
-    .brand-text {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-mid);
-      letter-spacing: 0.15em;
+      font-size: 20px;
+      letter-spacing: -1px;
       text-transform: uppercase;
+      color: var(--accent);
+    }
+    .topbar-nav { display: flex; align-items: center; gap: 32px; }
+    .topbar-link {
+      font-weight: 700; font-size: 14px; line-height: 20px;
+      letter-spacing: -0.35px; text-transform: uppercase;
+      color: var(--text-muted);
+      padding-bottom: 4px;
+      transition: color .2s;
+    }
+    .topbar-link:hover { color: var(--text); }
+    .topbar-link.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    .topbar-actions { display: flex; align-items: center; gap: 16px; }
+    .icon-btn {
+      width: 36px; height: 36px;
+      border-radius: 9999px;
+      display: grid; place-items: center;
+      color: var(--text-muted);
+      transition: background .2s, color .2s;
+    }
+    .icon-btn:hover { background: var(--border); color: var(--text); }
+    .icon-btn svg { width: 20px; height: 20px; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 56px; left: 0; bottom: 0;
+      width: 256px;
+      padding: 16px;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; justify-content: space-between;
+      overflow-y: auto;
+      z-index: 50;
+    }
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+
+    .brand-block { padding: 0 8px 32px; }
+    .brand-row { display: flex; align-items: center; }
+    .brand-mark {
+      width: 40px; height: 40px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: grid; place-items: center;
+      color: var(--accent-deep);
+      box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1);
+    }
+    .brand-mark svg { width: 18px; height: 18px; }
+    .brand-text { padding-left: 12px; }
+    .brand-name {
+      font-family: var(--serif);
+      font-weight: 700; font-size: 14px; line-height: 20px;
+      letter-spacing: -0.35px; color: var(--text);
+    }
+    .brand-sub {
+      font-size: 10px; line-height: 15px; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text-dim);
     }
 
-    .brand-text span { color: var(--green); }
-
-    .topbar-meta {
-      display: flex; align-items: center; gap: 2rem;
-      font-size: 0.68rem; color: var(--text-dim);
+    .nav-list { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .nav-link {
+      display: flex; align-items: center;
+      padding: 10px 12px; gap: 12px;
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-weight: 500; font-size: 12px; line-height: 16px;
+      transition: background .2s, color .2s;
+    }
+    .nav-link svg { width: 14px; height: 14px; flex: none; color: currentColor; }
+    .nav-link:hover { color: var(--text); background: var(--border); }
+    .nav-link.active {
+      background: var(--bg-active);
+      color: var(--accent);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     }
 
-    .topbar-meta .live {
-      display: flex; align-items: center; gap: 0.4rem;
-      color: var(--green);
+    .sidebar-cta {
+      margin-top: 24px;
+      width: 100%;
+      padding: 12px 0;
+      background: var(--accent);
+      color: var(--text);
+      border-radius: 8px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-weight: 700; font-size: 12px;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      transition: filter .2s, transform .15s;
+    }
+    .sidebar-cta:hover { filter: brightness(1.08); }
+    .sidebar-cta:active { transform: translateY(1px); }
+    .sidebar-cta svg { width: 10px; height: 10px; }
+
+    .sidebar-footer {
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar-footer .nav-link {
+      font-size: 10px; line-height: 15px; letter-spacing: 0.5px;
+      text-transform: uppercase; padding: 8px 12px;
     }
 
-    .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: var(--glow-sm);
-      animation: blink 2s ease-in-out infinite;
+    /* ── MAIN CANVAS ── */
+    .canvas {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 56px 40px 28px;
+      display: flex; flex-direction: column; gap: 80px;
     }
+    .stack { display: flex; flex-direction: column; gap: 48px; }
 
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-
-    /* ── HERO ── */
+    /* ── HERO / COMMAND PALETTE ── */
     .hero {
-      position: relative; z-index: 1;
-      min-height: 88vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem;
+      position: relative;
+      padding: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow-card);
       overflow: hidden;
     }
-
-    /* Large background text */
-    .hero-bg-text {
-      position: absolute;
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(8rem, 20vw, 22rem);
-      font-weight: 900;
-      color: transparent;
-      -webkit-text-stroke: 1px #00ff4108;
-      letter-spacing: -0.05em;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      white-space: nowrap;
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 0%, rgba(255,99,99,0.15), transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(255,99,99,0.08), transparent 60%);
+      opacity: 0.6;
       pointer-events: none;
-      user-select: none;
       z-index: 0;
     }
-
-    .hero-content { position: relative; z-index: 1; }
-
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.8rem;
-      font-size: 0.7rem; letter-spacing: 0.3em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-bottom: 2rem;
-      opacity: 0; animation: fadeDown 0.6s ease forwards 0.2s;
-    }
-
-    .hero-eyebrow::before, .hero-eyebrow::after {
-      content: '';
-      display: inline-block; width: 40px; height: 1px;
-      background: linear-gradient(to right, transparent, var(--text-dim));
-    }
-    .hero-eyebrow::after { background: linear-gradient(to left, transparent, var(--text-dim)); }
-
-    .hero-name {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(1rem, 2vw, 1.3rem);
-      font-weight: 300;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      margin-bottom: 1rem;
-      opacity: 0; animation: fadeDown 0.6s ease forwards 0.4s;
-    }
-
-    .hero-title {
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(3rem, 8vw, 7.5rem);
-      font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      color: var(--green);
-      text-shadow: var(--glow-lg);
-      margin-bottom: 1.5rem;
-      opacity: 0; animation: fadeDown 0.8s ease forwards 0.5s;
-    }
-
-    .hero-title .line2 {
-      display: block;
-      color: transparent;
-      -webkit-text-stroke: 1px var(--green-dim);
-      text-shadow: none;
-      opacity: 0.5;
-    }
-
-    .hero-sub {
-      font-family: 'VT323', monospace;
-      font-size: 1.4rem;
-      color: var(--amber);
-      letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-      opacity: 0; animation: fadeDown 0.6s ease forwards 0.8s;
-    }
-
-    .hero-desc {
-      max-width: 520px;
-      margin: 0 auto 3rem;
-      font-size: 0.82rem;
-      line-height: 1.9;
-      color: var(--text-dim);
-      opacity: 0; animation: fadeDown 0.6s ease forwards 1s;
-    }
-
-    .hero-desc em { color: var(--text-mid); font-style: normal; }
-
-    /* ── SEMESTER BADGE ROW ── */
-    .badge-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: 1rem; flex-wrap: wrap;
-      margin-bottom: 4rem;
-      opacity: 0; animation: fadeDown 0.6s ease forwards 1.1s;
-    }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.35rem 0.9rem;
-      border: 1px solid var(--border);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      background: var(--panel);
-      border-radius: 2px;
-    }
-
-    .badge.active { border-color: #00ff4130; color: var(--green); background: #00ff4108; }
-    .badge.active .badge-dot { background: var(--green); box-shadow: var(--glow-sm); animation: blink 2s infinite; }
-    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-dim); }
-
-    /* ── SCROLL INDICATOR ── */
-    .scroll-hint {
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--text-dim);
-      opacity: 0; animation: fadeDown 0.6s ease forwards 1.4s;
-    }
-
-    .scroll-line {
-      width: 1px; height: 50px;
-      background: linear-gradient(to bottom, var(--green-dim), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; transform: scaleY(1); }
-      50%       { opacity: 1;   transform: scaleY(1.2); }
-    }
-
-    /* ── DIVIDER ── */
-    .divider {
-      position: relative; z-index: 1;
-      display: flex; align-items: center; gap: 1.5rem;
-      padding: 0 3rem; margin-bottom: 3rem;
-    }
-
-    .divider-line { flex: 1; height: 1px; background: var(--border); }
-    .divider-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.62rem; letter-spacing: 0.25em;
-      text-transform: uppercase; color: var(--text-dim);
-      white-space: nowrap;
-    }
-
-    /* ── SEMESTER SECTION ── */
-    .semester-section {
-      position: relative; z-index: 1;
-      padding: 0 3rem 6rem;
-    }
-
-    .semester-header {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: 2rem;
-    }
-
-    .semester-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.65rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text-dim);
-      margin-bottom: 0.4rem;
-    }
-
-    .semester-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.6rem; font-weight: 900;
-      color: var(--text); letter-spacing: -0.01em;
-    }
-
-    .semester-title span { color: var(--green); text-shadow: var(--glow-sm); }
-
-    .semester-count {
-      font-size: 0.72rem; color: var(--text-dim);
-    }
-
-    /* ── COURSE CARDS GRID ── */
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .course-card {
+    .hero-inner {
       position: relative;
-      background: var(--bg2);
-      padding: 2.2rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-      overflow: hidden;
-      transition: background 0.3s;
-      group: true;
+      padding: 48px;
+      background: var(--bg-overlay);
+      border: 1px solid var(--border-2);
+      border-radius: 22px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; flex-direction: column; gap: 48px;
+      z-index: 1;
     }
-
-    /* Animated corner accent */
-    .course-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 0; height: 0;
-      border-top: 3px solid var(--card-color, var(--green));
-      border-left: 3px solid var(--card-color, var(--green));
-      transition: width 0.35s ease, height 0.35s ease;
-      box-shadow: var(--card-glow, var(--glow-sm));
+    .hero-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 28px; flex-wrap: wrap;
     }
-
-    .course-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; right: 0;
-      width: 0; height: 0;
-      border-bottom: 3px solid var(--card-color, var(--green));
-      border-right: 3px solid var(--card-color, var(--green));
-      transition: width 0.35s ease, height 0.35s ease;
-      transition-delay: 0.05s;
-    }
-
-    .course-card:hover { background: var(--panel); }
-
-    .course-card:hover::before,
-    .course-card:hover::after {
-      width: 40px; height: 40px;
-    }
-
-    /* Hover shimmer */
-    .course-card .shimmer {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 40%, rgba(0,255,65,0.03) 50%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s, transform 0.4s;
-      transform: translateX(-100%);
-    }
-
-    .course-card:hover .shimmer {
-      opacity: 1;
-      transform: translateX(100%);
-    }
-
-    .course-card.placeholder {
-      cursor: default;
-      opacity: 0.4;
-    }
-
-    .course-card.placeholder:hover { background: var(--bg2); }
-    .course-card.placeholder:hover::before,
-    .course-card.placeholder:hover::after { width: 0; height: 0; }
-
-    /* Card internals */
-    .card-top {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      margin-bottom: 1.8rem;
-    }
-
-    .card-code {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.6rem; letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 0.4rem;
-    }
-
-    .card-status-pill {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border-radius: 2px;
-      font-family: 'Share Tech Mono', monospace;
-    }
-
-    .pill-active  { background: #00ff4112; color: var(--green); border: 1px solid #00ff4128; }
-    .pill-soon    { background: #ffb70010; color: var(--amber); border: 1px solid #ffb70025; }
-    .pill-future  { background: #ffffff08; color: var(--text-dim); border: 1px solid var(--border); }
-    .pill-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
-    .pill-active .pill-dot { animation: blink 2s infinite; }
-
-    .card-icon {
-      font-family: 'VT323', monospace;
-      font-size: 2.8rem;
+    .hero-copy { flex: 1 1 480px; min-width: 280px; display: flex; flex-direction: column; gap: 16px; }
+    .hero-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(40px, 6vw, 60px);
       line-height: 1;
-      color: var(--card-color, var(--green));
-      text-shadow: var(--card-glow, var(--glow-sm));
-      opacity: 0.7;
-      transition: opacity 0.3s, text-shadow 0.3s;
+      letter-spacing: -1.5px;
+      color: var(--text-cream);
     }
-
-    .course-card:hover .card-icon {
-      opacity: 1;
-      text-shadow: var(--card-glow, var(--glow));
+    .hero-desc {
+      font-size: 18px; line-height: 29px;
+      color: var(--text-mute);
+      max-width: 580px;
     }
-
-    .card-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.05rem; font-weight: 700;
+    .avatar-stack { display: flex; }
+    .avatar {
+      width: 56px; height: 56px;
+      border-radius: 9999px;
+      border: 4px solid var(--bg);
+      background: var(--bg-active) center/cover no-repeat;
+      display: grid; place-items: center;
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 14px;
       color: var(--text);
-      line-height: 1.25;
-      margin-bottom: 0.7rem;
-      transition: color 0.25s, text-shadow 0.25s;
     }
+    .avatar + .avatar { margin-left: -16px; }
+    .avatar.count { color: var(--accent); }
+    .avatar.av-1 { background: linear-gradient(135deg, #4a3a5a, #2d1f3a); }
+    .avatar.av-2 { background: linear-gradient(135deg, #5a3a4a, #3a1f2d); }
 
-    .course-card:hover .card-title {
-      color: var(--card-color, var(--green));
-      text-shadow: var(--card-glow, var(--glow-sm));
+    /* ── COMMAND PALETTE ── */
+    .palette {
+      position: relative;
+      background: var(--bg-overlay-3);
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      padding: 26px 96px 26px 64px;
     }
-
-    .card-desc {
-      font-size: 0.76rem;
-      color: var(--text-dim);
-      line-height: 1.75;
-      margin-bottom: 1.8rem;
+    .palette-icon {
+      position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px;
+      color: var(--text-muted);
     }
-
-    .card-tags {
-      display: flex; flex-wrap: wrap; gap: 0.4rem;
-      margin-bottom: 1.8rem;
+    .palette input {
+      width: 100%;
+      background: transparent;
+      border: none; outline: none;
+      font-family: var(--serif);
+      font-size: 20px; line-height: 23px;
+      color: var(--text);
     }
-
-    .tag {
-      font-size: 0.6rem; letter-spacing: 0.08em;
-      padding: 0.15rem 0.5rem;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      border-radius: 2px;
-      background: var(--bg);
+    .palette input::placeholder { color: var(--text-dim); }
+    .palette-keys {
+      position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+      display: flex; align-items: center; gap: 8px;
     }
-
-    .card-footer-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 1.2rem;
-      border-top: 1px solid var(--border2);
-    }
-
-    .card-meta { font-size: 0.66rem; color: var(--text-dim); }
-
-    .card-arrow {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      transition: color 0.25s, transform 0.25s, text-shadow 0.25s;
-    }
-
-    .course-card:hover .card-arrow {
-      color: var(--card-color, var(--green));
-      text-shadow: var(--card-glow, var(--glow-sm));
-      transform: translateX(4px);
-    }
-
-    /* ── FUTURE SEMESTERS ROW ── */
-    .future-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--border2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      margin-top: 1px;
-    }
-
-    .future-card {
-      background: var(--bg2);
-      padding: 1.4rem 1.8rem;
-      opacity: 0.35;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .future-card-left { display: flex; flex-direction: column; gap: 0.3rem; }
-
-    .future-label {
-      font-size: 0.58rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text-dim);
-    }
-
-    .future-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.75rem; font-weight: 700;
-      color: var(--text-dim);
-    }
-
-    .future-lock { font-size: 0.9rem; color: var(--text-dim); }
-
-    /* ── SYSTEM STATUS BAR ── */
-    .status-bar {
-      position: relative; z-index: 1;
-      margin: 0 3rem;
-      padding: 1rem 1.6rem;
-      border: 1px solid var(--border);
+    .key {
+      font-family: var(--mono);
+      font-size: 10px; line-height: 15px;
+      color: var(--text-muted);
+      padding: 4px 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-2);
       border-radius: 4px;
-      background: var(--panel);
+    }
+
+    /* ── BENTO GRID ── */
+    .bento {
+      display: grid;
+      grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .bento-card.feature { gap: 32px; }
+    .bento-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .bento-h3 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 24px; line-height: 32px;
+      color: var(--text);
+    }
+    .bento-sub { font-size: 14px; line-height: 20px; color: var(--text-muted); margin-top: 4px; }
+    .bento-icon { color: var(--accent); width: 18px; height: 18px; }
+
+    /* feature card inner: 2-column status grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .status-card {
+      background: var(--bg-overlay-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .status-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .pill {
+      font-weight: 700; font-size: 10px; line-height: 15px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 4px 8px; border-radius: 4px;
+    }
+    .pill-good { color: var(--good); background: var(--good-bg); }
+    .pill-warn { color: var(--warn); background: var(--warn-bg); }
+    .status-meta { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+    .status-title {
+      font-family: var(--serif);
+      font-weight: 700; font-size: 18px; line-height: 28px;
+      color: var(--text);
+      padding-top: 4px;
+    }
+    .status-desc { font-size: 12px; line-height: 16px; color: var(--text-muted); padding-bottom: 4px; }
+    .progress {
+      position: relative;
+      height: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      position: absolute; inset: 0;
+      background: var(--accent);
+      transform-origin: left;
+    }
+
+    /* faculty ledger (right card) */
+    .ledger { display: flex; flex-direction: column; gap: 24px; }
+    .ledger-row { display: flex; align-items: center; gap: 16px; }
+    .ledger-avatar {
+      width: 48px; height: 48px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.05);
+      display: grid; place-items: center;
+      font-family: var(--serif);
+      font-weight: 700; font-size: 14px;
+      color: var(--text-cream);
+      flex: none;
+    }
+    .ledger-avatar.av-a { background: linear-gradient(135deg, #3a4a5a, #1f2d3a); }
+    .ledger-avatar.av-b { background: linear-gradient(135deg, #5a4a3a, #3a2d1f); }
+    .ledger-avatar.av-c { background: linear-gradient(135deg, #4a3a5a, #2d1f3a); }
+    .ledger-avatar.av-d { background: linear-gradient(135deg, #3a5a4a, #1f3a2d); }
+    .ledger-info { flex: 1; min-width: 0; }
+    .ledger-name {
+      font-family: var(--serif);
+      font-weight: 700; font-size: 14px; line-height: 20px;
+      color: var(--text);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .ledger-course {
+      font-size: 10px; line-height: 15px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .ledger-rating { text-align: right; flex: none; }
+    .ledger-score {
+      font-family: var(--serif);
+      font-weight: 400; font-size: 14px; line-height: 20px;
+      color: var(--accent);
+    }
+    .ledger-of {
+      font-size: 10px; line-height: 15px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* ── ARCHIVES ── */
+    .archives-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .archives-title {
+      font-family: var(--serif);
+      font-weight: 700; font-size: 30px; line-height: 36px;
+      color: var(--text);
+    }
+    .archives-desc { color: var(--text-muted); font-size: 16px; line-height: 24px; margin-top: 8px; }
+    .archives-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 12px;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--accent);
+      transition: transform .15s;
+    }
+    .archives-cta:hover { transform: translateX(2px); }
+    .archives-cta svg { width: 10px; height: 10px; }
+
+    .archives-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+    .archive-card {
+      position: relative;
+      aspect-ratio: 218 / 272.5;
+      border: 1px solid var(--border-2);
+      border-radius: 24px;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform .25s, border-color .25s;
+    }
+    .archive-card:hover { transform: translateY(-4px); border-color: rgba(255,99,99,0.4); }
+    .archive-art {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: saturate(0.4) brightness(0.7);
+      z-index: 0;
+    }
+    .archive-art.art-analog {
+      background: radial-gradient(circle at 30% 30%, #2a3540, #0c1218),
+        repeating-linear-gradient(0deg, transparent 0 14px, rgba(74,222,128,0.18) 14px 15px);
+    }
+    .archive-art.art-semi {
+      background:
+        conic-gradient(from 45deg at 50% 50%, #251a1a, #3a2545, #1d2a3a, #251a1a),
+        radial-gradient(circle at 50% 50%, #3a2540, transparent 60%);
+    }
+    .archive-art.art-control {
+      background:
+        radial-gradient(circle at 70% 30%, rgba(255,183,36,0.35), transparent 50%),
+        repeating-linear-gradient(45deg, #1a1a2e 0 18px, #21213a 18px 36px);
+    }
+    .archive-art.art-vlsi {
+      background:
+        linear-gradient(180deg, #0f1320 0%, #1a1a2e 60%),
+        radial-gradient(circle at 50% 50%, rgba(255,99,99,0.25), transparent 50%);
+      background-blend-mode: screen, normal;
+    }
+    .archive-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, var(--bg) 0%, rgba(26,26,46,0) 50%, rgba(26,26,46,0) 100%);
+      z-index: 1;
+    }
+    .archive-meta {
+      position: absolute; left: 25px; right: 25px; bottom: 25px;
+      z-index: 2;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .archive-code {
+      font-weight: 700; font-size: 10px; line-height: 15px;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .archive-name {
+      font-family: var(--serif);
+      font-weight: 700; font-size: 20px; line-height: 28px;
+      color: var(--text);
+    }
+    .archive-stat {
       display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 1rem;
-      margin-bottom: 5rem;
+      padding: 0 8px;
+      font-size: 11px; line-height: 16px;
     }
-
-    .status-bar-item {
-      display: flex; align-items: center; gap: 0.6rem;
-      font-size: 0.68rem; color: var(--text-dim);
-    }
-
-    .status-bar-item .val {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.72rem; color: var(--green);
-    }
-
-    .status-bar-sep {
-      width: 1px; height: 16px;
-      background: var(--border);
-    }
+    .archive-stat .left { color: var(--text-dim); }
+    .archive-stat .right { color: var(--text-soft); display: inline-flex; align-items: center; gap: 4px; }
+    .archive-stat .right svg { width: 10px; height: 10px; color: var(--accent); }
 
     /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
+    .site-footer {
+      background: rgba(38, 24, 23, 0.3);
       border-top: 1px solid var(--border);
-      padding: 1.8rem 3rem;
+      padding: 48px 24px;
+    }
+    .footer-row {
+      max-width: 976px; margin: 0 auto;
       display: flex; align-items: center; justify-content: space-between;
-      font-size: 0.68rem; color: var(--text-dim);
+      gap: 32px; flex-wrap: wrap;
     }
-
-    footer .logo {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.72rem; font-weight: 700;
-      color: var(--text-mid);
+    .footer-brand {
+      font-weight: 900; font-size: 20px; line-height: 28px;
+      letter-spacing: -1px; text-transform: uppercase;
+      color: var(--accent); opacity: 0.5;
     }
-
-    footer .logo span { color: var(--green); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .footer-links {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      flex: 1; justify-content: center;
     }
-
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
+    .footer-link {
+      font-size: 11px; line-height: 16px;
+      letter-spacing: 2.2px; text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color .2s;
     }
+    .footer-link:hover { color: var(--text); }
+    .footer-meta { font-size: 11px; line-height: 16px; color: var(--text-faint); max-width: 220px; }
 
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      right: 32px; bottom: 32px;
+      width: 64px; height: 64px;
+      background: var(--accent);
+      border-radius: 16px;
+      display: grid; place-items: center;
+      box-shadow: var(--shadow-fab);
+      color: var(--text);
+      z-index: 200;
+      transition: transform .2s, filter .2s;
+    }
+    .fab:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .fab svg { width: 22px; height: 26px; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
 
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
+    /* ── MOBILE SIDEBAR TOGGLE ── */
+    .menu-btn { display: none; }
 
     /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .bento { grid-template-columns: minmax(0, 1fr); }
+      .archives-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 900px) {
-      .courses-grid { grid-template-columns: 1fr; }
-      .future-row   { grid-template-columns: repeat(2, 1fr); }
-      .topbar, .semester-section, footer, .status-bar { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .divider { padding: 0 1.5rem; }
+      .shell { padding-left: 0; }
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        width: 240px;
+      }
+      .sidebar.open { transform: translateX(0); box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+      .menu-btn { display: grid; }
+      .topbar-nav { display: none; }
+      .canvas { padding: 32px 20px; gap: 56px; }
+      .hero-inner { padding: 32px 24px; gap: 32px; }
+      .hero-title { font-size: 40px; }
+      .hero-desc { font-size: 16px; line-height: 26px; }
+      .palette { padding: 20px 20px 20px 56px; }
+      .palette-keys { display: none; }
+      .bento-card { padding: 24px; }
+      .status-grid { grid-template-columns: 1fr; }
+      .archives-grid { grid-template-columns: 1fr; }
+      .footer-row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .topbar { padding: 0 16px; }
+      .topbar-brand { font-size: 18px; }
+      .canvas { padding: 24px 16px; gap: 48px; }
+      .hero { border-radius: 20px; }
+      .hero-inner { border-radius: 18px; padding: 24px 18px; }
+      .palette { padding-left: 48px; }
+      .palette input { font-size: 16px; }
+      .fab { right: 16px; bottom: 16px; width: 56px; height: 56px; }
     }
   </style>
 </head>
 <body>
-
-  <div class="bg-glow"></div>
-  <div class="grid-bg"></div>
-
-  <!-- Floating particles -->
-  <div class="particles" id="particles"></div>
-
-  <!-- Top bar -->
-  <nav class="topbar">
-    <div class="topbar-brand">
-      <div class="brand-mark">EE</div>
-      <span class="brand-text"><span>EE</span> Knowledge Base</span>
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <a href="index.html" class="topbar-brand">ECEUH</a>
+    <nav class="topbar-nav">
+      <a href="#dashboard" class="topbar-link active">Dashboard</a>
+      <a href="#archives" class="topbar-link">Courses</a>
+      <a href="professors.html" class="topbar-link">Professors</a>
+      <a href="#labs" class="topbar-link">Labs</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </button>
     </div>
-    <div class="topbar-meta">
-      <span class="live">
-        <span class="live-dot"></span>
-        <span>Semester Active</span>
-      </span>
-      <a href="professors.html" style="color: #4d9fff; text-decoration: none; font-size: 0.68rem; letter-spacing: 0.05em; transition: text-shadow 0.2s;" onmouseover="this.style.textShadow='0 0 8px #4d9fff88'" onmouseout="this.style.textShadow='none'">Professors ↗</a>
-      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
-      <span>Year 03</span>
-      <span id="clock">--:--:--</span>
-    </div>
-  </nav>
+  </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg-text">EE</div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Electrical Engineering · University</p>
-      <p class="hero-name">Knowledge Base</p>
-      <h1 class="hero-title">
-        Course<br/>
-        <span class="line2">Archive</span>
-      </h1>
-      <p class="hero-sub">> select a course to begin_</p>
-      <p class="hero-desc">
-        A living record of coursework, problem walkthroughs, and resources —
-        built <em>in real time</em> each semester. For students, by a student.
-      </p>
-      <div class="badge-row">
-        <div class="badge active"><span class="badge-dot"></span> Spring 2026</div>
-        <div class="badge"><span class="badge-dot"></span> Year 03</div>
-        <div class="badge"><span class="badge-dot"></span> 3 Active Courses</div>
-        <div class="badge"><span class="badge-dot"></span> EE Major</div>
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand-block">
+        <div class="brand-row">
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
+          </div>
+          <div class="brand-text">
+            <div class="brand-name">ECEUH</div>
+            <div class="brand-sub">Knowledge Base</div>
+          </div>
+        </div>
       </div>
-      <div class="scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-line"></div>
-      </div>
+
+      <nav class="nav-list">
+        <a href="#dashboard" class="nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#archives" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>
+          <span>Course Archives</span>
+        </a>
+        <a href="professors.html" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M16 11a4 4 0 0 0 0-8"/></svg>
+          <span>Faculty</span>
+        </a>
+        <a href="#labs" class="nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6L4 18a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-10V2"/><line x1="9" y1="2" x2="15" y2="2"/></svg>
+          <span>Lab Journals</span>
+        </a>
+
+        <a href="#archives" class="sidebar-cta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg>
+          <span>Browse Courses</span>
+        </a>
+      </nav>
     </div>
-  </section>
 
-  <!-- Divider -->
-  <div class="divider reveal">
-    <div class="divider-line"></div>
-    <span class="divider-label">// 01 — Current Semester Courses</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <!-- Current Semester Courses -->
-  <section class="semester-section reveal reveal-delay-1">
-    <div class="semester-header">
-      <div>
-        <div class="semester-label">Semester_03 · Spring 2026</div>
-        <h2 class="semester-title">Active <span>Courses</span></h2>
-      </div>
-      <span class="semester-count">3 of 4 tracked</span>
+    <div class="sidebar-footer">
+      <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1 .8 2.1v3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9 0-6.3-5.2-11.5-11.5-11.5z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <a href="#about" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>About</span>
+      </a>
     </div>
+  </aside>
 
-    <div class="courses-grid">
+  <main class="shell">
+    <div class="canvas">
 
-      <!-- Digital Logic Design -->
-      <a class="course-card"
-         href="dld.html"
-         style="--card-color: #00ff41; --card-glow: 0 0 12px #00ff4188, 0 0 30px #00ff4130;">
-        <div class="shimmer"></div>
-        <div class="card-top">
-          <div>
-            <div class="card-code">ECE_3441 · 4 Credit Hours</div>
-            <div class="card-status-pill pill-active">
-              <span class="pill-dot"></span> Active
+      <!-- ── HERO / COMMAND PALETTE ── -->
+      <section id="dashboard" class="hero reveal">
+        <div class="hero-inner">
+          <div class="hero-row">
+            <div class="hero-copy">
+              <h1 class="hero-title">EE Coursework, archived.</h1>
+              <p class="hero-desc">A living record of homework walkthroughs, lab notes, and faculty ratings — built in real time each semester at the University of Houston.</p>
+            </div>
+            <div class="avatar-stack" aria-hidden="true">
+              <div class="avatar av-1">BS</div>
+              <div class="avatar av-2">XS</div>
+              <div class="avatar count">+2</div>
             </div>
           </div>
-          <div class="card-icon">[DL]</div>
-        </div>
-        <h3 class="card-title">Digital Logic Design</h3>
-        <p class="card-desc">Boolean algebra, logic gates, combinational & sequential circuits, K-maps, and finite state machines.</p>
-        <div class="card-tags">
-          <span class="tag">Boolean Algebra</span>
-          <span class="tag">Logic Gates</span>
-          <span class="tag">K-Maps</span>
-          <span class="tag">FSMs</span>
-        </div>
-        <div class="card-footer-row">
-          <span class="card-meta">6 units · 24 problems</span>
-          <span class="card-arrow">→</span>
-        </div>
-      </a>
 
-      <!-- Programming with C -->
-      <a class="course-card"
-         href="cprog.html"
-         style="--card-color: #00ffe7; --card-glow: 0 0 12px #00ffe788, 0 0 30px #00ffe730;">
-        <div class="shimmer"></div>
-        <div class="card-top">
-          <div>
-            <div class="card-code">ECE_3331 · 3 Credit Hours</div>
-            <div class="card-status-pill pill-active">
-              <span class="pill-dot"></span> Active
+          <form class="palette" onsubmit="event.preventDefault(); document.getElementById('archives').scrollIntoView({behavior:'smooth'});">
+            <svg class="palette-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" placeholder="Access course archives, lab journals, or faculty papers…" aria-label="Search the knowledge base"/>
+            <span class="palette-keys"><span class="key">⌘</span><span class="key">K</span></span>
+          </form>
+        </div>
+      </section>
+
+      <!-- ── BENTO: ACTIVE CIRCUITS + FACULTY LEDGER ── -->
+      <section class="bento reveal">
+
+        <article class="bento-card feature">
+          <header class="bento-head">
+            <div>
+              <h2 class="bento-h3">Active Coursework</h2>
+              <p class="bento-sub">Spring 2026 · 3 tracked courses</p>
+            </div>
+            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </header>
+
+          <div class="status-grid">
+            <div class="status-card">
+              <div class="status-row">
+                <span class="pill pill-good">In Progress</span>
+                <span class="status-meta">Week 09 / 16</span>
+              </div>
+              <h3 class="status-title">Digital Logic Design</h3>
+              <p class="status-desc">K-maps, FSMs, and sequential circuit synthesis. Quizzes and walkthroughs updated weekly.</p>
+              <div class="progress" aria-label="58% complete"><div class="progress-bar" style="right: 42%"></div></div>
+            </div>
+
+            <div class="status-card">
+              <div class="status-row">
+                <span class="pill pill-warn">Catching Up</span>
+                <span class="status-meta">Week 09 / 16</span>
+              </div>
+              <h3 class="status-title">Circuits 2 — AC Analysis</h3>
+              <p class="status-desc">Phasors, impedance, Bode plots, and second-order RLC frequency response.</p>
+              <div class="progress" aria-label="45% complete"><div class="progress-bar" style="right: 55%"></div></div>
             </div>
           </div>
-          <div class="card-icon" style="color: #00ffe7;">[C/]</div>
-        </div>
-        <h3 class="card-title">Programming Apps with C</h3>
-        <p class="card-desc">Procedural programming, memory management, pointers, data structures, and algorithm design in C.</p>
-        <div class="card-tags">
-          <span class="tag">Pointers</span>
-          <span class="tag">Memory</span>
-          <span class="tag">Structs</span>
-          <span class="tag">Algorithms</span>
-        </div>
-        <div class="card-footer-row">
-          <span class="card-meta">View resources</span>
-          <span class="card-arrow" style="color: #00ffe780;">→</span>
-        </div>
-      </a>
+        </article>
 
-      <!-- Circuits 2 -->
-      <a class="course-card"
-         href="circuits2.html"
-         style="--card-color: #ffb700; --card-glow: 0 0 12px #ffb70088, 0 0 30px #ffb70030;">
-        <div class="shimmer"></div>
-        <div class="card-top">
-          <div>
-            <div class="card-code">ECE_2202 · 3 Credit Hours</div>
-            <div class="card-status-pill pill-active">
-              <span class="pill-dot"></span> Active
+        <article class="bento-card">
+          <h2 class="bento-h3">Faculty Ledger</h2>
+          <div class="ledger">
+            <div class="ledger-row">
+              <div class="ledger-avatar av-a">BS</div>
+              <div class="ledger-info">
+                <div class="ledger-name">Dr. Bhavin Sheth</div>
+                <div class="ledger-course">Digital Logic Design</div>
+              </div>
+              <div class="ledger-rating">
+                <div class="ledger-score">3.0</div>
+                <div class="ledger-of">/ 5.0</div>
+              </div>
+            </div>
+            <div class="ledger-row">
+              <div class="ledger-avatar av-b">DR</div>
+              <div class="ledger-info">
+                <div class="ledger-name">Dr. Deepa Ramachandran</div>
+                <div class="ledger-course">Digital Logic Design</div>
+              </div>
+              <div class="ledger-rating">
+                <div class="ledger-score">4.5</div>
+                <div class="ledger-of">/ 5.0</div>
+              </div>
+            </div>
+            <div class="ledger-row">
+              <div class="ledger-avatar av-c">XS</div>
+              <div class="ledger-info">
+                <div class="ledger-name">Dr. Xiaonan Shan</div>
+                <div class="ledger-course">Circuits 2</div>
+              </div>
+              <div class="ledger-rating">
+                <div class="ledger-score">4.5</div>
+                <div class="ledger-of">/ 5.0</div>
+              </div>
+            </div>
+            <div class="ledger-row">
+              <div class="ledger-avatar av-d">BJ</div>
+              <div class="ledger-info">
+                <div class="ledger-name">Dr. Biresh K. Joardar</div>
+                <div class="ledger-course">Programming with C</div>
+              </div>
+              <div class="ledger-rating">
+                <div class="ledger-score">5.0</div>
+                <div class="ledger-of">/ 5.0</div>
+              </div>
             </div>
           </div>
-          <div class="card-icon" style="color: #ffb700;">[∿∿]</div>
-        </div>
-        <h3 class="card-title">Circuits 2</h3>
-        <p class="card-desc">AC circuit analysis, phasors, impedance, frequency response, Bode plots, filters, and RLC networks.</p>
-        <div class="card-tags">
-          <span class="tag">AC Analysis</span>
-          <span class="tag">Phasors</span>
-          <span class="tag">Bode Plots</span>
-          <span class="tag">Filters</span>
-        </div>
-        <div class="card-footer-row">
-          <span class="card-meta">Coming soon</span>
-          <span class="card-arrow" style="color: #ffb70080;">→</span>
-        </div>
-      </a>
+        </article>
 
-    </div>
+      </section>
 
-    </div>
-  </section>
-
-  <!-- Divider -->
-  <div class="divider reveal">
-    <div class="divider-line"></div>
-    <span class="divider-label">// 02 — Professor Directory</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <!-- Professor Card -->
-  <section class="semester-section reveal reveal-delay-1" style="padding-top: 0;">
-    <div class="semester-header">
-      <div>
-        <div class="semester-label">Spring 2026 · 3 Courses</div>
-        <h2 class="semester-title">Professor <span>Ratings</span></h2>
-      </div>
-      <span class="semester-count">via RateMyProfessors</span>
-    </div>
-
-    <a class="course-card" href="professors.html"
-       style="--card-color: #4d9fff; --card-glow: 0 0 12px #4d9fff88, 0 0 30px #4d9fff30; display: block; border-radius: 6px; border: 1px solid var(--border); text-decoration: none;">
-      <div class="shimmer"></div>
-      <div class="card-top">
-        <div>
-          <div class="card-code">Spring 2026 · All Courses</div>
-          <div class="card-status-pill pill-active" style="background:#4d9fff12; color:#4d9fff; border:1px solid #4d9fff28;">
-            <span class="pill-dot" style="background:#4d9fff;"></span> 3 Professors
+      <!-- ── COURSE ARCHIVES ── -->
+      <section id="archives" class="reveal" style="display:flex; flex-direction:column; gap:24px;">
+        <div class="archives-head">
+          <div>
+            <h2 class="archives-title">Course Archives</h2>
+            <p class="archives-desc">Unit walkthroughs, past exams, and formula sheets for every tracked course.</p>
           </div>
+          <a href="#archives" class="archives-cta">
+            <span>View All Archives</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
         </div>
-        <div class="card-icon" style="color: #4d9fff;">[★]</div>
-      </div>
-      <h3 class="card-title" style="color: var(--text);">Professor Directory</h3>
-      <p class="card-desc">RateMyProfessors ratings, difficulty scores, and would-take-again percentages for every professor teaching a tracked course this semester.</p>
-      <div class="card-tags">
-        <span class="tag">Digital Logic Design</span>
-        <span class="tag">Circuits 2</span>
-        <span class="tag">Programming with C</span>
-      </div>
-      <div class="card-footer-row">
-        <span class="card-meta">Rating · Difficulty · Would Take Again</span>
-        <span class="card-arrow" style="color: #4d9fff;">→</span>
-      </div>
-    </a>
 
-    <!-- Future placeholders row -->
-    <div class="future-row" style="margin-top: 1px;">
-      <div class="future-card">
-        <div class="future-card-left">
-          <span class="future-label">Fall 2026</span>
-          <span class="future-title">Course Slot 01</span>
-        </div>
-        <span class="future-lock">⌀</span>
-      </div>
-      <div class="future-card">
-        <div class="future-card-left">
-          <span class="future-label">Fall 2026</span>
-          <span class="future-title">Course Slot 02</span>
-        </div>
-        <span class="future-lock">⌀</span>
-      </div>
-      <div class="future-card">
-        <div class="future-card-left">
-          <span class="future-label">Spring 2027</span>
-          <span class="future-title">Course Slot 03</span>
-        </div>
-        <span class="future-lock">⌀</span>
-      </div>
-      <div class="future-card">
-        <div class="future-card-left">
-          <span class="future-label">Spring 2027</span>
-          <span class="future-title">Course Slot 04</span>
-        </div>
-        <span class="future-lock">⌀</span>
-      </div>
-    </div>
-  </section>
+        <div class="archives-grid">
+          <a href="dld.html" class="archive-card">
+            <div class="archive-art art-analog"></div>
+            <div class="archive-meta">
+              <div>
+                <div class="archive-code">ECE-3441</div>
+                <div class="archive-name">Digital Logic Design</div>
+              </div>
+              <div class="archive-stat">
+                <span class="left">6 units</span>
+                <span class="right">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 22 12 18.3 18.2 22l-1.7-7.9L22 9.3l-7.2-.7z"/></svg>
+                  24 problems
+                </span>
+              </div>
+            </div>
+          </a>
 
-  <!-- Status bar -->
-  <div class="status-bar reveal">
-    <div class="status-bar-item">
-      <span>System</span>
-      <span class="val">ONLINE</span>
-    </div>
-    <div class="status-bar-sep"></div>
-    <div class="status-bar-item">
-      <span>Semester</span>
-      <span class="val">Spring 2026</span>
-    </div>
-    <div class="status-bar-sep"></div>
-    <div class="status-bar-item">
-      <span>Week</span>
-      <span class="val">09 / 16</span>
-    </div>
-    <div class="status-bar-sep"></div>
-    <div class="status-bar-item">
-      <span>Courses Tracked</span>
-      <span class="val">03</span>
-    </div>
-    <div class="status-bar-sep"></div>
-    <div class="status-bar-item">
-      <span>Total Problems</span>
-      <span class="val">24+</span>
-    </div>
-    <div class="status-bar-sep"></div>
-    <div class="status-bar-item">
-      <span>Last Updated</span>
-      <span class="val" id="last-updated">--</span>
-    </div>
-  </div>
+          <a href="circuits2.html" class="archive-card">
+            <div class="archive-art art-semi"></div>
+            <div class="archive-meta">
+              <div>
+                <div class="archive-code">ECE-2202</div>
+                <div class="archive-name">Circuits 2</div>
+              </div>
+              <div class="archive-stat">
+                <span class="left">AC · Phasors</span>
+                <span class="right">3 cr.</span>
+              </div>
+            </div>
+          </a>
 
-  <!-- Footer -->
-  <footer>
-    <span class="logo"><span>EE</span> Knowledge Base · Year 03</span>
-    <span>Built for the EE Discord community.</span>
-    <span id="footer-date">Spring 2026</span>
-  </footer>
+          <a href="cprog.html" class="archive-card">
+            <div class="archive-art art-control"></div>
+            <div class="archive-meta">
+              <div>
+                <div class="archive-code">ECE-3331</div>
+                <div class="archive-name">Programming with C</div>
+              </div>
+              <div class="archive-stat">
+                <span class="left">Pointers · Memory</span>
+                <span class="right">3 cr.</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="professors.html" class="archive-card">
+            <div class="archive-art art-vlsi"></div>
+            <div class="archive-meta">
+              <div>
+                <div class="archive-code">RMP · Spring '26</div>
+                <div class="archive-name">Professor Ratings</div>
+              </div>
+              <div class="archive-stat">
+                <span class="left">4 professors</span>
+                <span class="right">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 22 12 18.3 18.2 22l-1.7-7.9L22 9.3l-7.2-.7z"/></svg>
+                  Browse
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <div class="footer-row">
+        <span class="footer-brand">ECEUH</span>
+        <nav class="footer-links">
+          <a href="#dashboard" class="footer-link">Dashboard</a>
+          <a href="#archives" class="footer-link">Archives</a>
+          <a href="professors.html" class="footer-link">Faculty</a>
+          <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+        </nav>
+        <p class="footer-meta">Built for the UH EE Discord community. For students, by a student.</p>
+      </div>
+    </footer>
+  </main>
+
+  <a href="#archives" class="fab" aria-label="Browse archives">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>
+  </a>
 
   <script>
-    // Theme toggle
-    const btn = document.getElementById('theme-toggle');
-    function applyTheme(theme) {
-      if (theme === 'light') {
-        document.documentElement.classList.add('light');
-        btn.textContent = '● Dark';
+    // Mobile sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.getElementById('menu-btn');
+    if (menuBtn) {
+      menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && e.target !== menuBtn) {
+          sidebar.classList.remove('open');
+        }
+      });
+    }
+
+    // Theme toggle (defaults to dark; light mode is a subtle softening)
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('theme-toggle');
+    function applyTheme(t) {
+      if (t === 'light') {
+        root.style.setProperty('--bg', '#f4ecea');
+        root.style.setProperty('--bg-card', '#fff5f3');
+        root.style.setProperty('--bg-overlay', 'rgba(255,255,255,0.7)');
+        root.style.setProperty('--bg-overlay-2', 'rgba(255,255,255,0.55)');
+        root.style.setProperty('--bg-overlay-3', 'rgba(255,255,255,0.6)');
+        root.style.setProperty('--bg-active', '#ffe4df');
+        root.style.setProperty('--text', '#1A1A2E');
+        root.style.setProperty('--text-cream', '#3a1212');
+        root.style.setProperty('--text-mute', '#5a3431');
+        root.style.setProperty('--text-muted', '#475569');
+        root.style.setProperty('--text-dim', '#64748B');
+        root.style.setProperty('--text-soft', '#334155');
+        root.style.setProperty('--border', 'rgba(26,26,46,0.08)');
+        root.style.setProperty('--border-2', 'rgba(26,26,46,0.14)');
       } else {
-        document.documentElement.classList.remove('light');
-        btn.textContent = '☀ Light';
+        // restore by removing inline overrides
+        ['--bg','--bg-card','--bg-overlay','--bg-overlay-2','--bg-overlay-3','--bg-active',
+         '--text','--text-cream','--text-mute','--text-muted','--text-dim','--text-soft',
+         '--border','--border-2'].forEach(p => root.style.removeProperty(p));
       }
     }
-    function toggleTheme() {
-      const isLight = document.documentElement.classList.contains('light');
-      const next = isLight ? 'dark' : 'light';
-      localStorage.setItem('ee-theme', next);
-      applyTheme(next);
-    }
-    // Load saved preference on page load
-    applyTheme(localStorage.getItem('ee-theme') || 'dark');
-
-    // Clock
-    function tick() {
-      const now = new Date();
-      document.getElementById('clock').textContent = now.toTimeString().slice(0,8);
-      document.getElementById('last-updated').textContent =
-        now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      document.getElementById('footer-date').textContent =
-        now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    }
-    tick(); setInterval(tick, 1000);
-
-    // Particles
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 22; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.cssText = `
-        left: ${Math.random() * 100}%;
-        animation-duration: ${8 + Math.random() * 14}s;
-        animation-delay: ${Math.random() * 12}s;
-        opacity: 0;
-        width: ${Math.random() > 0.7 ? 3 : 2}px;
-        height: ${Math.random() > 0.7 ? 3 : 2}px;
-      `;
-      container.appendChild(p);
+    const saved = localStorage.getItem('eceuh-theme') || 'dark';
+    applyTheme(saved);
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const cur = localStorage.getItem('eceuh-theme') || 'dark';
+        const next = cur === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('eceuh-theme', next);
+        applyTheme(next);
+      });
     }
 
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    // Cmd+K focuses the palette
+    const palette = document.querySelector('.palette input');
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        palette && palette.focus();
+      }
+    });
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); }
       });
     }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
+    document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
   </script>
 </body>
 </html>
