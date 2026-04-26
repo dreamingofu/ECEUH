@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Archives · ECEUH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <style>
+    :root {
+      --bg:           #1A1A2E;
+      --bg-card:      #261817;
+      --bg-overlay:   rgba(42, 42, 62, 0.6);
+      --bg-overlay-2: rgba(42, 42, 62, 0.4);
+      --bg-active:    #2A2A3E;
+      --accent:       #FF6363;
+      --accent-deep:  #67000E;
+      --text:         #FFFFFF;
+      --text-cream:   #F6DDDB;
+      --text-muted:   #94A3B8;
+      --text-dim:     #64748B;
+      --text-faint:   #475569;
+      --text-soft:    #CBD5E1;
+      --border:       rgba(255, 255, 255, 0.05);
+      --border-2:     rgba(255, 255, 255, 0.1);
+      --serif:        'Lora', 'Liberation Serif', Georgia, serif;
+      --sans:         'Inter', system-ui, -apple-system, sans-serif;
+      --mono:         'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace;
+    }
+    html.light {
+      --bg:           #f4ecea;
+      --bg-card:      #fff5f3;
+      --bg-overlay:   rgba(255, 255, 255, 0.7);
+      --bg-overlay-2: rgba(255, 255, 255, 0.55);
+      --bg-active:    #ffe4df;
+      --accent:       #b94a4a;
+      --text:         #1A1A2E;
+      --text-cream:   #3a1212;
+      --text-muted:   #475569;
+      --text-dim:     #64748B;
+      --text-faint:   #64748B;
+      --text-soft:    #334155;
+      --border:       rgba(26, 26, 46, 0.08);
+      --border-2:     rgba(26, 26, 46, 0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .canvas {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 40px 48px;
+      display: flex; flex-direction: column; gap: 56px;
+    }
+
+    .page-head { display: flex; flex-direction: column; gap: 8px; }
+    .page-eyebrow {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .page-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -1px;
+      color: var(--text-cream);
+    }
+    .page-desc {
+      font-size: 16px; line-height: 26px;
+      color: var(--text-muted);
+      max-width: 640px;
+    }
+
+    .level-section { display: flex; flex-direction: column; gap: 24px; }
+    .level-head {
+      display: flex; align-items: baseline; gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .level-title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .level-meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+    }
+    @media (max-width: 1024px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 540px)  { .grid { grid-template-columns: 1fr; } }
+
+    .archive-card {
+      position: relative;
+      display: flex; flex-direction: column;
+      gap: 14px;
+      transition: transform .25s;
+    }
+    .archive-card:hover { transform: translateY(-4px); }
+    .archive-card.placeholder { opacity: 0.55; }
+    .archive-card.placeholder:hover { transform: none; }
+
+    .archive-thumb {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      overflow: hidden;
+      isolation: isolate;
+      background: #0d0d18;
+      border: 1px solid var(--border-2);
+      transition: border-color .25s;
+    }
+    .archive-card:hover .archive-thumb { border-color: rgba(255,99,99,0.35); }
+    .archive-card.placeholder:hover .archive-thumb { border-color: var(--border-2); }
+
+    .archive-art {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform .4s ease;
+      z-index: 0;
+    }
+    .archive-card:not(.placeholder):hover .archive-art { transform: scale(1.05); }
+    .archive-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(15,13,28,0) 35%, rgba(15,13,28,0.85) 100%),
+        linear-gradient(180deg, rgba(15,13,28,0.35) 0%, rgba(15,13,28,0) 30%);
+      z-index: 1;
+    }
+
+    .archive-meta {
+      position: absolute; left: 18px; right: 18px; bottom: 18px;
+      z-index: 2;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .archive-code {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .archive-name {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 22px;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+
+    .archive-stat {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 4px;
+      font-size: 11px; line-height: 16px;
+    }
+    .archive-stat .left { color: var(--text-dim); }
+    .archive-stat .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-soft); font-weight: 500;
+    }
+    .archive-stat .badge.live { color: var(--accent); font-weight: 700; }
+    .archive-stat .badge.live::before {
+      content: ''; width: 6px; height: 6px; border-radius: 9999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(255,99,99,0.5);
+      animation: pulse 1.8s ease-out infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255,99,99,0.5); }
+      80%  { box-shadow: 0 0 0 6px rgba(255,99,99,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,99,99,0); }
+    }
+  </style>
+</head>
+<body class="eceuh-shell eceuh-collapsible">
+  <main>
+    <div class="canvas">
+      <header class="page-head">
+        <span class="page-eyebrow">Course Archives</span>
+        <h1 class="page-title">Every course in the ECE base.</h1>
+        <p class="page-desc">All courses on the University of Houston ECE degree path. Pages with a <strong style="color:var(--accent)">Live</strong> badge have walkthroughs, lab notes, and resources today &mdash; the rest are placeholders that fill in as the semester goes.</p>
+      </header>
+
+      <section class="level-section">
+        <div class="level-head">
+          <h2 class="level-title">1000-level</h2>
+          <span class="level-meta">Foundations &middot; year 01</span>
+        </div>
+        <div class="grid" id="grid-1000"></div>
+      </section>
+
+      <section class="level-section">
+        <div class="level-head">
+          <h2 class="level-title">2000-level</h2>
+          <span class="level-meta">Circuits &middot; year 02</span>
+        </div>
+        <div class="grid" id="grid-2000"></div>
+      </section>
+
+      <section class="level-section">
+        <div class="level-head">
+          <h2 class="level-title">3000-level</h2>
+          <span class="level-meta">Core ECE &middot; year 03</span>
+        </div>
+        <div class="grid" id="grid-3000"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="eceuh-footer">
+    <p>Built for the UH EE Discord community. For students, by a student.</p>
+  </footer>
+
+  <script>
+    const COURSES = [
+      // 1000-level
+      { code: 'ENGI 1100', title: 'Introduction to Engineering',     level: 1000, art: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ENGI 1331', title: 'Computing for Engineers',         level: 1000, art: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=900&q=80&auto=format&fit=crop' },
+      // 2000-level
+      { code: 'ENGI 2304', title: 'Technical Communications',        level: 2000, art: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 2201',  title: 'Circuits Analysis I',              level: 2000, art: 'https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 2202',  title: 'Circuit Analysis II',              level: 2000, art: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=900&q=80&auto=format&fit=crop', href: 'circuits2.html', live: true },
+      { code: 'ECE 2100',  title: 'Circuit Analysis Lab',             level: 2000, art: 'https://images.unsplash.com/photo-1581090700227-1e37b190418e?w=900&q=80&auto=format&fit=crop' },
+      { code: 'INDE 2333', title: 'Engineering Statistics',           level: 2000, art: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=900&q=80&auto=format&fit=crop' },
+      // 3000-level
+      { code: 'ECE 3331',  title: 'Programming Applications in ECE',  level: 3000, art: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80&auto=format&fit=crop', href: 'cprog.html', live: true },
+      { code: 'ECE 3441',  title: 'Digital Logic Design',             level: 3000, art: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80&auto=format&fit=crop', href: 'dld.html', live: true },
+      { code: 'ECE 3155',  title: 'Electronics Lab',                  level: 3000, art: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 3355',  title: 'Electronics',                      level: 3000, art: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 3337',  title: 'Signals & Systems Analysis',       level: 3000, art: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 3317',  title: 'Applied EM Waves',                 level: 3000, art: 'https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 3436',  title: 'Microprocessor Systems',           level: 3000, art: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=900&q=80&auto=format&fit=crop' },
+      { code: 'ECE 3340',  title: 'Numerical Methods',                level: 3000, art: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=900&q=80&auto=format&fit=crop' },
+    ];
+
+    function renderGrid(level) {
+      const host = document.getElementById('grid-' + level);
+      const items = COURSES.filter(c => c.level === level);
+      host.innerHTML = items.map(c => {
+        const live = !!c.live;
+        const cardCls = live ? 'archive-card' : 'archive-card placeholder';
+        const wrap = live
+          ? (inner) => `<a href="${c.href}" class="${cardCls}">${inner}</a>`
+          : (inner) => `<div class="${cardCls}">${inner}</div>`;
+        return wrap(`
+          <div class="archive-thumb">
+            <div class="archive-art" style="background-image:url('${c.art}');"></div>
+            <div class="archive-meta">
+              <div class="archive-code">${c.code}</div>
+              <div class="archive-name">${c.title}</div>
+            </div>
+          </div>
+          <div class="archive-stat">
+            <span class="left">${c.code.split(' ')[0]}</span>
+            <span class="badge ${live ? 'live' : ''}">${live ? 'Live' : 'Coming soon'}</span>
+          </div>
+        `);
+      }).join('');
+    }
+    renderGrid(1000);
+    renderGrid(2000);
+    renderGrid(3000);
+  </script>
+</body>
+</html>
