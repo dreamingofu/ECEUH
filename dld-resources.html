@@ -2,733 +2,126 @@
 <html lang="en">
 <head>
   <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EE — DLD Resources</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg:        #050a05;
-      --bg2:       #080f08;
-      --panel:     #0b140b;
-      --border:    #1a3a1a;
-      --border2:   #0f2018;
-      --green:     #00ff41;
-      --green-dim: #00cc33;
-      --green-dark:#003311;
-      --amber:     #ffb700;
-      --red:       #ff3c3c;
-      --cyan:      #00fff7;
-      --blue:      #4d9fff;
-      --text:      #b8d4b8;
-      --text-dim:  #4a6b4a;
-      --text-mid:  #6b9a6b;
-      --glow:      0 0 8px #00ff4180, 0 0 20px #00ff4130;
-      --glow-lg:   0 0 16px #00ff4199, 0 0 40px #00ff4150, 0 0 80px #00ff4120;
-    }
-
-    html.light {
-      --bg:#f5f7f5; --bg2:#ffffff; --panel:#edf2ed;
-      --border:#7aaa7a; --border2:#a0c4a0;
-      --green:#005c14; --green-dim:#004810; --green-dark:#d4eed4;
-      --amber:#6b4800; --red:#aa1a1a; --cyan:#005048; --blue:#0c2ea0;
-      --text:#0a150a; --text-dim:#2a4a2a; --text-mid:#1e3c1e;
-      --glow:none; --glow-lg:none;
-    }
-    html.light body::before  { display: none; }
-    html.light .bg-glow      { display: none; }
-    html.light .grid-bg      { opacity: 0.07; filter: invert(1); }
-    html.light .topbar       { background: rgba(245,247,245,0.98); border-bottom: 1px solid var(--border); }
-    html.light .vis-card     { background: #ffffff; }
-    html.light .vis-card:hover { background: var(--panel); }
-    html.light .file-item    { background: #ffffff; }
-    html.light .file-item:hover { background: var(--panel); }
-    html.light .ext-card     { background: #ffffff; }
-    html.light .ext-card:hover { background: var(--panel); }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg); color: var(--text);
-      font-family: 'Share Tech Mono', monospace;
-      min-height: 100vh; overflow-x: hidden; cursor: crosshair;
-    }
-
-    body::before {
-      content: ''; position: fixed; inset: 0;
-      background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px);
-      pointer-events: none; z-index: 9999;
-    }
-
-    .bg-glow { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 70% 50% at 50% -5%, #00ff4108 0%, transparent 70%); }
-    .grid-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.04; background-image: linear-gradient(var(--green) 1px, transparent 1px), linear-gradient(90deg, var(--green) 1px, transparent 1px); background-size: 40px 40px; animation: gridDrift 60s linear infinite; }
-    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 40px 40px; } }
-
-    /* ── TOPBAR ── */
-    .topbar {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.9rem 3rem; border-bottom: 1px solid var(--border);
-      background: rgba(5,10,5,0.94); backdrop-filter: blur(10px);
-    }
-    .topbar-left { display: flex; align-items: center; gap: 1.2rem; }
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--text-dim); text-decoration: none;
-      padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 2px;
-      transition: all 0.2s;
-    }
-    .back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-dark); }
-    .breadcrumb { font-size: 0.68rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem; }
-    .breadcrumb span { color: var(--green); }
-    .topbar-right { display: flex; align-items: center; gap: 1.5rem; font-size: 0.68rem; color: var(--text-dim); }
-    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: var(--glow); animation: blink 2s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-    .theme-toggle { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
-    .theme-toggle:hover { border-color: var(--green); color: var(--green); }
-
-    /* ── LAYOUT ── */
-    .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
-
-    /* ── PAGE HEADER ── */
-    .page-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
-    .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.6rem; }
-    .page-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--green-dim); }
-    .page-title { font-family: 'Orbitron', monospace; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; color: var(--green); text-shadow: var(--glow-lg); letter-spacing: -0.02em; margin-bottom: 0.6rem; }
-    .page-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.8; max-width: 600px; }
-    .page-desc em { color: var(--text); font-style: normal; }
-
-    /* ── SECTION HEADER ── */
-    .sec-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.8rem; }
-    .sec-header h2 { font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 700; color: var(--green); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
-    .sec-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
-    .sec-tag { font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; }
-    .section { margin-bottom: 4rem; }
-
-    /* ── VISUALIZER CARDS ── */
-    .vis-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-
-    .vis-card {
-      background: var(--bg2); padding: 1.8rem;
-      position: relative; overflow: hidden;
-      text-decoration: none; display: block;
-      transition: background 0.25s;
-    }
-    .vis-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: var(--green); transform: scaleX(0); transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-    .vis-card:hover { background: var(--panel); }
-    .vis-card:hover::before { transform: scaleX(1); }
-
-    .vis-icon {
-      font-family: 'VT323', monospace; font-size: 2.8rem;
-      color: var(--green); text-shadow: var(--glow);
-      opacity: 0.7; margin-bottom: 1rem; display: block;
-      transition: opacity 0.3s;
-    }
-    .vis-card:hover .vis-icon { opacity: 1; }
-
-    .vis-badge {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 0.18rem 0.55rem; border-radius: 2px; margin-bottom: 0.7rem;
-      background: #00ff4112; color: var(--green); border: 1px solid #00ff4128;
-    }
-    .vis-badge-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); animation: blink 2s infinite; }
-
-    .vis-title {
-      font-family: 'Orbitron', monospace; font-size: 0.95rem; font-weight: 700;
-      color: var(--text); margin-bottom: 0.5rem; line-height: 1.3;
-      transition: color 0.2s, text-shadow 0.2s;
-    }
-    .vis-card:hover .vis-title { color: var(--green); text-shadow: var(--glow); }
-
-    .vis-desc { font-size: 0.75rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 1.2rem; }
-
-    .vis-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.4rem; }
-    .vtag { font-size: 0.6rem; padding: 0.15rem 0.5rem; border: 1px solid var(--border); color: var(--text-dim); border-radius: 2px; background: var(--bg); }
-
-    .vis-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border2); font-size: 0.65rem; color: var(--text-dim); }
-    .vis-arrow { color: var(--text-dim); transition: color 0.2s, transform 0.2s; }
-    .vis-card:hover .vis-arrow { color: var(--green); transform: translateX(4px); }
-
-    /* ── FILE LIBRARY ── */
-    .file-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .filter-btn { font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
-    .filter-btn:hover  { border-color: var(--green); color: var(--green); }
-    .filter-btn.active { border-color: var(--green); color: var(--green); background: var(--green-dark); }
-
-    .file-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-
-    .file-item { background: var(--bg2); display: flex; flex-direction: column; transition: background 0.2s; position: relative; overflow: hidden; }
-    .file-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--green); transform: scaleY(0); transform-origin: bottom; transition: transform 0.25s ease; z-index: 1; }
-    .file-item:hover { background: var(--panel); }
-    .file-item:hover::before { transform: scaleY(1); }
-    .file-item.hidden { display: none; }
-
-    .file-inner { padding: 1.2rem 1.6rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1.2rem; align-items: center; }
-    .file-icon { font-family: 'VT323', monospace; font-size: 1.8rem; line-height: 1; width: 44px; text-align: center; }
-    .icon-quiz    { color: var(--green); }
-    .icon-exam    { color: var(--red); }
-    .icon-formula { color: var(--amber); }
-
-    .file-info { display: flex; flex-direction: column; gap: 0.3rem; }
-    .file-meta  { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
-    .ftype { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 2px; }
-    .ftype-quiz    { background: #00ff4112; color: var(--green);  border: 1px solid #00ff4128; }
-    .ftype-exam    { background: #ff3c3c12; color: var(--red);    border: 1px solid #ff3c3c28; }
-    .ftype-formula { background: #ffb70012; color: var(--amber);  border: 1px solid #ffb70028; }
-    .ftopic { font-size: 0.6rem; color: var(--text-dim); }
-    .file-name { font-size: 0.88rem; color: var(--text); transition: color 0.2s; }
-    .file-item:hover .file-name { color: var(--green); }
-    .file-preview { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; }
-    .file-preview em { font-style: normal; }
-    .file-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
-    .file-date { font-size: 0.6rem; color: var(--text-dim); white-space: nowrap; }
-    .dl-btn { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-dim); text-decoration: none; background: transparent; transition: all 0.2s; white-space: nowrap; }
-    .dl-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-dark); box-shadow: var(--glow); }
-    .dl-btn.soon { opacity: 0.4; pointer-events: none; }
-
-    /* ── EXTERNAL LINKS ── */
-    .ext-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-
-    .ext-card {
-      background: var(--bg2); padding: 1.4rem 1.8rem;
-      text-decoration: none; display: flex; align-items: center; gap: 1.2rem;
-      transition: background 0.2s; position: relative; overflow: hidden;
-    }
-    .ext-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: var(--blue); transform: scaleY(0); transform-origin: bottom; transition: transform 0.3s ease; }
-    .ext-card:hover { background: var(--panel); }
-    .ext-card:hover::before { transform: scaleY(1); }
-
-    .ext-icon { font-family: 'VT323', monospace; font-size: 2rem; color: var(--blue); min-width: 40px; text-align: center; text-shadow: 0 0 8px #4d9fff55; }
-    .ext-info { flex: 1; }
-    .ext-title { font-family: 'Orbitron', monospace; font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; transition: color 0.2s; }
-    .ext-card:hover .ext-title { color: var(--blue); }
-    .ext-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.6; }
-    .ext-arrow { color: var(--text-dim); font-size: 0.9rem; transition: color 0.2s, transform 0.2s; flex-shrink: 0; }
-    .ext-card:hover .ext-arrow { color: var(--blue); transform: translateX(3px); }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
-    ::-webkit-scrollbar-thumb:hover { background: var(--green-dim); }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
-    .reveal.d1 { transition-delay: 0.1s; }
-    .reveal.d2 { transition-delay: 0.2s; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 860px) {
-      .vis-grid, .ext-grid { grid-template-columns: 1fr; }
-      .wrapper { padding: 2rem 1.5rem; }
-      .topbar  { padding: 0.9rem 1.5rem; }
-    }
-  
-    /* ╔══ ECEUH REDESIGN OVERRIDE ══╗
-       Remaps original palette to the navy + coral theme.
-       Keeps existing markup intact; toggles still work. */
-    :root {
-      --bg:         #1A1A2E !important;
-      --bg2:        #261817 !important;
-      --panel:      #2A2A3E !important;
-      --border:     rgba(255, 255, 255, 0.05) !important;
-      --border2:    rgba(255, 255, 255, 0.1) !important;
-      --green:      #FF6363 !important;
-      --green-dim:  #ff4d4d !important;
-      --green-dark: rgba(255, 99, 99, 0.12) !important;
-      --green-mid:  rgba(255, 99, 99, 0.25) !important;
-      --amber:      #FBBF24 !important;
-      --cyan:       #94A3B8 !important;
-      --red:        #FF6363 !important;
-      --blue:       #94A3B8 !important;
-      --text:       #FFFFFF !important;
-      --text-dim:   #64748B !important;
-      --text-mid:   #CBD5E1 !important;
-      --glow-sm:    none !important;
-      --glow:       none !important;
-      --glow-lg:    none !important;
-      --glow-amber: none !important;
-      --glow-cyan:  none !important;
-      --glow-blue:  none !important;
-    }
-    html.light {
-      --bg:         #f4ecea !important;
-      --bg2:        #fff5f3 !important;
-      --panel:      #ffe4df !important;
-      --border:     rgba(26, 26, 46, 0.08) !important;
-      --border2:    rgba(26, 26, 46, 0.14) !important;
-      --green:      #b94a4a !important;
-      --green-dim:  #a83838 !important;
-      --green-dark: rgba(185, 74, 74, 0.10) !important;
-      --green-mid:  rgba(185, 74, 74, 0.25) !important;
-      --amber:      #b27a00 !important;
-      --cyan:       #475569 !important;
-      --red:        #b94a4a !important;
-      --blue:       #475569 !important;
-      --text:       #1A1A2E !important;
-      --text-dim:   #475569 !important;
-      --text-mid:   #334155 !important;
-    }
-
-    /* Body + decorative kill switches */
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-      cursor: auto !important;
-    }
-    body::before, body::after,
-    .bg-glow, .grid-bg, .particles, .scanlines, .scanline,
-    .circuit-bg, .noise-bg, .vignette { display: none !important; }
-
-    /* Typography mapping */
-    h1, h2, h3, h4, h5, h6,
-    .hero-title, .hero-name, .hero-eyebrow,
-    .semester-title, .semester-label,
-    .card-title, .page-title, .sec-header h2,
-    .brand-text, .future-title, .future-label,
-    .topbar-breadcrumb, .topbar-nav a, .badge, .tag,
-    .card-code, .card-status-pill, .divider-label, .topbar-link {
-      font-family: 'Lora', 'Liberation Serif', Georgia, serif !important;
-    }
-    body, p, li, button, input, textarea, select, .card-desc, .card-meta, .future-card,
-    .topbar-meta, .status-bar-item, .topbar-right, .footer, footer {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    }
-    code, pre, kbd, .key, .keyboard, .hero-sub, .clock, #clock,
-    .rating-val, .val, .live-dot, [id^="last-updated"] {
-      font-family: 'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace !important;
-    }
-
-    /* Brand mark — coral pill */
-    .brand-mark {
-      background: var(--green) !important;
-      color: #67000E !important;
-      border: none !important;
-      font-family: 'Inter', sans-serif !important;
-      font-weight: 900 !important;
-      letter-spacing: -0.02em !important;
-      border-radius: 8px !important;
-      box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1) !important;
-      animation: none !important;
-    }
-
-    /* Topbar — frosted navy */
-    .topbar {
-      background: rgba(26, 26, 46, 0.85) !important;
-      backdrop-filter: blur(8px) !important;
-      -webkit-backdrop-filter: blur(8px) !important;
-      border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-    }
-    html.light .topbar {
-      background: rgba(244, 236, 234, 0.92) !important;
-      border-bottom: 1px solid rgba(26,26,46,0.08) !important;
-    }
-
-    /* Theme toggle button */
-    .theme-toggle {
-      font-family: 'Inter', sans-serif !important;
-      border-radius: 8px !important;
-      border-color: rgba(255,255,255,0.12) !important;
-      color: var(--text-dim) !important;
-    }
-    .theme-toggle:hover { border-color: var(--green) !important; color: var(--green) !important; }
-
-    /* Hero glow text → softer outline */
-    .hero-bg-text { -webkit-text-stroke: 1px rgba(255,99,99,0.10) !important; }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12) !important; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--green) !important; }
-
-    /* Card and pill rounding for the new system */
-    .course-card, .future-card, .card, .badge, .tag {
-      border-radius: 12px !important;
-    }
-    .card-status-pill, .pill { border-radius: 6px !important; }
-
-    /* Cursor blink dots stay subtle */
-    .live-dot, .pill-active .pill-dot, .badge.active .badge-dot {
-      box-shadow: none !important;
-    }
-
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - DLD File Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
-  <link rel="stylesheet" href="theme.css" />
 </head>
-<body class="eceuh-shell eceuh-collapsible">
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <div>
+              <div class="hero-kicker">Digital Logic Design</div>
+              <h1 class="hero-title">File Library</h1>
+              <p class="hero-desc">Same coral type system, same rounded card language, but now applied to the DLD library so it feels like it belongs to the rest of the site.</p>
+            </div>
+            <div class="hero-code">R2_SYNC</div>
+          </div>
+        </div>
+      </section>
 
-<div class="bg-glow"></div>
-<div class="grid-bg"></div>
+      <section class="section-card">
+        <div class="section-inner">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">01 // Practice Files</div>
+              <h2 class="section-title">Bucket-Backed Downloads</h2>
+              <p class="section-subtitle">Filter the library by file type. Every link opens the Cloudflare R2 object directly.</p>
+            </div>
+          </div>
 
-<!-- Topbar -->
-<nav class="topbar">
-  <div class="topbar-left">
-    <a class="back-btn" href="../dld.html">← DLD</a>
-    <div class="breadcrumb">
-      <span>DLD</span>
-      <span style="color:var(--border);">/</span>
-      <span>Resources</span>
+          <div class="filter-row">
+            <button class="filter-btn active" data-filter="all">All Files</button>
+            <button class="filter-btn" data-filter="quiz">Classwork</button>
+            <button class="filter-btn" data-filter="exam">Reviews</button>
+            <button class="filter-btn" data-filter="reference">Reference Docs</button>
+          </div>
+
+          <div class="file-list">
+            <article class="file-entry" data-type="quiz">
+              <div>
+                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · PDF</span></div>
+                <h3 class="file-title">ECE3441 SP26 CW1</h3>
+                <p class="file-desc">Public bucket handout for the DLD course, now surfaced with the same typographic rhythm and spacing used across the site.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW1.pdf" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="quiz">
+              <div>
+                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · DOCX</span></div>
+                <h3 class="file-title">ECE3441 SP26 CW2</h3>
+                <p class="file-desc">Editable Word version for students who want to annotate or revise the classwork directly instead of printing a PDF.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="quiz">
+              <div>
+                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · PDF</span></div>
+                <h3 class="file-title">ECE3441 SP26 CW3</h3>
+                <p class="file-desc">Additional DLD practice material pulled directly from the mounted bucket and presented as a first-class library item.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW3-1.pdf" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="exam">
+              <div>
+                <div class="file-meta"><span class="type-chip exam">Review</span><span class="file-label">Bucket Sync · PDF</span></div>
+                <h3 class="file-title">ECE3441 SP26 CW4</h3>
+                <p class="file-desc">Review-style DLD material promoted into the same consistent library system instead of sitting behind a disconnected layout.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="exam">
+              <div>
+                <div class="file-meta"><span class="type-chip exam">Review</span><span class="file-label">Bucket Sync · PDF</span></div>
+                <h3 class="file-title">ECE3441 SP26 CW5</h3>
+                <p class="file-desc">A second downloadable review packet now styled like the homepage cards instead of the older terminal-like rows.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW5.pdf" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="reference">
+              <div>
+                <div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · DOCX</span></div>
+                <h3 class="file-title">Editable DLD Classwork Source</h3>
+                <p class="file-desc">A direct Word source for students who want a version they can edit, annotate, or keep alongside their personal notes.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+            <article class="file-entry" data-type="reference">
+              <div>
+                <div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · PDF</span></div>
+                <h3 class="file-title">DLD Quick Access PDF</h3>
+                <p class="file-desc">A lightweight reference entry that gives students another easy jump into the active DLD bucket content.</p>
+              </div>
+              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">Open File</a></div>
+            </article>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-  <div class="topbar-right">
-    <span style="display:flex;align-items:center;gap:0.4rem;color:var(--green);">
-      <span class="live-dot"></span> Spring 2026
-    </span>
-    <span id="clock">--:--:--</span>
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
-  </div>
-</nav>
-
-<div class="wrapper">
-
-  <!-- Header -->
-  <div class="page-header">
-    <p class="page-eyebrow">Digital Logic Design · EE_3XX</p>
-    <h1 class="page-title">Resources Hub</h1>
-    <p class="page-desc">
-      All tools, files, and references for <em>Digital Logic Design</em> in one place.
-      Interactive visualizers, downloadable practice files, formula sheets, and curated external links.
-    </p>
-  </div>
-
-  <!-- ── VISUALIZERS ── -->
-  <section class="section reveal">
-    <div class="sec-header">
-      <h2>// Interactive Visualizers</h2>
-      <div class="sec-line"></div>
-      <span class="sec-tag">01 — TOOLS</span>
-    </div>
-
-    <div class="vis-grid">
-
-      <a class="vis-card" href="truth-table.html">
-        <span class="vis-icon">[TT]</span>
-        <div class="vis-badge"><span class="vis-badge-dot"></span> Live</div>
-        <div class="vis-title">Truth Table Generator</div>
-        <p class="vis-desc">Enter any Boolean expression and auto-generate the full truth table, highlighted minterms, SOP expression, and step-by-step row evaluation.</p>
-        <div class="vis-tags">
-          <span class="vtag">Boolean Algebra</span>
-          <span class="vtag">AND / OR / NOT</span>
-          <span class="vtag">XOR / NAND / NOR</span>
-          <span class="vtag">SOP</span>
-        </div>
-        <div class="vis-footer">
-          <span>Unit 01</span>
-          <span class="vis-arrow">→</span>
-        </div>
-      </a>
-
-      <a class="vis-card" href="kmap-solver.html">
-        <span class="vis-icon">[KM]</span>
-        <div class="vis-badge"><span class="vis-badge-dot"></span> Live</div>
-        <div class="vis-title">K-Map Solver</div>
-        <p class="vis-desc">Click cells to set 0, 1, or X (don't-care). The solver groups prime implicants with color overlays and outputs minimized SOP and POS expressions.</p>
-        <div class="vis-tags">
-          <span class="vtag">2 / 3 / 4 Variables</span>
-          <span class="vtag">Prime Implicants</span>
-          <span class="vtag">SOP / POS</span>
-          <span class="vtag">Don't-Care</span>
-        </div>
-        <div class="vis-footer">
-          <span>Unit 04</span>
-          <span class="vis-arrow">→</span>
-        </div>
-      </a>
-
-      <a class="vis-card" href="logic-gate-sim.html">
-        <span class="vis-icon">[LG]</span>
-        <div class="vis-badge"><span class="vis-badge-dot"></span> Live</div>
-        <div class="vis-title">Logic Gate Simulator</div>
-        <p class="vis-desc">Drag gates onto a canvas, connect them with wires, toggle inputs, and watch signal propagation animate in real time. Generates a truth table for your circuit.</p>
-        <div class="vis-tags">
-          <span class="vtag">AND/OR/NOT/NAND</span>
-          <span class="vtag">NOR/XOR/XNOR/BUF</span>
-          <span class="vtag">Signal Animation</span>
-          <span class="vtag">Truth Table</span>
-        </div>
-        <div class="vis-footer">
-          <span>Units 01–02</span>
-          <span class="vis-arrow">→</span>
-        </div>
-      </a>
-
-      <!-- Placeholder — FSM Visualizer -->
-      <a class="vis-card" href="#" style="opacity:0.4;pointer-events:none;cursor:default;">
-        <span class="vis-icon" style="text-shadow:none;">[FSM]</span>
-        <div class="vis-badge" style="background:transparent;color:var(--text-dim);border-color:var(--border);">Coming Soon</div>
-        <div class="vis-title" style="color:var(--text-dim);">FSM Visualizer</div>
-        <p class="vis-desc">Draw Moore and Mealy state machines, step through input sequences, and watch state transitions animate.</p>
-        <div class="vis-tags">
-          <span class="vtag">Moore / Mealy</span>
-          <span class="vtag">State Diagrams</span>
-          <span class="vtag">Transition Tables</span>
-        </div>
-        <div class="vis-footer"><span>Unit 06</span><span>—</span></div>
-      </a>
-
-      <!-- Placeholder — Timing Diagram -->
-      <a class="vis-card" href="#" style="opacity:0.4;pointer-events:none;cursor:default;">
-        <span class="vis-icon" style="text-shadow:none;">[TD]</span>
-        <div class="vis-badge" style="background:transparent;color:var(--text-dim);border-color:var(--border);">Coming Soon</div>
-        <div class="vis-title" style="color:var(--text-dim);">Timing Diagram Builder</div>
-        <p class="vis-desc">Draw clock and signal waveforms for sequential circuits, flip-flops, and registers.</p>
-        <div class="vis-tags">
-          <span class="vtag">Flip-Flops</span>
-          <span class="vtag">Clock Signals</span>
-          <span class="vtag">Sequential Logic</span>
-        </div>
-        <div class="vis-footer"><span>Unit 05</span><span>—</span></div>
-      </a>
-
-      <!-- Placeholder — Boolean Simplifier -->
-      <a class="vis-card" href="#" style="opacity:0.4;pointer-events:none;cursor:default;">
-        <span class="vis-icon" style="text-shadow:none;">[B∑]</span>
-        <div class="vis-badge" style="background:transparent;color:var(--text-dim);border-color:var(--border);">Coming Soon</div>
-        <div class="vis-title" style="color:var(--text-dim);">Boolean Simplifier</div>
-        <p class="vis-desc">Step-by-step simplification of Boolean expressions using algebraic laws and theorems.</p>
-        <div class="vis-tags">
-          <span class="vtag">Boolean Laws</span>
-          <span class="vtag">De Morgan's</span>
-          <span class="vtag">Step-by-Step</span>
-        </div>
-        <div class="vis-footer"><span>Unit 01</span><span>—</span></div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ── FILE LIBRARY ── -->
-  <section class="section reveal d1" id="files">
-    <div class="sec-header">
-      <h2>// File Library</h2>
-      <div class="sec-line"></div>
-      <span class="sec-tag">02 — PRACTICE_FILES</span>
-    </div>
-
-    <div class="file-filters">
-      <button class="filter-btn active" onclick="filterFiles('all',this)">All Files</button>
-      <button class="filter-btn" onclick="filterFiles('quiz',this)">Classwork</button>
-      <button class="filter-btn" onclick="filterFiles('exam',this)">Reviews</button>
-      <button class="filter-btn" onclick="filterFiles('formula',this)">Reference Docs</button>
-    </div>
-
-    <div class="file-grid">
-
-      <div class="file-item" data-type="quiz">
-        <div class="file-inner">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-quiz">Classwork</span><span class="ftopic">Bucket Sync · PDF</span></div>
-            <div class="file-name">ECE3441 SP26 CW1</div>
-            <div class="file-preview">Public bucket handout for the DLD course. Opens directly from your Cloudflare R2 bucket. <em>PDF resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW1.pdf" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="quiz">
-        <div class="file-inner">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-quiz">Classwork</span><span class="ftopic">Bucket Sync · DOCX</span></div>
-            <div class="file-name">ECE3441 SP26 CW2</div>
-            <div class="file-preview">Editable Word version from the DLD folder for students who want to annotate or revise directly. <em>DOCX resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="quiz">
-        <div class="file-inner">
-          <div class="file-icon icon-quiz">[Q]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-quiz">Classwork</span><span class="ftopic">Bucket Sync · PDF</span></div>
-            <div class="file-name">ECE3441 SP26 CW3</div>
-            <div class="file-preview">Additional DLD practice material pulled straight from the mounted bucket and exposed as a direct file link. <em>PDF resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW3-1.pdf" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="exam">
-        <div class="file-inner">
-          <div class="file-icon icon-exam">[E]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-exam">Review</span><span class="ftopic">Bucket Sync · PDF</span></div>
-            <div class="file-name">ECE3441 SP26 CW4</div>
-            <div class="file-preview">Review-style DLD file promoted from the bucket into the resource library for quick access. <em>PDF resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="exam">
-        <div class="file-inner">
-          <div class="file-icon icon-exam">[E]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-exam">Review</span><span class="ftopic">Bucket Sync · PDF</span></div>
-            <div class="file-name">ECE3441 SP26 CW5</div>
-            <div class="file-preview">Another downloadable DLD practice file now linked from the live site instead of a missing local path. <em>PDF resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW5.pdf" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="formula">
-        <div class="file-inner">
-          <div class="file-icon icon-formula">[∑]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-formula">Reference</span><span class="ftopic">Bucket Sync · DOCX</span></div>
-            <div class="file-name">Editable DLD Classwork Source</div>
-            <div class="file-preview">Editable source document mirrored from the mounted bucket for students who prefer a Word workflow. <em>DOCX resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="file-item" data-type="formula">
-        <div class="file-inner">
-          <div class="file-icon icon-formula">[∑]</div>
-          <div class="file-info">
-            <div class="file-meta"><span class="ftype ftype-formula">Reference</span><span class="ftopic">Bucket Sync · PDF</span></div>
-            <div class="file-name">DLD Quick Access PDF</div>
-            <div class="file-preview">Fast open link for one of the latest DLD PDFs in the bucket, surfaced here as a reference document. <em>PDF resource</em></div>
-          </div>
-          <div class="file-actions">
-            <span class="file-date">Synced Apr 2026</span>
-            <a class="dl-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">↗ Open File</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── EXTERNAL LINKS ── -->
-  <section class="section reveal d2" id="external">
-    <div class="sec-header">
-      <h2>// External References</h2>
-      <div class="sec-line"></div>
-      <span class="sec-tag">03 — EXTERNAL_LINKS</span>
-    </div>
-
-    <div class="ext-grid">
-      <a class="ext-card" href="https://www.nandgame.com" target="_blank" rel="noopener">
-        <span class="ext-icon">[▷]</span>
-        <div class="ext-info">
-          <div class="ext-title">NandGame</div>
-          <div class="ext-desc">Build a computer from NAND gates up. Excellent for understanding how gates compose into complex systems.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-      <a class="ext-card" href="https://logic.ly" target="_blank" rel="noopener">
-        <span class="ext-icon">[◈]</span>
-        <div class="ext-info">
-          <div class="ext-title">Logic.ly</div>
-          <div class="ext-desc">Web-based logic circuit simulator. Great for visualizing and testing circuits beyond this site's simulator.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-      <a class="ext-card" href="https://www.geeksforgeeks.org/digital-electronics-logic-design-tutorials/" target="_blank" rel="noopener">
-        <span class="ext-icon">[//]</span>
-        <div class="ext-info">
-          <div class="ext-title">GeeksForGeeks — DLD</div>
-          <div class="ext-desc">Comprehensive written tutorials covering all major DLD topics with examples and practice problems.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-      <a class="ext-card" href="https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/" target="_blank" rel="noopener">
-        <span class="ext-icon">[MIT]</span>
-        <div class="ext-info">
-          <div class="ext-title">MIT OCW 6.004</div>
-          <div class="ext-desc">MIT's Computation Structures course — free lectures and problem sets covering digital logic from first principles.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-      <a class="ext-card" href="https://www.youtube.com/playlist?list=PLBlnK6fEyqRjMH3mWf6kwqiTbT798eAOm" target="_blank" rel="noopener">
-        <span class="ext-icon">[▶]</span>
-        <div class="ext-info">
-          <div class="ext-title">Neso Academy — DLD</div>
-          <div class="ext-desc">YouTube playlist covering all DLD topics with clear explanations. Great complement to lecture notes.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-      <a class="ext-card" href="https://www.boolean-algebra.com" target="_blank" rel="noopener">
-        <span class="ext-icon">[∧]</span>
-        <div class="ext-info">
-          <div class="ext-title">Boolean-Algebra.com</div>
-          <div class="ext-desc">Online Boolean expression simplifier and truth table generator. Useful for cross-checking your work.</div>
-        </div>
-        <span class="ext-arrow">↗</span>
-      </a>
-    </div>
-  </section>
-
-</div>
-
-<script>
-  // Theme
-  const btn = document.getElementById('theme-toggle');
-  function applyTheme(t) {
-    document.documentElement.classList.toggle('light', t==='light');
-    btn.textContent = t==='light' ? '● Dark' : '☀ Light';
-  }
-  function toggleTheme() {
-    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-    localStorage.setItem('ee-theme', next); applyTheme(next);
-  }
-  applyTheme(localStorage.getItem('ee-theme') || 'dark');
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+  </main>
+  <script>
+    const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
+    const fileEntries = Array.from(document.querySelectorAll('.file-entry'));
+    function applyFilter(type) {
+      fileEntries.forEach((entry) => {
+        entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type);
+      });
+      filterButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.filter === type);
+      });
+    }
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => applyFilter(button.dataset.filter));
     });
-
-  // Clock
-  function tick() { document.getElementById('clock').textContent = new Date().toTimeString().slice(0,8); }
-  tick(); setInterval(tick, 1000);
-
-  // File filter
-  function filterFiles(type, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.file-item').forEach(item => {
-      item.classList.toggle('hidden', type !== 'all' && item.dataset.type !== type);
-    });
-  }
-
-  // Scroll reveal
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-</script>
-<footer class="eceuh-footer">
-  <p>Built for the UH EE Discord community. For students, by a student.</p>
-</footer>
+  </script>
 </body>
 </html>
