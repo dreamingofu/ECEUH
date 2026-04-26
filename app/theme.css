@@ -229,7 +229,8 @@ body.eceuh-shell { padding-left: 256px !important; padding-top: 0 !important; }
 .eceuh-toggle {
   display: none;
   position: fixed;
-  top: 16px; left: 16px;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  left: calc(env(safe-area-inset-left, 0px) + 16px);
   width: 44px; height: 44px;
   border-radius: 12px;
   background: rgba(26, 26, 46, 0.85);
@@ -248,6 +249,10 @@ body.eceuh-collapsible .eceuh-toggle { display: inline-flex; }
 body.eceuh-shell:not(.eceuh-collapsible) .eceuh-toggle { display: none; }
 @media (max-width: 900px) {
   body.eceuh-shell .eceuh-toggle { display: inline-flex; }
+  .eceuh-sidebar {
+    width: min(300px, calc(100vw - 28px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
 }
 .eceuh-toggle svg { width: 20px; height: 20px; }
 

@@ -1,124 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EE - Circuits 2</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="course-pages.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth.js" defer></script>
-  <script src="course-pages.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="0; url=app/circuits2.html" />
+  <script>
+    window.location.replace('app/circuits2.html' + window.location.search + window.location.hash);
+  </script>
 </head>
-<body class="eceuh-shell eceuh-collapsible course-ui">
-  <main class="course-page">
-    <div class="page-stack">
-      <section class="hero-card">
-        <div class="hero-inner">
-          <div class="hero-top">
-            <div>
-              <div class="hero-kicker">Course Hub</div>
-              <h1 class="hero-title">Circuits 2</h1>
-              <p class="hero-desc">A cleaner front door for the second circuits course: unit navigation, downloadable bucket files, and outside references each get their own destination page.</p>
-            </div>
-            <div class="hero-code">ECE_2202</div>
-          </div>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-value">8</span>
-              <span class="hero-stat-label">Core Units</span>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-value">6</span>
-              <span class="hero-stat-label">Linked Files</span>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-value">3</span>
-              <span class="hero-stat-label">Destinations</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div class="hub-grid">
-          <a class="hub-card" href="circuits2-topics.html">
-            <div class="hub-media">
-              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=1200&q=80&auto=format&fit=crop');"></div>
-              <div class="hub-meta">
-                <div class="hub-meta-code">C2 // Topics</div>
-                <div class="hub-meta-title">Topics</div>
-              </div>
-            </div>
-            <div class="hub-body">
-              <h2 class="hub-body-title">Signals, Filters, and Analysis Paths</h2>
-              <p class="hub-body-text">Keep the course structure readable with a dedicated topic page for phasors, power, RLC behavior, Bode plots, filters, and Laplace work.</p>
-              <div class="hub-tags">
-                <span class="hub-tag">Phasors</span>
-                <span class="hub-tag">RLC</span>
-                <span class="hub-tag">Laplace</span>
-              </div>
-              <div class="hub-footer">
-                <span>Open unit coverage</span>
-                <span class="hub-arrow">View -></span>
-              </div>
-            </div>
-          </a>
-
-          <a class="hub-card" href="circuits2-files.html">
-            <div class="hub-media">
-              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80&auto=format&fit=crop');"></div>
-              <div class="hub-meta">
-                <div class="hub-meta-code">C2 // Library</div>
-                <div class="hub-meta-title">File Library</div>
-              </div>
-            </div>
-            <div class="hub-body">
-              <h2 class="hub-body-title">Exam Packs, Homework, and Syllabus Files</h2>
-              <p class="hub-body-text">The R2-backed Circuits 2 documents now live in a proper library page instead of being scattered across a mixed-purpose resource grid.</p>
-              <div class="hub-tags">
-                <span class="hub-tag">Homework</span>
-                <span class="hub-tag">Quizzes</span>
-                <span class="hub-tag">Reference Sheets</span>
-              </div>
-              <div class="hub-footer">
-                <span>Open the file stack</span>
-                <span class="hub-arrow">Browse -></span>
-              </div>
-            </div>
-          </a>
-
-          <a class="hub-card" href="circuits2-links.html">
-            <div class="hub-media">
-              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80&auto=format&fit=crop');"></div>
-              <div class="hub-meta">
-                <div class="hub-meta-code">C2 // Links</div>
-                <div class="hub-meta-title">External Resources</div>
-              </div>
-            </div>
-            <div class="hub-body">
-              <h2 class="hub-body-title">Simulators and Supporting References</h2>
-              <p class="hub-body-text">Circuit tools and trusted references get their own page so the landing page stays consistent with DLD and C programming.</p>
-              <div class="hub-tags">
-                <span class="hub-tag">Falstad</span>
-                <span class="hub-tag">All About Circuits</span>
-                <span class="hub-tag">MIT OCW</span>
-              </div>
-              <div class="hub-footer">
-                <span>Open the reference deck</span>
-                <span class="hub-arrow">Explore -></span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <p class="page-footer">Circuits 2 now uses the same dedicated-page pattern as the rest of the site: the course hub is for direction, not for cramming every section into one scroll.</p>
-    </div>
-  </main>
+<body>
+  <p>Redirecting to <a href="app/circuits2.html">app/circuits2.html</a>...</p>
 </body>
 </html>

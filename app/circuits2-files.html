@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - Circuits 2 File Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="course-pages.js" defer></script>
+</head>
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card"><div class="hero-inner"><div class="hero-top"><div><div class="hero-kicker">Circuits 2</div><h1 class="hero-title">File Library</h1><p class="hero-desc">A dedicated bucket-backed library page for the core Circuits 2 documents.</p></div><div class="hero-code">R2_SYNC</div></div></div></section>
+      <section class="section-card">
+        <div class="section-inner">
+          <div class="section-header"><div><div class="section-kicker">01 // Practice Files</div><h2 class="section-title">Linked Course Files</h2></div></div>
+          <div class="filter-row">
+            <button class="filter-btn active" data-filter="all">All Files</button>
+            <button class="filter-btn" data-filter="quiz">Quizzes</button>
+            <button class="filter-btn" data-filter="exam">Exams</button>
+            <button class="filter-btn" data-filter="reference">Reference Docs</button>
+          </div>
+          <div class="file-list">
+            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Course Syllabus</h3><p class="file-desc">Spring 2026 ECE2202 syllabus, linked directly from the public bucket.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Syllabus-S26-ECE2202.pdf" target="_blank" rel="noopener">Open File</a></div></article>
+            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · DOCX</span></div><h3 class="file-title">Exam 2 Formula Sheet</h3><p class="file-desc">Editable formula sheet stored as a DOCX for quick revision or last-minute cleanup before the exam.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx" target="_blank" rel="noopener">Open File</a></div></article>
+            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Quiz 1 Packet</h3><p class="file-desc">The first Circuits 2 quiz packet now lives in the dedicated file page instead of an inline resource card.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Circuits%202_quiz1%201.pdf" target="_blank" rel="noopener">Open File</a></div></article>
+            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Quiz 2 Solution</h3><p class="file-desc">Second quiz solution file, ready to open from the same visual system used by the DLD library page.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf" target="_blank" rel="noopener">Open File</a></div></article>
+            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Exam 2 Review Problems</h3><p class="file-desc">Tagged review packet for the second exam with the same card style as the rest of the site.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Exam%202%20Review%20Problems%20-%20Tagged.pdf" target="_blank" rel="noopener">Open File</a></div></article>
+            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Homework 4 Solutions</h3><p class="file-desc">Worked solutions file promoted into the same library system so it is easier to find from the course hub.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Homework%204%20solutions.pdf" target="_blank" rel="noopener">Open File</a></div></article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const c2Buttons = Array.from(document.querySelectorAll('[data-filter]'));
+    const c2Entries = Array.from(document.querySelectorAll('.file-entry'));
+    function c2Filter(type) {
+      c2Entries.forEach((entry) => entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type));
+      c2Buttons.forEach((button) => button.classList.toggle('active', button.dataset.filter === type));
+    }
+    c2Buttons.forEach((button) => button.addEventListener('click', () => c2Filter(button.dataset.filter)));
+  </script>
+</body>
+</html>

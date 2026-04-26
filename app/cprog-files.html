@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - C Programming File Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="course-pages.js" defer></script>
+</head>
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card"><div class="hero-inner"><div class="hero-top"><div><div class="hero-kicker">Programming with C</div><h1 class="hero-title">File Library</h1><p class="hero-desc">The C course library now follows the same format as the DLD page, even before all of the downloads are filled in.</p></div><div class="hero-code">FILES</div></div></div></section>
+      <section class="section-card">
+        <div class="section-inner">
+          <div class="section-header"><div><div class="section-kicker">01 // Practice Files</div><h2 class="section-title">Course Downloads</h2></div></div>
+          <div class="filter-row">
+            <button class="filter-btn active" data-filter="all">All Files</button>
+            <button class="filter-btn" data-filter="quiz">Quizzes</button>
+            <button class="filter-btn" data-filter="exam">Exams</button>
+            <button class="filter-btn" data-filter="reference">Reference Docs</button>
+          </div>
+          <div class="file-list">
+            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Unit 01 · Placeholder</span></div><h3 class="file-title">Quiz 01 - C Fundamentals &amp; Pointers</h3><p class="file-desc">Reserved slot for the first quiz packet covering data types, functions, pointers, and basic memory questions.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Unit 03 · Placeholder</span></div><h3 class="file-title">Quiz 02 - Arrays &amp; Strings</h3><p class="file-desc">Reserved slot for array and string practice material with the same layout used across the other file libraries.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Midterm · Placeholder</span></div><h3 class="file-title">Midterm 01 Practice Exam</h3><p class="file-desc">Dedicated destination for the first practice midterm once the actual file is ready to publish.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Past Exam · Placeholder</span></div><h3 class="file-title">Past Exam Archive</h3><p class="file-desc">Space for a prior-term exam PDF so the course can keep the same structure as DLD and Circuits 2.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Core Sheet</span></div><h3 class="file-title">C Quick Reference</h3><p class="file-desc">Reserved slot for a compact guide covering pointers, strings, memory allocation, and common library calls.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Debugging Sheet</span></div><h3 class="file-title">Memory Debug Checklist</h3><p class="file-desc">A future handout for leak checking, pointer safety, and common runtime failure patterns in C programs.</p></div><div class="file-actions"><span class="file-date">Coming Soon</span><span class="action-btn">Coming Soon</span></div></article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const cButtons = Array.from(document.querySelectorAll('[data-filter]'));
+    const cEntries = Array.from(document.querySelectorAll('.file-entry'));
+    function cFilter(type) {
+      cEntries.forEach((entry) => entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type));
+      cButtons.forEach((button) => button.classList.toggle('active', button.dataset.filter === type));
+    }
+    cButtons.forEach((button) => button.addEventListener('click', () => cFilter(button.dataset.filter)));
+  </script>
+</body>
+</html>
