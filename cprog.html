@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EE — Programming Apps with C</title>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bg:         #020a0a;
@@ -322,9 +324,138 @@
       .hero, .wrapper, footer, .terminal-block { padding-left: 1.5rem; padding-right: 1.5rem; }
       .topbar { padding: 0.9rem 1.5rem; }
     }
+  
+    /* ╔══ ECEUH REDESIGN OVERRIDE ══╗
+       Remaps original palette to the navy + coral theme.
+       Keeps existing markup intact; toggles still work. */
+    :root {
+      --bg:         #1A1A2E !important;
+      --bg2:        #261817 !important;
+      --panel:      #2A2A3E !important;
+      --border:     rgba(255, 255, 255, 0.05) !important;
+      --border2:    rgba(255, 255, 255, 0.1) !important;
+      --green:      #FF6363 !important;
+      --green-dim:  #ff4d4d !important;
+      --green-dark: rgba(255, 99, 99, 0.12) !important;
+      --green-mid:  rgba(255, 99, 99, 0.25) !important;
+      --amber:      #FBBF24 !important;
+      --cyan:       #94A3B8 !important;
+      --red:        #FF6363 !important;
+      --blue:       #94A3B8 !important;
+      --text:       #FFFFFF !important;
+      --text-dim:   #64748B !important;
+      --text-mid:   #CBD5E1 !important;
+      --glow-sm:    none !important;
+      --glow:       none !important;
+      --glow-lg:    none !important;
+      --glow-amber: none !important;
+      --glow-cyan:  none !important;
+      --glow-blue:  none !important;
+    }
+    html.light {
+      --bg:         #f4ecea !important;
+      --bg2:        #fff5f3 !important;
+      --panel:      #ffe4df !important;
+      --border:     rgba(26, 26, 46, 0.08) !important;
+      --border2:    rgba(26, 26, 46, 0.14) !important;
+      --green:      #b94a4a !important;
+      --green-dim:  #a83838 !important;
+      --green-dark: rgba(185, 74, 74, 0.10) !important;
+      --green-mid:  rgba(185, 74, 74, 0.25) !important;
+      --amber:      #b27a00 !important;
+      --cyan:       #475569 !important;
+      --red:        #b94a4a !important;
+      --blue:       #475569 !important;
+      --text:       #1A1A2E !important;
+      --text-dim:   #475569 !important;
+      --text-mid:   #334155 !important;
+    }
+
+    /* Body + decorative kill switches */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      cursor: auto !important;
+    }
+    body::before, body::after,
+    .bg-glow, .grid-bg, .particles, .scanlines, .scanline { display: none !important; }
+
+    /* Typography mapping */
+    h1, h2, h3, h4, h5, h6,
+    .hero-title, .hero-name, .hero-eyebrow,
+    .semester-title, .semester-label,
+    .card-title, .page-title, .sec-header h2,
+    .brand-text, .future-title, .future-label,
+    .topbar-breadcrumb, .topbar-nav a, .badge, .tag,
+    .card-code, .card-status-pill, .divider-label, .topbar-link {
+      font-family: 'Lora', 'Liberation Serif', Georgia, serif !important;
+    }
+    body, p, li, button, input, textarea, select, .card-desc, .card-meta, .future-card,
+    .topbar-meta, .status-bar-item, .topbar-right, .footer, footer {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
+    code, pre, kbd, .key, .keyboard, .hero-sub, .clock, #clock,
+    .rating-val, .val, .live-dot, [id^="last-updated"] {
+      font-family: 'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace !important;
+    }
+
+    /* Brand mark — coral pill */
+    .brand-mark {
+      background: var(--green) !important;
+      color: #67000E !important;
+      border: none !important;
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 900 !important;
+      letter-spacing: -0.02em !important;
+      border-radius: 8px !important;
+      box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1) !important;
+      animation: none !important;
+    }
+
+    /* Topbar — frosted navy */
+    .topbar {
+      background: rgba(26, 26, 46, 0.85) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    }
+    html.light .topbar {
+      background: rgba(244, 236, 234, 0.92) !important;
+      border-bottom: 1px solid rgba(26,26,46,0.08) !important;
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      font-family: 'Inter', sans-serif !important;
+      border-radius: 8px !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: var(--text-dim) !important;
+    }
+    .theme-toggle:hover { border-color: var(--green) !important; color: var(--green) !important; }
+
+    /* Hero glow text → softer outline */
+    .hero-bg-text { -webkit-text-stroke: 1px rgba(255,99,99,0.10) !important; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12) !important; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green) !important; }
+
+    /* Card and pill rounding for the new system */
+    .course-card, .future-card, .card, .badge, .tag {
+      border-radius: 12px !important;
+    }
+    .card-status-pill, .pill { border-radius: 6px !important; }
+
+    /* Cursor blink dots stay subtle */
+    .live-dot, .pill-active .pill-dot, .badge.active .badge-dot {
+      box-shadow: none !important;
+    }
+
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <link rel="stylesheet" href="theme.css" />
 </head>
-<body>
+<body class="eceuh-shell eceuh-collapsible">
 
   <div class="bg-glow"></div>
   <div class="grid-bg"></div>
@@ -396,7 +527,7 @@
 
       <div class="topics-grid">
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-01">
           <div class="topic-deco">{ }</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_01</div><div class="topic-status ts-active"><span class="ts-dot"></span> Active</div></div>
@@ -412,7 +543,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-02">
           <div class="topic-deco">*p</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_02</div><div class="topic-status ts-active"><span class="ts-dot"></span> Active</div></div>
@@ -428,7 +559,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-03">
           <div class="topic-deco">[]</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_03</div><div class="topic-status ts-pending"><span class="ts-dot"></span> In Progress</div></div>
@@ -444,7 +575,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-04">
           <div class="topic-deco">&#x26F6;</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_04</div><div class="topic-status ts-pending"><span class="ts-dot"></span> In Progress</div></div>
@@ -460,7 +591,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-05">
           <div class="topic-deco">struct</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_05</div><div class="topic-status ts-locked"><span class="ts-dot"></span> Upcoming</div></div>
@@ -476,7 +607,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-06">
           <div class="topic-deco">FILE</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_06</div><div class="topic-status ts-locked"><span class="ts-dot"></span> Upcoming</div></div>
@@ -492,7 +623,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-07">
           <div class="topic-deco">→→</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_07</div><div class="topic-status ts-locked"><span class="ts-dot"></span> Upcoming</div></div>
@@ -508,7 +639,7 @@
           </div>
         </div>
 
-        <div class="topic-card">
+        <div class="topic-card" data-progress="cprog:unit-08">
           <div class="topic-deco">O(n)</div>
           <div class="topic-top">
             <div><div class="topic-num">UNIT_08</div><div class="topic-status ts-locked"><span class="ts-dot"></span> Upcoming</div></div>
@@ -747,6 +878,9 @@
       localStorage.setItem('ee-theme', next); applyTheme(next);
     }
     applyTheme(localStorage.getItem('ee-theme') || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+    });
 
     // File filter
     function filterFiles(type, btn) {
@@ -778,5 +912,8 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
+<footer class="eceuh-footer">
+  <p>Built for the UH EE Discord community. For students, by a student.</p>
+</footer>
 </body>
 </html>
