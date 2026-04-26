@@ -570,8 +570,11 @@
     }
 
     .res-card {
+      display: block;
       background: var(--bg2); padding: 1.6rem;
       transition: background 0.2s;
+      color: inherit;
+      text-decoration: none;
     }
 
     .res-card:hover { background: var(--panel); }
@@ -590,6 +593,14 @@
     }
 
     .res-desc { font-size: 0.73rem; color: var(--text-dim); line-height: 1.65; }
+    .res-link {
+      display: inline-flex;
+      margin-top: 0.9rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -1185,36 +1196,42 @@
       </div>
 
       <div class="resources-grid">
-        <div class="res-card">
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Syllabus-S26-ECE2202.pdf" target="_blank" rel="noopener">
           <span class="res-icon">[TB]</span>
-          <div class="res-title">Primary Textbook</div>
-          <p class="res-desc">Engineering Circuit Analysis — Hayt & Kemmerly. Chapter notes and key sections linked per unit.</p>
-        </div>
-        <div class="res-card">
+          <div class="res-title">Course Syllabus</div>
+          <p class="res-desc">Spring 2026 ECE2202 syllabus from the mounted bucket, now reachable from the course page.</p>
+          <span class="res-link">↗ Open PDF</span>
+        </a>
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Homework%204%20solutions.pdf" target="_blank" rel="noopener">
           <span class="res-icon">[HW]</span>
-          <div class="res-title">Homework Walkthroughs</div>
-          <p class="res-desc">Step-by-step AC problem solutions with full phasor work shown. Added after each assignment.</p>
-        </div>
-        <div class="res-card">
+          <div class="res-title">Homework 4 Solutions</div>
+          <p class="res-desc">Worked solutions file for Circuits II, linked directly from the public bucket instead of a placeholder card.</p>
+          <span class="res-link">↗ Open PDF</span>
+        </a>
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Circuits%202_quiz1%201.pdf" target="_blank" rel="noopener">
           <span class="res-icon">[∿]</span>
-          <div class="res-title">Phasor Diagrams</div>
-          <p class="res-desc">Coming soon — interactive phasor visualizations for impedance and power triangle problems.</p>
-        </div>
-        <div class="res-card">
+          <div class="res-title">Quiz 1 Packet</div>
+          <p class="res-desc">First Circuits II quiz file surfaced from the bucket so students can open it directly from this page.</p>
+          <span class="res-link">↗ Open PDF</span>
+        </a>
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Exam%202%20Review%20Problems%20-%20Tagged.pdf" target="_blank" rel="noopener">
           <span class="res-icon">[PX]</span>
-          <div class="res-title">Practice Problems</div>
-          <p class="res-desc">Exam-style problems organized by topic and difficulty, with full solutions and common mistake callouts.</p>
-        </div>
-        <div class="res-card">
+          <div class="res-title">Exam 2 Review Problems</div>
+          <p class="res-desc">Tagged review packet for the second exam, promoted into the resource grid as a real downloadable asset.</p>
+          <span class="res-link">↗ Open PDF</span>
+        </a>
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx" target="_blank" rel="noopener">
           <span class="res-icon">[∑]</span>
-          <div class="res-title">Formula Sheets</div>
-          <p class="res-desc">Condensed reference cards — impedance tables, power formulas, Bode plot rules, filter responses.</p>
-        </div>
-        <div class="res-card">
+          <div class="res-title">Exam 2 Formula Sheet</div>
+          <p class="res-desc">Reference sheet stored as a DOCX in your bucket for quick edits or download before the exam.</p>
+          <span class="res-link">↗ Open DOCX</span>
+        </a>
+        <a class="res-card" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf" target="_blank" rel="noopener">
           <span class="res-icon">[//]</span>
-          <div class="res-title">External References</div>
-          <p class="res-desc">Curated links to circuit simulators, Khan Academy AC content, and MIT OCW 6.002 lecture notes.</p>
-        </div>
+          <div class="res-title">Quiz 2 Solution</div>
+          <p class="res-desc">Solution file for the second quiz, now linked as part of the live Circuits II resource stack.</p>
+          <span class="res-link">↗ Open PDF</span>
+        </a>
       </div>
     </section>
   </div>
