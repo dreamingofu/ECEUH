@@ -1,100 +1,292 @@
-/* ECEUH shared theme — standardized topbar + footer for all pages. */
+/* ECEUH shared theme — universal sidebar (replaces topbar on every page). */
 
 :root {
   --eceuh-serif: 'Lora', 'Liberation Serif', Georgia, serif;
   --eceuh-sans:  'Inter', system-ui, -apple-system, sans-serif;
   --eceuh-mono:  'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace;
+  --eceuh-accent: #FF6363;
+  --eceuh-accent-deep: #67000E;
+  --eceuh-bg: #1A1A2E;
+  --eceuh-text: #FFFFFF;
+  --eceuh-muted: #94A3B8;
+  --eceuh-dim: #64748B;
+  --eceuh-active: #2A2A3E;
+  --eceuh-border: rgba(255, 255, 255, 0.05);
+  --eceuh-border-2: rgba(255, 255, 255, 0.1);
+}
+html.light {
+  --eceuh-bg: #f4ecea;
+  --eceuh-text: #1A1A2E;
+  --eceuh-muted: #475569;
+  --eceuh-dim: #64748B;
+  --eceuh-active: #ffe4df;
+  --eceuh-border: rgba(26, 26, 46, 0.08);
+  --eceuh-border-2: rgba(26, 26, 46, 0.14);
 }
 
-/* ── Standardized topbar ────────────────────────────────────────────────── */
-.eceuh-topbar {
-  position: fixed !important;
-  top: 0; left: 0; right: 0;
-  height: 56px;
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  background: rgba(26, 26, 46, 0.85) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+/* ── Sidebar ─────────────────────────────────────────────────────────── */
+.eceuh-sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 256px;
+  padding: 16px;
+  background: var(--eceuh-bg);
+  border-right: 1px solid var(--eceuh-border);
+  display: flex; flex-direction: column; justify-content: space-between;
   z-index: 100;
   font-family: var(--eceuh-sans);
+  overflow-y: auto;
+  transform: translateX(0);
+  transition: transform .25s ease;
 }
-html.light .eceuh-topbar {
-  background: rgba(244, 236, 234, 0.92) !important;
-  border-bottom-color: rgba(26, 26, 46, 0.08) !important;
+.eceuh-sidebar::-webkit-scrollbar { width: 6px; }
+.eceuh-sidebar::-webkit-scrollbar-thumb { background: var(--eceuh-border-2); border-radius: 4px; }
+
+/* Permanent on the home page; collapsible elsewhere */
+body.eceuh-collapsible .eceuh-sidebar { transform: translateX(-100%); box-shadow: none; }
+body.eceuh-collapsible.eceuh-sidebar-open .eceuh-sidebar {
+  transform: translateX(0);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.eceuh-brand {
-  font-family: var(--eceuh-sans) !important;
-  font-weight: 900;
-  font-size: 20px;
-  letter-spacing: -1px;
-  text-transform: uppercase;
-  color: #FF6363;
+/* Body offset on permanent layouts */
+body.eceuh-shell { padding-left: 256px !important; padding-top: 0 !important; }
+@media (max-width: 900px) {
+  body.eceuh-shell { padding-left: 0 !important; }
+  .eceuh-sidebar { transform: translateX(-100%); box-shadow: none; }
+  body.eceuh-shell.eceuh-sidebar-open .eceuh-sidebar { transform: translateX(0); }
+}
+
+/* Brand */
+.eceuh-sidebar .brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 8px 24px;
   text-decoration: none;
 }
-
-.eceuh-nav {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.eceuh-sidebar .brand-mark {
+  width: 40px; height: 40px;
+  background: var(--eceuh-accent);
+  color: var(--eceuh-accent-deep);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  flex: none;
+  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1);
+  animation: none;
+  font-family: var(--eceuh-sans);
+  font-weight: 900;
+  font-size: 18px;
 }
-.eceuh-nav a {
-  font-family: var(--eceuh-sans) !important;
+.eceuh-sidebar .brand-text {
+  display: flex; flex-direction: column;
+  font-family: var(--eceuh-serif);
   font-weight: 700;
   font-size: 14px;
   line-height: 20px;
-  letter-spacing: -0.35px;
+  color: var(--eceuh-text);
+}
+.eceuh-sidebar .brand-text small {
+  font-family: var(--eceuh-sans);
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  color: #94A3B8;
-  text-decoration: none;
-  padding-bottom: 4px;
-  transition: color .2s;
+  color: var(--eceuh-dim);
+  font-weight: 400;
 }
-.eceuh-nav a:hover { color: #FFFFFF; }
-.eceuh-nav a.active {
-  color: #FF6363;
-  border-bottom: 2px solid #FF6363;
-}
-html.light .eceuh-nav a { color: #475569; }
-html.light .eceuh-nav a:hover { color: #1A1A2E; }
 
-.eceuh-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* Nav */
+.eceuh-sidebar nav {
+  display: flex; flex-direction: column; gap: 4px; flex: 1;
 }
-.eceuh-iconbtn {
-  width: 36px; height: 36px;
+.eceuh-sidebar nav a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--eceuh-dim);
+  text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.eceuh-sidebar nav a:hover { color: var(--eceuh-text); background: var(--eceuh-border); }
+.eceuh-sidebar nav a.active {
+  background: var(--eceuh-active);
+  color: var(--eceuh-accent);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+.eceuh-sidebar nav a svg { width: 16px; height: 16px; flex: none; color: currentColor; }
+
+/* Bottom block: theme toggle + account */
+.eceuh-sidebar .bottom {
+  padding-top: 16px;
+  border-top: 1px solid var(--eceuh-border);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.eceuh-sidebar .theme-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: none; border: none;
+  color: var(--eceuh-dim);
+  font-family: var(--eceuh-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.eceuh-sidebar .theme-btn:hover { color: var(--eceuh-text); background: var(--eceuh-border); }
+.eceuh-sidebar .theme-btn svg { width: 16px; height: 16px; }
+
+/* Account block */
+.eceuh-sidebar .account {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.eceuh-sidebar .signin-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%;
+  padding: 12px 0;
+  background: var(--eceuh-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--eceuh-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter .15s, transform .1s;
+}
+.eceuh-sidebar .signin-cta:hover { filter: brightness(1.08); }
+.eceuh-sidebar .signin-cta:active { transform: translateY(1px); }
+.eceuh-sidebar .account-pill {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px;
   border-radius: 9999px;
-  display: grid;
-  place-items: center;
-  color: #94A3B8;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--eceuh-border-2);
+  color: var(--eceuh-text);
+  font-family: var(--eceuh-sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+  width: 100%;
+}
+.eceuh-sidebar .account-pill:hover { background: rgba(255,255,255,0.1); }
+.eceuh-sidebar .account-pill .av {
+  width: 30px; height: 30px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #FF6363, #a83838);
+  color: #fff;
+  display: grid; place-items: center;
+  font-weight: 900;
+  font-size: 11px;
+  flex: none;
+}
+.eceuh-sidebar .account-pill .who {
+  flex: 1; min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eceuh-sidebar .account-menu {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  margin-top: 6px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--eceuh-border-2);
+  border-radius: 10px;
+}
+.eceuh-sidebar.show-account-menu .account-menu { display: flex; }
+.eceuh-sidebar .account-menu .meta {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--eceuh-border);
+  margin-bottom: 4px;
+}
+.eceuh-sidebar .account-menu .meta strong { display: block; font-size: 13px; color: var(--eceuh-text); }
+.eceuh-sidebar .account-menu .meta small { display: block; color: var(--eceuh-dim); font-size: 11px; }
+.eceuh-sidebar .account-menu button {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
   background: none;
   border: none;
+  color: var(--eceuh-text);
+  font-size: 13px;
   cursor: pointer;
-  transition: background .2s, color .2s;
+  text-align: left;
+  font-family: var(--eceuh-sans);
 }
-.eceuh-iconbtn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
+.eceuh-sidebar .account-menu button:hover { background: rgba(255,255,255,0.06); }
+
+/* Hamburger toggle (only on collapsible pages) */
+.eceuh-toggle {
+  display: none;
+  position: fixed;
+  top: 16px; left: 16px;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--eceuh-border-2);
+  color: var(--eceuh-text);
+  cursor: pointer;
+  z-index: 99;
+  align-items: center; justify-content: center;
+  transition: background .15s;
 }
-.eceuh-iconbtn svg { width: 20px; height: 20px; }
-html.light .eceuh-iconbtn { color: #475569; }
-html.light .eceuh-iconbtn:hover { color: #1A1A2E; background: rgba(26, 26, 46, 0.06); }
+html.light .eceuh-toggle { background: rgba(244, 236, 234, 0.92); color: #1A1A2E; }
+.eceuh-toggle:hover { background: rgba(255, 99, 99, 0.2); }
+body.eceuh-collapsible .eceuh-toggle { display: inline-flex; }
+body.eceuh-shell:not(.eceuh-collapsible) .eceuh-toggle { display: none; }
+@media (max-width: 900px) {
+  body.eceuh-shell .eceuh-toggle { display: inline-flex; }
+}
+.eceuh-toggle svg { width: 20px; height: 20px; }
 
-/* Hide page padding-top trick: pages need 56px top space.
-   We add it directly to body via a class. */
-body.eceuh-shell { padding-top: 56px !important; }
+/* Backdrop when sidebar is open on collapsible pages */
+.eceuh-sidebar-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+  animation: eceuhFade .2s ease;
+}
+body.eceuh-sidebar-open.eceuh-collapsible .eceuh-sidebar-backdrop,
+body.eceuh-sidebar-open.eceuh-shell .eceuh-sidebar-backdrop {
+  display: block;
+}
+@media (min-width: 901px) {
+  body.eceuh-shell:not(.eceuh-collapsible) .eceuh-sidebar-backdrop { display: none !important; }
+}
+@keyframes eceuhFade { from { opacity: 0 } to { opacity: 1 } }
 
-/* ── Standardized footer ────────────────────────────────────────────────── */
+/* ── Hide legacy headers, sidebars, and footers everywhere ────────────── */
+.topbar:not(.eceuh-topbar),
+nav.topbar:not(.eceuh-topbar),
+.eceuh-topbar,
+header.topbar,
+aside.sidebar:not(.eceuh-sidebar) {
+  display: none !important;
+}
+body footer:not(.eceuh-footer) { display: none !important; }
+
+/* Home page's main wrapper used padding-left:256px + padding-top:56px to make
+   room for its own sidebar + header. The universal sidebar handles the left
+   offset on the body, and there's no header anymore. Reset the inner shell. */
+body.eceuh-shell .shell { padding-left: 0 !important; padding-top: 0 !important; }
+
+/* Collapsible pages: body has no permanent left offset; sidebar slides in on top. */
+body.eceuh-shell.eceuh-collapsible { padding-left: 0 !important; }
+
+/* ── Standardized footer ──────────────────────────────────────────────── */
 .eceuh-footer {
   background: rgba(38, 24, 23, 0.3) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
@@ -110,20 +302,3 @@ body.eceuh-shell { padding-top: 56px !important; }
   margin: 0;
 }
 html.light .eceuh-footer p { color: #64748B; }
-
-/* ── Mobile menu (only used by index.html sidebar; harmless elsewhere) ─── */
-.eceuh-menu-btn { display: none; }
-@media (max-width: 900px) {
-  .eceuh-nav { display: none !important; }
-  .eceuh-menu-btn { display: grid; }
-  .eceuh-topbar { padding: 0 16px; }
-}
-
-/* ── Hide legacy quirks that conflict with the new topbar/footer ──────── */
-body.eceuh-shell .topbar:not(.eceuh-topbar),
-body.eceuh-shell nav.topbar:not(.eceuh-topbar) {
-  display: none !important;
-}
-body.eceuh-shell footer:not(.eceuh-footer) {
-  display: none !important;
-}

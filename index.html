@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
   <style>
     /* ── BASE ── */
     :root {
@@ -322,6 +323,143 @@
     }
     .bento-sub { font-size: 14px; line-height: 20px; color: var(--text-muted); margin-top: 4px; }
     .bento-icon { color: var(--accent); width: 18px; height: 18px; }
+    .edit-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255, 99, 99, 0.1);
+      border: 1px solid rgba(255, 99, 99, 0.25);
+      border-radius: 9999px;
+      color: var(--accent);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .edit-btn:hover { background: rgba(255, 99, 99, 0.18); border-color: var(--accent); }
+    .edit-btn svg { width: 12px; height: 12px; }
+
+    /* Active Coursework — empty state */
+    .empty-active {
+      grid-column: 1 / -1;
+      padding: 32px 24px;
+      border: 1px dashed var(--border-2);
+      border-radius: 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .empty-active strong { color: var(--text-cream); display: block; margin-bottom: 4px; }
+    .empty-active .pick-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 14px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 9999px;
+      border: none;
+      font-family: var(--sans);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .empty-active .pick-cta:hover { filter: brightness(1.08); }
+
+    /* Course picker modal */
+    .picker-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 24px;
+      z-index: 1100;
+      animation: pickerFade .2s ease;
+    }
+    .picker-backdrop.open { display: flex; }
+    @keyframes pickerFade { from { opacity: 0 } to { opacity: 1 } }
+    .picker {
+      width: 100%;
+      max-width: 460px;
+      background: #0f0f1c;
+      border: 1px solid var(--border-2);
+      border-radius: 18px;
+      padding: 28px;
+      color: var(--text);
+      font-family: var(--sans);
+      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6);
+    }
+    .picker h3 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .picker p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+    .picker .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .picker-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .picker-option:hover { border-color: rgba(255,99,99,0.4); }
+    .picker-option input { margin-top: 2px; accent-color: var(--accent); width: 18px; height: 18px; flex: none; }
+    .picker-option .title {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      display: block;
+    }
+    .picker-option .meta {
+      display: block;
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 18px;
+      margin-top: 2px;
+    }
+    .picker-option input:checked ~ div .title { color: var(--accent); }
+    .picker-option:has(input:checked) { border-color: var(--accent); background: rgba(255,99,99,0.06); }
+    .picker-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .picker-btn {
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: filter .15s, background .15s;
+    }
+    .picker-btn.cancel {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-2);
+    }
+    .picker-btn.cancel:hover { color: var(--text); border-color: var(--accent); }
+    .picker-btn.save {
+      background: var(--accent);
+      color: #fff;
+    }
+    .picker-btn.save:hover { filter: brightness(1.08); }
+
+    /* Status card link styling */
+    a.status-card { text-decoration: none; transition: transform .15s, border-color .15s; }
+    a.status-card:hover { transform: translateY(-2px); border-color: rgba(255,99,99,0.3); }
 
     /* feature card inner: 2-column status grid */
     .status-grid {
@@ -375,8 +513,9 @@
       display: grid; place-items: center;
       font-family: var(--serif);
       font-weight: 700; font-size: 14px;
-      color: var(--text-cream);
+      color: #FFFFFF;
       flex: none;
+      letter-spacing: 0.5px;
     }
     .ledger-avatar.av-a { background: linear-gradient(135deg, #3a4a5a, #1f2d3a); }
     .ledger-avatar.av-b { background: linear-gradient(135deg, #5a4a3a, #3a2d1f); }
@@ -571,80 +710,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
 </head>
-<body>
-  <!-- ── TOPBAR ── -->
-  <header class="topbar">
-    <button class="icon-btn menu-btn" id="menu-btn" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-    </button>
-    <a href="index.html" class="topbar-brand">ECEUH</a>
-    <nav class="topbar-nav">
-      <a href="#dashboard" class="topbar-link active">Dashboard</a>
-      <a href="#archives" class="topbar-link">Archives</a>
-      <a href="professors.html" class="topbar-link">Faculty</a>
-      <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="topbar-link">GitHub</a>
-    </nav>
-    <div class="topbar-actions">
-      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-      </button>
-      <button class="icon-btn" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-      </button>
-    </div>
-  </header>
+<body class="eceuh-shell">
 
-  <!-- ── SIDEBAR ── -->
-  <aside class="sidebar" id="sidebar">
-    <div>
-      <div class="brand-block">
-        <div class="brand-row">
-          <div class="brand-mark">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
-          </div>
-          <div class="brand-text">
-            <div class="brand-name">ECEUH</div>
-            <div class="brand-sub">Knowledge Base</div>
-          </div>
-        </div>
-      </div>
-
-      <nav class="nav-list">
-        <a href="#dashboard" class="nav-link active">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-          <span>Dashboard</span>
-        </a>
-        <a href="#archives" class="nav-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>
-          <span>Course Archives</span>
-        </a>
-        <a href="professors.html" class="nav-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M16 11a4 4 0 0 0 0-8"/></svg>
-          <span>Faculty</span>
-        </a>
-        <a href="#labs" class="nav-link">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6L4 18a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-10V2"/><line x1="9" y1="2" x2="15" y2="2"/></svg>
-          <span>Lab Journals</span>
-        </a>
-
-        <a href="#archives" class="sidebar-cta">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg>
-          <span>Browse Courses</span>
-        </a>
-      </nav>
-    </div>
-
-    <div class="sidebar-footer">
-      <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="nav-link">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1 .8 2.1v3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9 0-6.3-5.2-11.5-11.5-11.5z"/></svg>
-        <span>GitHub</span>
-      </a>
-      <a href="#about" class="nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>About</span>
-      </a>
-    </div>
-  </aside>
 
   <main class="shell">
     <div class="canvas">
@@ -675,36 +742,18 @@
       <!-- ── BENTO: ACTIVE CIRCUITS + FACULTY LEDGER ── -->
       <section class="bento reveal">
 
-        <article class="bento-card feature">
+        <article class="bento-card feature" id="active-coursework">
           <header class="bento-head">
             <div>
               <h2 class="bento-h3">Active Coursework</h2>
-              <p class="bento-sub">Spring 2026 · 3 tracked courses</p>
+              <p class="bento-sub" id="active-sub">Pick the courses you're currently taking</p>
             </div>
-            <svg class="bento-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <button type="button" class="edit-btn" id="edit-active" aria-label="Edit active coursework">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+              <span>Edit</span>
+            </button>
           </header>
-
-          <div class="status-grid">
-            <div class="status-card">
-              <div class="status-row">
-                <span class="pill pill-good">In Progress</span>
-                <span class="status-meta">Week 09 / 16</span>
-              </div>
-              <h3 class="status-title">Digital Logic Design</h3>
-              <p class="status-desc">K-maps, FSMs, and sequential circuit synthesis. Quizzes and walkthroughs updated weekly.</p>
-              <div class="progress" aria-label="58% complete"><div class="progress-bar" style="right: 42%"></div></div>
-            </div>
-
-            <div class="status-card">
-              <div class="status-row">
-                <span class="pill pill-warn">Catching Up</span>
-                <span class="status-meta">Week 09 / 16</span>
-              </div>
-              <h3 class="status-title">Circuits 2 — AC Analysis</h3>
-              <p class="status-desc">Phasors, impedance, Bode plots, and second-order RLC frequency response.</p>
-              <div class="progress" aria-label="45% complete"><div class="progress-bar" style="right: 55%"></div></div>
-            </div>
-          </div>
+          <div class="status-grid" id="active-grid"></div>
         </article>
 
         <article class="bento-card">
@@ -833,10 +882,23 @@
     </div>
 
     <!-- ── FOOTER ── -->
-    <footer class="site-footer">
+    <footer class="site-footer eceuh-footer">
       <p class="footer-meta">Built for the UH EE Discord community. For students, by a student.</p>
     </footer>
   </main>
+
+  <!-- Active Coursework picker modal -->
+  <div class="picker-backdrop" id="picker">
+    <div class="picker" role="dialog" aria-labelledby="picker-title">
+      <h3 id="picker-title">Pick your active courses</h3>
+      <p>Select the courses you're currently taking. They'll show up here with progress synced from each course page.</p>
+      <div class="options" id="picker-options"></div>
+      <div class="picker-actions">
+        <button type="button" class="picker-btn cancel" id="picker-cancel">Cancel</button>
+        <button type="button" class="picker-btn save" id="picker-save">Save</button>
+      </div>
+    </div>
+  </div>
 
   <a href="#archives" class="fab" aria-label="Browse archives">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>
@@ -915,6 +977,120 @@
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+
+    /* ── Active Coursework: interactive picker + progress rollup ──────── */
+    const COURSES = {
+      dld:       { title: 'Digital Logic Design',   desc: 'K-maps, FSMs, and sequential circuit synthesis.',          units: 6, href: 'dld.html' },
+      circuits2: { title: 'Circuits 2',              desc: 'AC analysis, phasors, Bode plots, and second-order RLC.', units: 8, href: 'circuits2.html' },
+      cprog:     { title: 'Programming with C',     desc: 'Pointers, memory, structs, and algorithm design.',         units: 8, href: 'cprog.html' },
+    };
+    const ACTIVE_KEY = 'eceuh:active-courses';
+    const PROGRESS_KEY = 'eceuh:progress';
+
+    function getActive() {
+      try { return JSON.parse(localStorage.getItem(ACTIVE_KEY) || '[]'); }
+      catch { return []; }
+    }
+    function setActive(arr) {
+      localStorage.setItem(ACTIVE_KEY, JSON.stringify(arr));
+    }
+    function getProgressMap() {
+      try { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}'); }
+      catch { return {}; }
+    }
+    function computeRollup(slug) {
+      const map = getProgressMap();
+      const total = COURSES[slug].units;
+      let done = 0, partial = 0;
+      for (let i = 1; i <= total; i++) {
+        const k = `${slug}:unit-${String(i).padStart(2, '0')}`;
+        if (map[k] === 'done') done++;
+        else if (map[k] === 'in-progress') partial++;
+      }
+      const pct = Math.round(((done + partial * 0.5) / total) * 100);
+      return { pct, done, partial, total };
+    }
+    function statusFor(pct) {
+      if (pct >= 80) return { label: 'Almost done', cls: 'pill-good' };
+      if (pct >= 25) return { label: 'In Progress', cls: 'pill-good' };
+      if (pct > 0)   return { label: 'Catching Up', cls: 'pill-warn' };
+      return { label: 'Just started', cls: 'pill-warn' };
+    }
+
+    function renderActive() {
+      const grid = document.getElementById('active-grid');
+      const sub = document.getElementById('active-sub');
+      const active = getActive();
+      if (active.length === 0) {
+        sub.textContent = 'Pick the courses you\'re currently taking';
+        grid.innerHTML = `
+          <div class="empty-active">
+            <strong>No active courses yet</strong>
+            Choose which classes to track this semester and we'll roll up your unit progress here.
+            <button class="pick-cta" type="button" onclick="openPicker()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Pick courses
+            </button>
+          </div>
+        `;
+        return;
+      }
+      sub.textContent = `Spring 2026 · ${active.length} active course${active.length > 1 ? 's' : ''}`;
+      grid.innerHTML = active.map(slug => {
+        const c = COURSES[slug];
+        if (!c) return '';
+        const r = computeRollup(slug);
+        const s = statusFor(r.pct);
+        return `
+          <a class="status-card" href="${c.href}">
+            <div class="status-row">
+              <span class="pill ${s.cls}">${s.label}</span>
+              <span class="status-meta">${r.done}/${r.total} units · ${r.pct}%</span>
+            </div>
+            <h3 class="status-title">${c.title}</h3>
+            <p class="status-desc">${c.desc}</p>
+            <div class="progress" aria-label="${r.pct}% complete"><div class="progress-bar" style="right: ${100 - r.pct}%"></div></div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function openPicker() {
+      const active = getActive();
+      const list = document.getElementById('picker-options');
+      list.innerHTML = Object.entries(COURSES).map(([slug, c]) => `
+        <label class="picker-option">
+          <input type="checkbox" value="${slug}" ${active.includes(slug) ? 'checked' : ''} />
+          <div>
+            <span class="title">${c.title}</span>
+            <span class="meta">${c.units} units · ${c.desc}</span>
+          </div>
+        </label>
+      `).join('');
+      document.getElementById('picker').classList.add('open');
+    }
+    function closePicker() {
+      document.getElementById('picker').classList.remove('open');
+    }
+    window.openPicker = openPicker;
+
+    document.getElementById('edit-active').addEventListener('click', openPicker);
+    document.getElementById('picker-cancel').addEventListener('click', closePicker);
+    document.getElementById('picker').addEventListener('click', (e) => {
+      if (e.target.id === 'picker') closePicker();
+    });
+    document.getElementById('picker-save').addEventListener('click', () => {
+      const checked = Array.from(document.querySelectorAll('#picker-options input:checked')).map(i => i.value);
+      setActive(checked);
+      closePicker();
+      renderActive();
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === ACTIVE_KEY || e.key === PROGRESS_KEY) renderActive();
+    });
+
+    renderActive();
   </script>
 </body>
 </html>

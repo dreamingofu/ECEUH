@@ -303,29 +303,92 @@
     document.getElementById('eceuh-modal-root')?.classList.remove('open');
   }
 
-  /* ───── Topbar slot: replace placeholder account button ───── */
-  function injectAuthSlot() {
-    if (document.getElementById('eceuh-auth-slot')) return;
-    const slot = document.createElement('div');
-    slot.id = 'eceuh-auth-slot';
-    slot.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
+  /* ───── Universal sidebar (injected on every page) ───── */
+  function path() { return location.pathname.replace(/\/$/, '/index.html').split('/').pop() || 'index.html'; }
+  function isHome() { return path() === 'index.html' || path() === ''; }
 
-    // Find a host: prefer .eceuh-actions (shared topbar), then .topbar-actions (home), then .topbar-right (legacy)
-    const host = document.querySelector('.eceuh-actions, .topbar-actions, .topbar-right');
-    if (!host) return;
+  function injectSidebar() {
+    if (document.getElementById('eceuh-sidebar')) return;
+    const here = path();
+    const navLinks = [
+      { key: 'dashboard', href: 'index.html',           label: 'Dashboard',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>' },
+      { key: 'archives',  href: 'index.html#archives',  label: 'Course Archives',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>' },
+      { key: 'faculty',   href: 'professors.html',      label: 'Faculty',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M16 11a4 4 0 0 0 0-8"/></svg>' },
+      { key: 'github',    href: 'https://github.com/dreamingofu/eceuh', label: 'GitHub',
+        external: true,
+        icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1 .8 2.1v3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9 0-6.3-5.2-11.5-11.5-11.5z"/></svg>' },
+    ];
 
-    // Hide the placeholder "Account" icon button on the new layout
-    host.querySelector('button[aria-label="Account"]')?.remove();
-    host.appendChild(slot);
-    renderSlot();
+    const activeMap = {
+      'index.html': 'dashboard',
+      'professors.html': 'faculty',
+      'dld.html': 'archives',
+      'circuits2.html': 'archives',
+      'cprog.html': 'archives',
+      'dld-resources.html': 'archives',
+    };
+    const activeKey = activeMap[here] || '';
+
+    const aside = document.createElement('aside');
+    aside.id = 'eceuh-sidebar';
+    aside.className = 'eceuh-sidebar';
+    aside.innerHTML = `
+      <div>
+        <a href="index.html" class="brand">
+          <span class="brand-mark">E</span>
+          <span class="brand-text">ECEUH<small>Knowledge Base</small></span>
+        </a>
+        <nav>
+          ${navLinks.map(l => `
+            <a href="${l.href}" class="${activeKey === l.key ? 'active' : ''}" ${l.external ? 'target="_blank" rel="noopener"' : ''}>
+              ${l.icon}
+              <span>${l.label}</span>
+            </a>
+          `).join('')}
+        </nav>
+      </div>
+      <div class="bottom">
+        <button class="theme-btn" type="button" id="eceuh-theme-toggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-icon="dark"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <span data-label>Toggle theme</span>
+        </button>
+        <div class="account" id="eceuh-account-slot"></div>
+      </div>
+    `;
+    document.body.appendChild(aside);
+
+    // Toggle button + backdrop (visible only on collapsible pages or mobile)
+    const toggle = document.createElement('button');
+    toggle.className = 'eceuh-toggle';
+    toggle.setAttribute('aria-label', 'Open menu');
+    toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>`;
+    document.body.appendChild(toggle);
+
+    const backdrop = document.createElement('div');
+    backdrop.className = 'eceuh-sidebar-backdrop';
+    document.body.appendChild(backdrop);
+
+    toggle.addEventListener('click', () => document.body.classList.toggle('eceuh-sidebar-open'));
+    backdrop.addEventListener('click', () => document.body.classList.remove('eceuh-sidebar-open'));
+
+    // Set body classes if not already set on the page
+    if (!document.body.classList.contains('eceuh-shell')) {
+      document.body.classList.add('eceuh-shell');
+    }
+    if (!isHome() && !document.body.classList.contains('eceuh-collapsible')) {
+      document.body.classList.add('eceuh-collapsible');
+    }
   }
 
   async function renderSlot() {
-    const slot = document.getElementById('eceuh-auth-slot');
+    const slot = document.getElementById('eceuh-account-slot');
     if (!slot) return;
     const user = await currentUser();
     if (!user) {
-      slot.innerHTML = `<button class="eceuh-pill" type="button" data-open-signin>Sign in</button>`;
+      slot.innerHTML = `<button class="signin-cta" type="button" data-open-signin>Sign in</button>`;
       slot.querySelector('[data-open-signin]').addEventListener('click', () => openModal('signin'));
       return;
     }
@@ -334,31 +397,30 @@
     const name = prof?.username || user.email.split('@')[0];
     const initials = name.slice(0, 2).toUpperCase();
     slot.innerHTML = `
-      <button class="eceuh-avatar-btn" type="button" data-toggle-menu>
-        <span class="eceuh-avatar">${initials}</span>
-        <span>${name}</span>
+      <button class="account-pill" type="button" data-toggle-menu>
+        <span class="av">${initials}</span>
+        <span class="who">@${name}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-    `;
-    slot.querySelector('[data-toggle-menu]').addEventListener('click', (e) => {
-      e.stopPropagation();
-      const existing = slot.querySelector('.eceuh-menu');
-      if (existing) { existing.remove(); return; }
-      const menu = document.createElement('div');
-      menu.className = 'eceuh-menu';
-      menu.innerHTML = `
+      <div class="account-menu">
         <div class="meta"><strong>@${name}</strong><small>${user.email}</small></div>
         <button type="button" data-signout>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Sign out
         </button>
-      `;
-      slot.appendChild(menu);
-      menu.querySelector('[data-signout]').addEventListener('click', async () => {
-        await client().auth.signOut();
-        menu.remove();
-      });
-      const off = (ev) => { if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', off); } };
-      setTimeout(() => document.addEventListener('click', off), 0);
+      </div>
+    `;
+    const sidebar = document.getElementById('eceuh-sidebar');
+    slot.querySelector('[data-toggle-menu]').addEventListener('click', (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle('show-account-menu');
+    });
+    slot.querySelector('[data-signout]').addEventListener('click', async () => {
+      await client().auth.signOut();
+      sidebar.classList.remove('show-account-menu');
+    });
+    document.addEventListener('click', (e) => {
+      if (!slot.contains(e.target)) sidebar.classList.remove('show-account-menu');
     });
   }
 
@@ -458,7 +520,8 @@
   function boot() {
     injectStyles();
     buildModal();
-    injectAuthSlot();
+    injectSidebar();
+    renderSlot();
     wireThemeToggle();
     bindProgress();
 
