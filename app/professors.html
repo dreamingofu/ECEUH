@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EE — Professor Ratings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=VT323&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #04050a;
+      --bg2:        #080a12;
+      --panel:      #0d1020;
+      --border:     #1a2040;
+      --border2:    #111830;
+      --blue:       #4d9fff;
+      --blue-dim:   #2a6bcc;
+      --blue-dark:  #080f28;
+      --blue-glow:  0 0 12px #4d9fff88, 0 0 30px #4d9fff30;
+      --blue-glow-lg: 0 0 20px #4d9fffaa, 0 0 60px #4d9fff44, 0 0 120px #4d9fff18;
+      --green:      #00ff41;
+      --green-glow: 0 0 10px #00ff4188;
+      --amber:      #ffb700;
+      --amber-glow: 0 0 10px #ffb70088;
+      --red:        #ff4d4d;
+      --red-glow:   0 0 10px #ff4d4d88;
+      --cyan:       #00ffe7;
+      --text:       #a0b4cc;
+      --text-dim:   #2e3f5a;
+      --text-mid:   #5a7a9a;
+      --glow-sm:    0 0 8px #4d9fff55;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── LIGHT MODE ── */
+    html.light {
+      --bg: #f0f2f8; --bg2: #e8eaf2; --panel: #dde0ee;
+      --border: #a0aad0; --border2: #b8c0dc;
+      --blue: #1a4fcc; --blue-dim: #0e3399; --blue-dark: #d8e0f8;
+      --blue-glow: none; --blue-glow-lg: none;
+      --green: #007a1f; --amber: #8a6000; --red: #cc2020;
+      --text: #0a1428; --text-dim: #3a4a6a; --text-mid: #2a3a5a;
+      --glow-sm: none;
+    }
+    html.light body::before { display: none; }
+    html.light .bg-glow     { display: none; }
+    html.light .grid-bg     { opacity: 0.05; }
+    html.light .topbar      { background: rgba(240,242,248,0.96); }
+    html.light .live-dot    { box-shadow: none; }
+
+    /* ── SCANLINES ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.16) 3px, rgba(0,0,0,0.16) 4px
+      );
+      pointer-events: none; z-index: 9999;
+    }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -5%,  #4d9fff08 0%, transparent 70%),
+        radial-gradient(ellipse 35% 35% at 5%  50%,  #4d9fff05 0%, transparent 60%),
+        radial-gradient(ellipse 30% 30% at 95% 80%,  #00ffe705 0%, transparent 60%);
+    }
+
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; opacity: 0.03;
+      background-image:
+        linear-gradient(var(--blue) 1px, transparent 1px),
+        linear-gradient(90deg, var(--blue) 1px, transparent 1px);
+      background-size: 55px 55px;
+      animation: gridDrift 75s linear infinite;
+    }
+    @keyframes gridDrift { from { background-position: 0 0; } to { background-position: 55px 55px; } }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(4,5,10,0.94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1.2rem; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--border); border-radius: 2px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .back-btn:hover { color: var(--blue); border-color: #4d9fff40; background: var(--blue-dark); }
+    .breadcrumb { font-size: 0.68rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem; }
+    .breadcrumb span { color: var(--blue); }
+    .topbar-right { display: flex; align-items: center; gap: 1.5rem; font-size: 0.68rem; color: var(--text-dim); }
+    .live { display: flex; align-items: center; gap: 0.4rem; color: var(--blue); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: var(--glow-sm); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .theme-toggle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.75rem; border: 1px solid var(--border); border-radius: 2px;
+      background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── HERO ── */
+    .hero { position: relative; z-index: 1; padding: 5rem 3rem 3.5rem; border-bottom: 1px solid var(--border); overflow: hidden; }
+    .hero-bg-text {
+      position: absolute; font-family: 'Orbitron', monospace;
+      font-size: clamp(5rem, 16vw, 16rem); font-weight: 900;
+      color: transparent; -webkit-text-stroke: 1px #4d9fff06;
+      top: 50%; right: -1%; transform: translateY(-50%);
+      white-space: nowrap; pointer-events: none; user-select: none; letter-spacing: -0.04em;
+    }
+    .hero-inner { max-width: 680px; position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.5s ease forwards 0.2s;
+    }
+    .hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--blue-dim); }
+    .hero-eyebrow em { color: var(--blue-dim); font-style: normal; }
+    .hero-title {
+      font-family: 'Orbitron', monospace; font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 900; line-height: 0.95; letter-spacing: -0.03em;
+      color: var(--blue); text-shadow: var(--blue-glow-lg); margin-bottom: 0.8rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.3s;
+    }
+    .hero-title .sub { display: block; font-size: 0.32em; color: var(--text-dim); text-shadow: none; letter-spacing: 0.25em; text-transform: uppercase; font-weight: 400; margin-bottom: 0.5rem; }
+    .hero-sub { font-family: 'VT323', monospace; font-size: 1.35rem; color: var(--text-mid); letter-spacing: 0.08em; margin-bottom: 1.2rem; opacity: 0; animation: fadeUp 0.6s ease forwards 0.6s; }
+    .hero-desc { font-size: 0.8rem; line-height: 1.9; color: var(--text-dim); max-width: 520px; opacity: 0; animation: fadeUp 0.6s ease forwards 0.8s; }
+    .hero-desc em { color: var(--text); font-style: normal; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+      position: relative; z-index: 1; margin: 0 3rem; padding: 0.8rem 1.4rem;
+      background: #4d9fff08; border: 1px solid #4d9fff20; border-top: none;
+      font-size: 0.7rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.8rem;
+      opacity: 0; animation: fadeUp 0.5s ease forwards 1s;
+    }
+    .disclaimer .icon { color: var(--blue); font-size: 0.9rem; }
+    .disclaimer a { color: var(--blue); text-decoration: none; }
+    .disclaimer a:hover { text-shadow: var(--glow-sm); }
+
+    /* ── WRAPPER / SECTION ── */
+    .wrapper { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+    .section { padding: 4.5rem 0; }
+    .sec-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+    .sec-header h2 { font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 700; color: var(--blue); letter-spacing: 0.2em; text-transform: uppercase; white-space: nowrap; }
+    .sec-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+    .sec-tag { font-size: 0.62rem; color: var(--text-dim); letter-spacing: 0.1em; white-space: nowrap; }
+    .semester-label-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .sem-badge { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; padding: 0.25rem 0.7rem; border: 1px solid var(--border); color: var(--text-dim); border-radius: 2px; background: var(--panel); }
+    .sem-badge.active { border-color: #4d9fff30; color: var(--blue); background: #4d9fff08; }
+    .sem-line { flex: 1; height: 1px; background: var(--border2); }
+
+    /* ── TABBED COURSE BLOCKS ── */
+    .course-block { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+    .course-block-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.8rem; background: var(--panel); border-bottom: 1px solid var(--border); }
+    .course-block-title { font-family: 'Orbitron', monospace; font-size: 0.82rem; font-weight: 700; color: var(--text); letter-spacing: 0.08em; }
+    .tab-row { display: flex; border-bottom: 1px solid var(--border); background: var(--bg2); }
+    .tab-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.65rem 1.6rem; background: var(--bg2); color: var(--text-dim);
+      border: none; border-right: 1px solid var(--border); cursor: pointer;
+      flex: 1; text-align: left; transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn:hover { background: var(--panel); color: var(--text); }
+    .tab-btn.active { background: var(--bg); color: var(--blue); border-bottom: 2px solid var(--blue); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── PROFESSOR CARD ── */
+    .prof-card { background: var(--bg2); padding: 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .prof-card::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); transition: width 0.3s ease, height 0.3s ease; }
+    .prof-card::after  { content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); transition: width 0.3s ease, height 0.3s ease; transition-delay: 0.05s; }
+    .prof-card:hover { background: var(--panel); }
+    .prof-card:hover::before, .prof-card:hover::after { width: 32px; height: 32px; }
+
+    .prof-avatar { width: 52px; height: 52px; border: 1px solid var(--border); border-radius: 3px; display: grid; place-items: center; font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 900; color: var(--blue); background: var(--blue-dark); margin-bottom: 1.2rem; transition: box-shadow 0.3s, border-color 0.3s; }
+    .prof-card:hover .prof-avatar { box-shadow: var(--blue-glow); border-color: #4d9fff50; }
+
+    .prof-course-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 2px; }
+    .tag-dld   { background: #00ff4110; color: var(--green);  border: 1px solid #00ff4125; }
+    .tag-c2    { background: #ffb70010; color: var(--amber);  border: 1px solid #ffb70025; }
+    .tag-cprog { background: #00ffe710; color: var(--cyan);   border: 1px solid #00ffe725; }
+
+    .prof-name { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.3rem; transition: color 0.25s; }
+    .prof-card:hover .prof-name { color: var(--blue); }
+    .prof-dept { font-size: 0.7rem; color: var(--text-dim); margin-bottom: 1.5rem; }
+
+    /* ── METERS ── */
+    .ratings { display: flex; flex-direction: column; gap: 0.9rem; margin-bottom: 1.6rem; }
+    .rating-row { display: flex; flex-direction: column; gap: 0.35rem; }
+    .rating-label-row { display: flex; justify-content: space-between; align-items: center; }
+    .rating-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+    .rating-val { font-family: 'Orbitron', monospace; font-size: 0.8rem; font-weight: 700; }
+    .meter { width: 100%; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+    .fill-high { background: var(--green);  box-shadow: 0 0 6px var(--green); }
+    .fill-mid  { background: var(--amber);  box-shadow: 0 0 6px var(--amber); }
+    .fill-low  { background: var(--red);    box-shadow: 0 0 6px var(--red); }
+    .fill-none { background: var(--border2); box-shadow: none; }
+    .val-high { color: var(--green); }
+    .val-mid  { color: var(--amber); }
+    .val-low  { color: var(--red); }
+    .val-none { color: var(--text-dim); }
+
+    /* ── CARD FOOTER ── */
+    .prof-footer { padding-top: 1.2rem; border-top: 1px solid var(--border2); display: flex; align-items: center; justify-content: space-between; }
+    .rmp-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.68rem; letter-spacing: 0.08em; color: var(--blue); text-decoration: none; padding: 0.3rem 0.7rem; border: 1px solid #4d9fff30; border-radius: 2px; background: #4d9fff08; transition: background 0.2s, box-shadow 0.2s, border-color 0.2s; }
+    .rmp-link:hover { background: #4d9fff16; box-shadow: var(--glow-sm); border-color: #4d9fff55; }
+    .rmp-link.disabled { color: var(--text-dim); border-color: var(--border); background: transparent; pointer-events: none; }
+    .overall-score { display: flex; flex-direction: column; align-items: flex-end; }
+    .overall-num { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; line-height: 1; }
+    .overall-label { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.2rem; }
+
+    /* ── GUIDE ── */
+    .guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .guide-card { background: var(--bg2); padding: 1.6rem; transition: background 0.2s; }
+    .guide-card:hover { background: var(--panel); }
+    .guide-step { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; color: var(--blue); text-shadow: var(--glow-sm); margin-bottom: 0.6rem; display: block; }
+    .guide-title { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .guide-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.65; }
+    .guide-desc code { color: var(--blue); background: #4d9fff10; padding: 0.1rem 0.3rem; border-radius: 2px; font-size: 0.68rem; }
+
+    /* ── FOOTER ── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 1.8rem 3rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.68rem; color: var(--text-dim); }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-shadow: var(--glow-sm); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.d1 { transition-delay: 0.1s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-dim); }
+
+    @media (max-width: 900px) {
+      .guide-grid { grid-template-columns: 1fr; }
+      .topbar, .hero, .wrapper, .disclaimer, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+    @media (max-width: 760px) {
+      .topbar {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 0.9rem);
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .topbar-left,
+      .topbar-right {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+      .hero {
+        padding: 4rem 1.5rem 2.8rem;
+      }
+      .hero-title {
+        font-size: clamp(2.2rem, 10vw, 3.6rem);
+      }
+      .disclaimer {
+        margin: 0 1.5rem;
+        align-items: flex-start;
+      }
+      .course-block-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+      .tab-row {
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .tab-row::-webkit-scrollbar { display: none; }
+      .tab-btn {
+        flex: 0 0 auto;
+        min-width: 120px;
+      }
+      .prof-card {
+        padding: 24px !important;
+      }
+      .prof-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .overall-score {
+        align-items: flex-start;
+      }
+    }
+    @media (max-width: 520px) {
+      .wrapper,
+      .topbar,
+      .hero,
+      .disclaimer,
+      footer {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+      .hero-bg-text {
+        display: none;
+      }
+      .prof-avatar {
+        width: 48px !important;
+        height: 48px !important;
+      }
+      .prof-name {
+        font-size: 1.8rem !important;
+        line-height: 1.1 !important;
+      }
+      .rating-label-row {
+        gap: 0.75rem;
+      }
+    }
+  
+    /* ╔══ ECEUH REDESIGN OVERRIDE ══╗
+       Remaps original palette to the navy + coral theme.
+       Keeps existing markup intact; toggles still work. */
+    :root {
+      --bg:         #1A1A2E !important;
+      --bg2:        #261817 !important;
+      --panel:      #2A2A3E !important;
+      --border:     rgba(255, 255, 255, 0.05) !important;
+      --border2:    rgba(255, 255, 255, 0.1) !important;
+      --green:      #FF6363 !important;
+      --green-dim:  #ff4d4d !important;
+      --green-dark: rgba(255, 99, 99, 0.12) !important;
+      --green-mid:  rgba(255, 99, 99, 0.25) !important;
+      --amber:      #FBBF24 !important;
+      --cyan:       #94A3B8 !important;
+      --red:        #FF6363 !important;
+      --blue:       #94A3B8 !important;
+      --text:       #FFFFFF !important;
+      --text-dim:   #64748B !important;
+      --text-mid:   #CBD5E1 !important;
+      --glow-sm:    none !important;
+      --glow:       none !important;
+      --glow-lg:    none !important;
+      --glow-amber: none !important;
+      --glow-cyan:  none !important;
+      --glow-blue:  none !important;
+    }
+    html.light {
+      --bg:         #f4ecea !important;
+      --bg2:        #fff5f3 !important;
+      --panel:      #ffe4df !important;
+      --border:     rgba(26, 26, 46, 0.08) !important;
+      --border2:    rgba(26, 26, 46, 0.14) !important;
+      --green:      #b94a4a !important;
+      --green-dim:  #a83838 !important;
+      --green-dark: rgba(185, 74, 74, 0.10) !important;
+      --green-mid:  rgba(185, 74, 74, 0.25) !important;
+      --amber:      #b27a00 !important;
+      --cyan:       #475569 !important;
+      --red:        #b94a4a !important;
+      --blue:       #475569 !important;
+      --text:       #1A1A2E !important;
+      --text-dim:   #475569 !important;
+      --text-mid:   #334155 !important;
+    }
+
+    /* Body + decorative kill switches */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      cursor: auto !important;
+    }
+    body::before, body::after,
+    .bg-glow, .grid-bg, .particles, .scanlines, .scanline,
+    .circuit-bg, .noise-bg, .vignette { display: none !important; }
+
+    /* Typography mapping */
+    h1, h2, h3, h4, h5, h6,
+    .hero-title, .hero-name, .hero-eyebrow,
+    .semester-title, .semester-label,
+    .card-title, .page-title, .sec-header h2,
+    .brand-text, .future-title, .future-label,
+    .topbar-breadcrumb, .topbar-nav a, .badge, .tag,
+    .card-code, .card-status-pill, .divider-label, .topbar-link {
+      font-family: 'Lora', 'Liberation Serif', Georgia, serif !important;
+    }
+    body, p, li, button, input, textarea, select, .card-desc, .card-meta, .future-card,
+    .topbar-meta, .status-bar-item, .topbar-right, .footer, footer {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
+    code, pre, kbd, .key, .keyboard, .hero-sub, .clock, #clock,
+    .rating-val, .val, .live-dot, [id^="last-updated"] {
+      font-family: 'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace !important;
+    }
+
+    /* Brand mark — coral pill */
+    .brand-mark {
+      background: var(--green) !important;
+      color: #67000E !important;
+      border: none !important;
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 900 !important;
+      letter-spacing: -0.02em !important;
+      border-radius: 8px !important;
+      box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1), 0px 4px 6px -4px rgba(0,0,0,0.1) !important;
+      animation: none !important;
+    }
+
+    /* Topbar — frosted navy */
+    .topbar {
+      background: rgba(26, 26, 46, 0.85) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    }
+    html.light .topbar {
+      background: rgba(244, 236, 234, 0.92) !important;
+      border-bottom: 1px solid rgba(26,26,46,0.08) !important;
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      font-family: 'Inter', sans-serif !important;
+      border-radius: 8px !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: var(--text-dim) !important;
+    }
+    .theme-toggle:hover { border-color: var(--green) !important; color: var(--green) !important; }
+
+    /* Hero glow text → softer outline */
+    .hero-bg-text { -webkit-text-stroke: 1px rgba(255,99,99,0.10) !important; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12) !important; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--green) !important; }
+
+    /* Card and pill rounding for the new system */
+    .course-card, .future-card, .card, .badge, .tag {
+      border-radius: 12px !important;
+    }
+    .card-status-pill, .pill { border-radius: 6px !important; }
+
+    /* Cursor blink dots stay subtle */
+    .live-dot, .pill-active .pill-dot, .badge.active .badge-dot {
+      box-shadow: none !important;
+    }
+
+    /* ── Professor cards: match the home page bento aesthetic ─────────── */
+    .course-block {
+      background: #261817 !important;
+      border: 1px solid var(--border-2) !important;
+      border-radius: 24px !important;
+      overflow: hidden !important;
+      margin-bottom: 24px !important;
+    }
+    html.light .course-block {
+      background: #fff5f3 !important;
+      border-color: rgba(26,26,46,0.10) !important;
+    }
+    .course-block-header {
+      padding: 24px 28px !important;
+      background: transparent !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+    .course-block-title {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 18px !important;
+      letter-spacing: -0.2px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+    }
+    .tab-row {
+      background: transparent !important;
+      border-bottom: 1px solid var(--border) !important;
+      padding: 0 12px;
+    }
+    .tab-btn {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.6px !important;
+      padding: 14px 20px !important;
+      background: transparent !important;
+      border-right: none !important;
+      border-bottom: 2px solid transparent !important;
+      color: var(--text-dim) !important;
+      flex: 0 0 auto !important;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn:hover { color: var(--text) !important; background: transparent !important; }
+    .tab-btn.active {
+      color: #FF6363 !important;
+      background: transparent !important;
+      border-bottom-color: #FF6363 !important;
+    }
+
+    .prof-card {
+      background: transparent !important;
+      padding: 32px !important;
+      overflow: visible !important;
+      transition: none !important;
+    }
+    .prof-card::before, .prof-card::after { display: none !important; }
+    .prof-card:hover { background: transparent !important; }
+    .prof-card:hover::before, .prof-card:hover::after { display: none !important; }
+
+    .prof-avatar {
+      width: 56px !important;
+      height: 56px !important;
+      border-radius: 9999px !important;
+      background: linear-gradient(135deg, #FF6363, #a83838) !important;
+      color: #fff !important;
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 18px !important;
+      letter-spacing: 0.5px !important;
+      border: none !important;
+      margin-bottom: 16px !important;
+      box-shadow: none !important;
+    }
+    .prof-card:hover .prof-avatar {
+      box-shadow: none !important;
+      border: none !important;
+    }
+    .prof-name {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 22px !important;
+      line-height: 28px !important;
+      letter-spacing: -0.3px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+      margin-bottom: 6px !important;
+    }
+    .prof-card:hover .prof-name { color: var(--text) !important; }
+    .prof-dept {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 13px !important;
+      color: var(--text-dim) !important;
+      margin-bottom: 24px !important;
+    }
+    .prof-course-tag {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+      padding: 4px 10px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,99,99,0.12) !important;
+      color: #FF6363 !important;
+      border: none !important;
+    }
+    .tag-dld, .tag-c2, .tag-cprog {
+      background: rgba(255,99,99,0.12) !important;
+      color: #FF6363 !important;
+      border: none !important;
+    }
+    .ratings { gap: 14px !important; margin-bottom: 24px !important; }
+    .rating-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 11px !important;
+      letter-spacing: 0.4px !important;
+      color: var(--text-dim) !important;
+    }
+    .rating-val {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+    }
+    .val-high, .val-mid, .val-low { color: #FF6363 !important; }
+    .meter {
+      height: 6px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,255,255,0.06) !important;
+    }
+    html.light .meter { background: rgba(26,26,46,0.08) !important; }
+    .meter-fill { border-radius: 9999px !important; box-shadow: none !important; }
+    .fill-high, .fill-mid, .fill-low { background: #FF6363 !important; box-shadow: none !important; }
+
+    .prof-footer {
+      padding-top: 18px !important;
+      border-top: 1px solid var(--border) !important;
+    }
+    .rmp-link {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 12px !important;
+      letter-spacing: 0.2px !important;
+      padding: 8px 14px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,99,99,0.10) !important;
+      color: #FF6363 !important;
+      border: 1px solid rgba(255,99,99,0.25) !important;
+      box-shadow: none !important;
+    }
+    .rmp-link:hover {
+      background: rgba(255,99,99,0.16) !important;
+      border-color: #FF6363 !important;
+      box-shadow: none !important;
+    }
+    .overall-num {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 28px !important;
+      color: #FF6363 !important;
+    }
+    .overall-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      letter-spacing: 1px !important;
+    }
+
+    /* Guide cards too — match the bento style */
+    .guide-grid {
+      background: transparent !important;
+      border: none !important;
+      gap: 18px !important;
+    }
+    .guide-card {
+      background: #261817 !important;
+      border: 1px solid var(--border-2) !important;
+      border-radius: 18px !important;
+      padding: 24px !important;
+    }
+    html.light .guide-card {
+      background: #fff5f3 !important;
+      border-color: rgba(26,26,46,0.10) !important;
+    }
+    .guide-card:hover { background: #261817 !important; }
+    html.light .guide-card:hover { background: #fff5f3 !important; }
+    .guide-step {
+      font-family: 'Lora', serif !important;
+      font-size: 28px !important;
+      color: #FF6363 !important;
+      text-shadow: none !important;
+    }
+    .guide-title {
+      font-family: 'Lora', serif !important;
+      font-size: 16px !important;
+      letter-spacing: -0.2px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+    }
+    .guide-desc { font-family: 'Inter', sans-serif !important; line-height: 1.65 !important; }
+    .guide-desc code {
+      font-family: 'JetBrains Mono', monospace !important;
+      color: #FF6363 !important;
+      background: rgba(255,99,99,0.12) !important;
+      border-radius: 4px !important;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <link rel="stylesheet" href="theme.css" />
+</head>
+<body class="eceuh-shell eceuh-collapsible">
+
+  <div class="bg-glow"></div>
+  <div class="grid-bg"></div>
+
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="index.html">← Home</a>
+      <div class="breadcrumb">
+        <span>EE Knowledge Base</span>
+        <span style="color:var(--border);">/</span>
+        <span>Professors</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="live"><span class="live-dot"></span> Spring 2026</span>
+      <span id="clock">--:--:--</span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-bg-text">PROF</div>
+    <div class="hero-inner">
+      <p class="hero-eyebrow"><em>Spring 2026</em> · Electrical Engineering · Year 03</p>
+      <h1 class="hero-title"><span class="sub">Directory //</span>Professor<br/>Ratings</h1>
+      <p class="hero-sub">> sourced from RateMyProfessors.com_</p>
+      <p class="hero-desc">Ratings manually sourced from <em>RateMyProfessors</em> for each professor teaching a tracked course this semester. Includes overall rating, difficulty, and would-take-again percentage. Click any card to view their full RMP profile.</p>
+    </div>
+  </header>
+
+  <div class="disclaimer">
+    <span class="icon">[i]</span>
+    <span>Data sourced manually from <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a>. Ratings reflect community averages and may not represent your personal experience. Updated each semester.</span>
+  </div>
+
+  <div class="wrapper">
+    <section class="section reveal" id="professors">
+      <div class="sec-header">
+        <h2>// Spring 2026</h2>
+        <div class="sec-line"></div>
+        <span class="sec-tag">01 — CURRENT_SEMESTER</span>
+      </div>
+      <div class="semester-label-row">
+        <div class="sem-badge active">Active Semester</div>
+        <div class="sem-line"></div>
+        <span style="font-size:0.65rem; color:var(--text-dim);">3 courses tracked</span>
+      </div>
+
+      <!-- ── DIGITAL LOGIC DESIGN ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Digital Logic Design</span>
+          <span class="prof-course-tag tag-dld">ECE_3441</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('dld', 0, this)">Sheth</button>
+          <button class="tab-btn"        onclick="switchTab('dld', 1, this)">Ramachandran</button>
+        </div>
+        <div id="dld-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-dld-0">BS</div>
+            <div class="prof-name"   id="name-dld-0">Dr. Bhavin R. Sheth</div>
+            <div class="prof-dept"   id="dept-dld-0">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-dld-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-dld-0">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-dld-1">DR</div>
+            <div class="prof-name"   id="name-dld-1">Dr. Deepa Ramachandran</div>
+            <div class="prof-dept"   id="dept-dld-1">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-dld-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-dld-1">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CIRCUITS 2 ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Circuits 2</span>
+          <span class="prof-course-tag tag-c2">ECE_2202</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('c2', 0, this)">Shan</button>
+          <button class="tab-btn"        onclick="switchTab('c2', 1, this)">Ramachandran</button>
+        </div>
+        <div id="c2-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-c2-0">XS</div>
+            <div class="prof-name"   id="name-c2-0">Dr. Xiaonan Shan</div>
+            <div class="prof-dept"   id="dept-c2-0">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-c2-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-c2-0">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-c2-1">DR</div>
+            <div class="prof-name"   id="name-c2-1">Dr. Deepa Ramachandran</div>
+            <div class="prof-dept"   id="dept-c2-1">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-c2-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-c2-1">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROGRAMMING WITH C ── -->
+      <div class="course-block">
+        <div class="course-block-header">
+          <span class="course-block-title">Programming Apps with C</span>
+          <span class="prof-course-tag tag-cprog">ECE_3331</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('cprog', 0, this)">Joardar</button>
+          <button class="tab-btn"        onclick="switchTab('cprog', 1, this)">Sheth</button>
+        </div>
+        <div id="cprog-panels">
+          <div class="tab-panel active prof-card">
+            <div class="prof-avatar" id="av-cprog-0">BJ</div>
+            <div class="prof-name"   id="name-cprog-0">Dr. Biresh Kumar Joardar</div>
+            <div class="prof-dept"   id="dept-cprog-0">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-cprog-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-0">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+          <div class="tab-panel prof-card">
+            <div class="prof-avatar" id="av-cprog-1">BS</div>
+            <div class="prof-name"   id="name-cprog-1">Dr. Bhavin R. Sheth</div>
+            <div class="prof-dept"   id="dept-cprog-1">Electrical Engineering Dept.</div>
+            <div class="ratings">
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-overall" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-diff" style="width:0%"></div></div></div>
+              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-wta" style="width:0%"></div></div></div>
+            </div>
+            <div class="prof-footer">
+              <a class="rmp-link disabled" id="link-cprog-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-1">—</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  <footer>
+    <span>EE — <a href="professors.html">Professor Ratings</a> · Spring 2026</span>
+    <span>Data from <a href="https://www.ratemyprofessors.com" target="_blank" rel="noopener">RateMyProfessors.com</a></span>
+    <a href="index.html">← Back to Home</a>
+  </footer>
+
+  <script>
+    // ════════════════════════════════════════════
+    //  COURSES DATA — edit this object to update
+    //  profs[0] = first tab, profs[1] = second tab
+    // ════════════════════════════════════════════
+    const COURSES = {
+      dld: {
+        profs: [
+          {
+            name:       "Dr. Bhavin R. Sheth",
+            initials:   "BS",
+            dept:       "Electrical Engineering Dept.",
+            overall:    3.0,
+            difficulty: 4.0,
+            wouldTake:  70,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
+          },
+          {
+            name:       "Dr. Deepa Ramachandran",
+            initials:   "DR",
+            dept:       "Electrical Engineering Dept.",
+            overall:    4.5,
+            difficulty: 2.8,
+            wouldTake:  100,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/2729114",
+          },
+        ]
+      },
+      c2: {
+        profs: [
+          {
+            name:       "Dr. Xiaonan Shan",
+            initials:   "XS",
+            dept:       "Electrical Engineering Dept.",
+            overall:    4.5,
+            difficulty: 3.5,
+            wouldTake:  100,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/2991318",
+          },
+          {
+            name:       "Prof. TBD",
+            initials:   "??",
+            dept:       "Electrical Engineering Dept.",
+            overall:    null,
+            difficulty: null,
+            wouldTake:  null,
+            rmpUrl:     null,
+          },
+        ]
+      },
+      cprog: {
+        profs: [
+          {
+            name:       "Dr. Biresh Kumar Joardar",
+            initials:   "BJ",
+            dept:       "Electrical Engineering Dept.",
+            overall:    5.0,
+            difficulty: 2.0,
+            wouldTake:  100,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/2894356",
+          },
+          {
+            name:       "Dr. Bhavin R. Sheth",
+            initials:   "BS",
+            dept:       "Electrical Engineering Dept.",
+            overall:    1.5,
+            difficulty: 4,
+            wouldTake:  12,
+            rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
+          },
+        ]
+      },
+    };
+
+    // ── Tab switching ──
+    function switchTab(course, idx, btn) {
+      btn.closest('.tab-row').querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll(`#${course}-panels .tab-panel`).forEach((p, i) => {
+        p.classList.toggle('active', i === idx);
+      });
+    }
+
+    // ── Rating helpers ──
+    function getRatingClass(val, type) {
+      if (val === null) return { color: 'val-none', fill: 'fill-none' };
+      if (type === 'difficulty') {
+        if (val <= 2.5) return { color: 'val-high', fill: 'fill-high' };
+        if (val <= 3.5) return { color: 'val-mid',  fill: 'fill-mid'  };
+        return             { color: 'val-low',  fill: 'fill-low'  };
+      }
+      if (type === 'wta') {
+        if (val >= 75) return { color: 'val-high', fill: 'fill-high' };
+        if (val >= 50) return { color: 'val-mid',  fill: 'fill-mid'  };
+        return           { color: 'val-low',  fill: 'fill-low'  };
+      }
+      if (val >= 4.0) return { color: 'val-high', fill: 'fill-high' };
+      if (val >= 3.0) return { color: 'val-mid',  fill: 'fill-mid'  };
+      return            { color: 'val-low',  fill: 'fill-low'  };
+    }
+
+    function setMeter(meterId, valId, val, max, type, display) {
+      const meter = document.getElementById(meterId);
+      const valEl = document.getElementById(valId);
+      if (!meter || !valEl) return;
+      const cls = getRatingClass(val, type);
+      meter.className   = 'meter-fill ' + cls.fill;
+      valEl.className   = 'rating-val ' + cls.color;
+      valEl.textContent = display;
+      meter.style.width = val !== null ? `${(val / max) * 100}%` : '0%';
+    }
+
+    // ── Render all ──
+    function renderAll() {
+      Object.entries(COURSES).forEach(([course, data]) => {
+        data.profs.forEach((p, idx) => {
+          const key = `${course}-${idx}`;
+          const nameEl = document.getElementById(`name-${key}`);
+          const avEl   = document.getElementById(`av-${key}`);
+          const deptEl = document.getElementById(`dept-${key}`);
+          if (nameEl) nameEl.textContent = p.name;
+          if (avEl)   avEl.textContent   = p.initials;
+          if (deptEl) deptEl.textContent = p.dept;
+
+          setMeter(`m-${key}-overall`, `r-${key}-overall`, p.overall, 5, 'overall',
+            p.overall !== null ? `${p.overall.toFixed(1)} / 5.0` : '— / 5.0');
+          setMeter(`m-${key}-diff`, `r-${key}-diff`, p.difficulty, 5, 'difficulty',
+            p.difficulty !== null ? `${p.difficulty.toFixed(1)} / 5.0` : '— / 5.0');
+          setMeter(`m-${key}-wta`, `r-${key}-wta`, p.wouldTake, 100, 'wta',
+            p.wouldTake !== null ? `${p.wouldTake}%` : '— %');
+
+          const scoreEl = document.getElementById(`score-${key}`);
+          if (scoreEl) {
+            const cls = getRatingClass(p.overall, 'overall');
+            scoreEl.className   = 'overall-num ' + cls.color;
+            scoreEl.textContent = p.overall !== null ? p.overall.toFixed(1) : '—';
+          }
+          const linkEl = document.getElementById(`link-${key}`);
+          if (linkEl && p.rmpUrl) {
+            linkEl.href      = p.rmpUrl;
+            linkEl.className = 'rmp-link';
+          }
+        });
+      });
+    }
+
+    renderAll();
+
+    // ── Theme toggle ──
+    const btn = document.getElementById('theme-toggle');
+    function applyTheme(theme) {
+      if (theme === 'light') { document.documentElement.classList.add('light'); btn.textContent = '● Dark'; }
+      else { document.documentElement.classList.remove('light'); btn.textContent = '☀ Light'; }
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next); applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+    });
+
+    // ── Clock ──
+    function tick() { document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8); }
+    tick(); setInterval(tick, 1000);
+
+    // ── Scroll reveal ──
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+<footer class="eceuh-footer">
+  <p>Built for the UH EE Discord community. For students, by a student.</p>
+</footer>
+</body>
+</html>

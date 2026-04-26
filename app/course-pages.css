@@ -45,7 +45,7 @@ body.course-ui {
 .course-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 44px 32px 72px;
+  padding: calc(env(safe-area-inset-top, 0px) + 44px) 32px calc(env(safe-area-inset-bottom, 0px) + 72px);
 }
 
 .course-back {
@@ -683,7 +683,7 @@ html.light .external-card {
 
 @media (max-width: 760px) {
   .course-page {
-    padding: 28px 18px 54px;
+    padding: calc(env(safe-area-inset-top, 0px) + 72px) 16px calc(env(safe-area-inset-bottom, 0px) + 42px);
   }
 
   .hero-card,
@@ -708,11 +708,114 @@ html.light .external-card {
     align-items: flex-start;
   }
 
+  .hero-code {
+    min-width: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(30px, 10vw, 42px);
+  }
+
+  .hero-desc,
+  .section-subtitle,
+  .hub-body-text,
+  .topic-desc,
+  .file-desc,
+  .external-desc {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .hero-stat {
+    padding: 16px 16px 14px;
+  }
+
+  .hub-card {
+    min-height: 0;
+  }
+
+  .hub-media {
+    aspect-ratio: 1 / 0.82;
+  }
+
+  .hub-meta {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .hub-meta-title {
+    font-size: 24px;
+  }
+
+  .hub-body {
+    padding: 18px 18px 20px;
+    gap: 14px;
+  }
+
+  .hub-body-title,
+  .topic-title,
+  .file-title,
+  .external-title {
+    font-size: 22px;
+  }
+
+  .topic-card,
+  .file-entry,
+  .external-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .filter-row {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .filter-btn,
+  .action-btn {
+    min-height: 42px;
+  }
+
   .file-entry {
     grid-template-columns: 1fr;
   }
 
   .file-actions {
     align-items: flex-start;
+    width: 100%;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-stats {
+    gap: 10px;
+  }
+
+  .hero-stat-value {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .hub-tag,
+  .chip,
+  .topic-status,
+  .type-chip {
+    font-size: 11px;
+  }
+
+  .hub-footer,
+  .file-date,
+  .file-label,
+  .hero-kicker,
+  .section-kicker {
+    font-size: 11px;
   }
 }

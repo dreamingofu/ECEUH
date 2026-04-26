@@ -1,128 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EE - DLD File Library</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="theme.css" />
-  <link rel="stylesheet" href="course-pages.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth.js" defer></script>
-  <script src="course-pages.js" defer></script>
-</head>
-<body class="eceuh-shell eceuh-collapsible course-ui">
-  <main class="course-page">
-    <div class="page-stack">
-      <section class="hero-card">
-        <div class="hero-inner">
-          <div class="hero-top">
-            <div>
-              <div class="hero-kicker">Digital Logic Design</div>
-              <h1 class="hero-title">File Library</h1>
-              <p class="hero-desc">Same coral type system, same rounded card language, but now applied to the DLD library so it feels like it belongs to the rest of the site.</p>
-            </div>
-            <div class="hero-code">R2_SYNC</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-card">
-        <div class="section-inner">
-          <div class="section-header">
-            <div>
-              <div class="section-kicker">01 // Practice Files</div>
-              <h2 class="section-title">Bucket-Backed Downloads</h2>
-              <p class="section-subtitle">Filter the library by file type. Every link opens the Cloudflare R2 object directly.</p>
-            </div>
-          </div>
-
-          <div class="filter-row">
-            <button class="filter-btn active" data-filter="all">All Files</button>
-            <button class="filter-btn" data-filter="quiz">Classwork</button>
-            <button class="filter-btn" data-filter="exam">Reviews</button>
-            <button class="filter-btn" data-filter="reference">Reference Docs</button>
-          </div>
-
-          <div class="file-list">
-            <article class="file-entry" data-type="quiz">
-              <div>
-                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · PDF</span></div>
-                <h3 class="file-title">ECE3441 SP26 CW1</h3>
-                <p class="file-desc">Public bucket handout for the DLD course, now surfaced with the same typographic rhythm and spacing used across the site.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW1.pdf" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="quiz">
-              <div>
-                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · DOCX</span></div>
-                <h3 class="file-title">ECE3441 SP26 CW2</h3>
-                <p class="file-desc">Editable Word version for students who want to annotate or revise the classwork directly instead of printing a PDF.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="quiz">
-              <div>
-                <div class="file-meta"><span class="type-chip quiz">Classwork</span><span class="file-label">Bucket Sync · PDF</span></div>
-                <h3 class="file-title">ECE3441 SP26 CW3</h3>
-                <p class="file-desc">Additional DLD practice material pulled directly from the mounted bucket and presented as a first-class library item.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW3-1.pdf" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="exam">
-              <div>
-                <div class="file-meta"><span class="type-chip exam">Review</span><span class="file-label">Bucket Sync · PDF</span></div>
-                <h3 class="file-title">ECE3441 SP26 CW4</h3>
-                <p class="file-desc">Review-style DLD material promoted into the same consistent library system instead of sitting behind a disconnected layout.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="exam">
-              <div>
-                <div class="file-meta"><span class="type-chip exam">Review</span><span class="file-label">Bucket Sync · PDF</span></div>
-                <h3 class="file-title">ECE3441 SP26 CW5</h3>
-                <p class="file-desc">A second downloadable review packet now styled like the homepage cards instead of the older terminal-like rows.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW5.pdf" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="reference">
-              <div>
-                <div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · DOCX</span></div>
-                <h3 class="file-title">Editable DLD Classwork Source</h3>
-                <p class="file-desc">A direct Word source for students who want a version they can edit, annotate, or keep alongside their personal notes.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-            <article class="file-entry" data-type="reference">
-              <div>
-                <div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · PDF</span></div>
-                <h3 class="file-title">DLD Quick Access PDF</h3>
-                <p class="file-desc">A lightweight reference entry that gives students another easy jump into the active DLD bucket content.</p>
-              </div>
-              <div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf" target="_blank" rel="noopener">Open File</a></div>
-            </article>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting...</title>
+  <meta http-equiv="refresh" content="0; url=app/dld-resources.html" />
   <script>
-    const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
-    const fileEntries = Array.from(document.querySelectorAll('.file-entry'));
-    function applyFilter(type) {
-      fileEntries.forEach((entry) => {
-        entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type);
-      });
-      filterButtons.forEach((button) => {
-        button.classList.toggle('active', button.dataset.filter === type);
-      });
-    }
-    filterButtons.forEach((button) => {
-      button.addEventListener('click', () => applyFilter(button.dataset.filter));
-    });
+    window.location.replace('app/dld-resources.html' + window.location.search + window.location.hash);
   </script>
+</head>
+<body>
+  <p>Redirecting to <a href="app/dld-resources.html">app/dld-resources.html</a>...</p>
 </body>
 </html>
