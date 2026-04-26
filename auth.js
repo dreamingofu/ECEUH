@@ -503,7 +503,19 @@
     });
   }
 
-  /* ───── Theme toggle wiring (for the standardized topbar) ───── */
+  /* ───── Theme: apply saved preference on boot, sync across tabs ───── */
+  const THEME_KEY = 'ee-theme';
+  function applyTheme(t) {
+    const root = document.documentElement;
+    if (t === 'light') root.classList.add('light');
+    else root.classList.remove('light');
+  }
+  function initTheme() {
+    applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue);
+    });
+  }
   function wireThemeToggle() {
     const btn = document.getElementById('eceuh-theme-toggle');
     if (!btn || btn.__bound) return;
@@ -511,13 +523,14 @@
     btn.addEventListener('click', () => {
       const root = document.documentElement;
       const next = root.classList.contains('light') ? 'dark' : 'light';
-      if (next === 'light') root.classList.add('light'); else root.classList.remove('light');
-      localStorage.setItem('ee-theme', next);
+      applyTheme(next);
+      localStorage.setItem(THEME_KEY, next);
     });
   }
 
   /* ───── Boot ───── */
   function boot() {
+    initTheme();
     injectStyles();
     buildModal();
     injectSidebar();

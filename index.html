@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,6 +40,35 @@
       --serif:        'Lora', 'Liberation Serif', Georgia, serif;
       --sans:         'Inter', system-ui, -apple-system, sans-serif;
       --mono:         'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace;
+    }
+
+    /* Light mode — override every variable used on this page so the whole
+       layout re-themes when html.light is toggled. */
+    html.light {
+      --bg:           #f4ecea;
+      --bg-card:      #fff5f3;
+      --bg-overlay:   rgba(255, 255, 255, 0.7);
+      --bg-overlay-2: rgba(255, 255, 255, 0.55);
+      --bg-overlay-3: rgba(255, 255, 255, 0.6);
+      --bg-active:    #ffe4df;
+      --accent:       #b94a4a;
+      --accent-deep:  #67000E;
+      --text:         #1A1A2E;
+      --text-cream:   #3a1212;
+      --text-mute:    #5a3431;
+      --text-muted:   #475569;
+      --text-dim:     #64748B;
+      --text-faint:   #64748B;
+      --text-soft:    #334155;
+      --good:         #15803d;
+      --warn:         #b45309;
+      --good-bg:      rgba(34, 197, 94, 0.15);
+      --warn-bg:      rgba(245, 158, 11, 0.18);
+      --border:       rgba(26, 26, 46, 0.08);
+      --border-2:     rgba(26, 26, 46, 0.14);
+      --shadow-card:  0 25px 50px -12px rgba(0, 0, 0, 0.08);
+      --shadow-bar:   0 25px 50px -12px rgba(0, 0, 0, 0.10);
+      --shadow-fab:   0 25px 50px -12px rgba(0, 0, 0, 0.10);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -920,46 +950,8 @@
       });
     }
 
-    // Theme toggle (defaults to dark; light mode is a subtle softening)
-    const root = document.documentElement;
-    const themeBtn = document.getElementById('theme-toggle');
-    function applyTheme(t) {
-      if (t === 'light') {
-        root.style.setProperty('--bg', '#f4ecea');
-        root.style.setProperty('--bg-card', '#fff5f3');
-        root.style.setProperty('--bg-overlay', 'rgba(255,255,255,0.7)');
-        root.style.setProperty('--bg-overlay-2', 'rgba(255,255,255,0.55)');
-        root.style.setProperty('--bg-overlay-3', 'rgba(255,255,255,0.6)');
-        root.style.setProperty('--bg-active', '#ffe4df');
-        root.style.setProperty('--text', '#1A1A2E');
-        root.style.setProperty('--text-cream', '#3a1212');
-        root.style.setProperty('--text-mute', '#5a3431');
-        root.style.setProperty('--text-muted', '#475569');
-        root.style.setProperty('--text-dim', '#64748B');
-        root.style.setProperty('--text-soft', '#334155');
-        root.style.setProperty('--border', 'rgba(26,26,46,0.08)');
-        root.style.setProperty('--border-2', 'rgba(26,26,46,0.14)');
-      } else {
-        // restore by removing inline overrides
-        ['--bg','--bg-card','--bg-overlay','--bg-overlay-2','--bg-overlay-3','--bg-active',
-         '--text','--text-cream','--text-mute','--text-muted','--text-dim','--text-soft',
-         '--border','--border-2'].forEach(p => root.style.removeProperty(p));
-      }
-    }
-    const THEME_KEY = 'ee-theme';
-    const saved = localStorage.getItem(THEME_KEY) || 'dark';
-    applyTheme(saved);
-    if (themeBtn) {
-      themeBtn.addEventListener('click', () => {
-        const cur = localStorage.getItem(THEME_KEY) || 'dark';
-        const next = cur === 'dark' ? 'light' : 'dark';
-        localStorage.setItem(THEME_KEY, next);
-        applyTheme(next);
-      });
-    }
-    window.addEventListener('storage', (e) => {
-      if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue);
-    });
+    // Theme toggle is handled centrally by auth.js (toggles the html.light
+    // class, which the html.light CSS rules above respond to).
 
     // Cmd+K focuses the palette
     const palette = document.querySelector('.palette input');
