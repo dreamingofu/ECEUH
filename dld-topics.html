@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - DLD Topics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+</head>
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <div>
+              <div class="hero-kicker">Digital Logic Design</div>
+              <h1 class="hero-title">Topics</h1>
+              <p class="hero-desc">The full DLD unit map, preserved as its own destination page so the course hub can stay clean and consistent.</p>
+            </div>
+            <div class="hero-code">UNIT_MAP</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card">
+        <div class="section-inner">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">01 // Course Content</div>
+              <h2 class="section-title">Unit Breakdown</h2>
+              <p class="section-subtitle">From Boolean algebra to finite state machines, these are the core checkpoints for the course.</p>
+            </div>
+          </div>
+
+          <div class="topic-grid">
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_01</span><span class="topic-status active">Active</span></div>
+              <h3 class="topic-title">Boolean Algebra &amp; Logic</h3>
+              <p class="topic-desc">Boolean identities, De Morgan's theorem, truth tables, canonical forms, and the symbolic groundwork for later circuit design.</p>
+              <div class="topic-tags"><span class="chip">Truth Tables</span><span class="chip">SOP/POS</span><span class="chip">Logic Laws</span></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_02</span><span class="topic-status active">Active</span></div>
+              <h3 class="topic-title">Logic Gates &amp; Circuits</h3>
+              <p class="topic-desc">Gate families, equivalence, gate-level composition, and the translation between algebraic expressions and actual circuit structures.</p>
+              <div class="topic-tags"><span class="chip">AND/OR/NOT</span><span class="chip">NAND/NOR</span><span class="chip">Gate Equivalence</span></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_03</span><span class="topic-status pending">In Progress</span></div>
+              <h3 class="topic-title">Combinational Logic</h3>
+              <p class="topic-desc">Adders, subtractors, multiplexers, decoders, encoders, and the design habits behind reusable combinational modules.</p>
+              <div class="topic-tags"><span class="chip">Adders</span><span class="chip">MUX/DEMUX</span><span class="chip">Decoders</span></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_04</span><span class="topic-status pending">In Progress</span></div>
+              <h3 class="topic-title">Karnaugh Maps</h3>
+              <p class="topic-desc">Map-based minimization for SOP and POS forms, prime implicants, essential groups, and don't-care handling.</p>
+              <div class="topic-tags"><span class="chip">2-4 Variables</span><span class="chip">Prime Implicants</span><span class="chip">Optimization</span></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_05</span><span class="topic-status upcoming">Upcoming</span></div>
+              <h3 class="topic-title">Sequential Logic</h3>
+              <p class="topic-desc">Latches, flip-flops, timing behavior, counters, and the shift from stateless logic into memory-driven systems.</p>
+              <div class="topic-tags"><span class="chip">Flip-Flops</span><span class="chip">Counters</span><span class="chip">Timing</span></div>
+            </article>
+            <article class="topic-card">
+              <div class="topic-row"><span class="topic-code">UNIT_06</span><span class="topic-status upcoming">Upcoming</span></div>
+              <h3 class="topic-title">Finite State Machines</h3>
+              <p class="topic-desc">Moore and Mealy models, state minimization, transition diagrams, and structured sequential design.</p>
+              <div class="topic-tags"><span class="chip">Moore</span><span class="chip">Mealy</span><span class="chip">State Diagrams</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
