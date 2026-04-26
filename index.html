@@ -434,50 +434,41 @@
     }
     .archive-card {
       position: relative;
-      aspect-ratio: 218 / 272.5;
-      border: 1px solid var(--border-2);
+      display: flex; flex-direction: column;
+      gap: 16px;
+      transition: transform .25s;
+    }
+    .archive-card:hover { transform: translateY(-4px); }
+    .archive-thumb {
+      position: relative;
+      aspect-ratio: 1 / 1.05;
       border-radius: 24px;
       overflow: hidden;
       isolation: isolate;
-      transition: transform .25s, border-color .25s;
+      background: #0d0d18;
+      border: 1px solid var(--border-2);
+      transition: border-color .25s;
     }
-    .archive-card:hover { transform: translateY(-4px); border-color: rgba(255,99,99,0.4); }
+    .archive-card:hover .archive-thumb { border-color: rgba(255,99,99,0.4); }
     .archive-art {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
-      filter: saturate(0.4) brightness(0.7);
+      transition: transform .4s ease;
       z-index: 0;
     }
-    .archive-art.art-analog {
-      background: radial-gradient(circle at 30% 30%, #2a3540, #0c1218),
-        repeating-linear-gradient(0deg, transparent 0 14px, rgba(74,222,128,0.18) 14px 15px);
-    }
-    .archive-art.art-semi {
-      background:
-        conic-gradient(from 45deg at 50% 50%, #251a1a, #3a2545, #1d2a3a, #251a1a),
-        radial-gradient(circle at 50% 50%, #3a2540, transparent 60%);
-    }
-    .archive-art.art-control {
-      background:
-        radial-gradient(circle at 70% 30%, rgba(255,183,36,0.35), transparent 50%),
-        repeating-linear-gradient(45deg, #1a1a2e 0 18px, #21213a 18px 36px);
-    }
-    .archive-art.art-vlsi {
-      background:
-        linear-gradient(180deg, #0f1320 0%, #1a1a2e 60%),
-        radial-gradient(circle at 50% 50%, rgba(255,99,99,0.25), transparent 50%);
-      background-blend-mode: screen, normal;
-    }
-    .archive-card::after {
+    .archive-card:hover .archive-art { transform: scale(1.05); }
+    .archive-thumb::after {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(0deg, var(--bg) 0%, rgba(26,26,46,0) 50%, rgba(26,26,46,0) 100%);
+      background:
+        linear-gradient(180deg, rgba(15,13,28,0) 30%, rgba(15,13,28,0.85) 100%),
+        linear-gradient(180deg, rgba(15,13,28,0.4) 0%, rgba(15,13,28,0) 30%);
       z-index: 1;
     }
     .archive-meta {
       position: absolute; left: 25px; right: 25px; bottom: 25px;
       z-index: 2;
-      display: flex; flex-direction: column; gap: 16px;
+      display: flex; flex-direction: column; gap: 4px;
     }
     .archive-code {
       font-weight: 700; font-size: 10px; line-height: 15px;
@@ -486,46 +477,36 @@
     }
     .archive-name {
       font-family: var(--serif);
-      font-weight: 700; font-size: 20px; line-height: 28px;
-      color: var(--text);
+      font-style: italic;
+      font-weight: 700; font-size: 22px; line-height: 28px;
+      color: var(--text-cream);
+      letter-spacing: -0.3px;
     }
     .archive-stat {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 8px;
-      font-size: 11px; line-height: 16px;
+      padding: 0 4px;
+      font-size: 12px; line-height: 16px;
     }
     .archive-stat .left { color: var(--text-dim); }
-    .archive-stat .right { color: var(--text-soft); display: inline-flex; align-items: center; gap: 4px; }
-    .archive-stat .right svg { width: 10px; height: 10px; color: var(--accent); }
+    .archive-stat .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-soft); font-weight: 500;
+    }
+    .archive-stat .badge.top-pick { color: var(--accent); font-weight: 700; }
+    .archive-stat .badge svg { width: 12px; height: 12px; }
 
     /* ── FOOTER ── */
     .site-footer {
       background: rgba(38, 24, 23, 0.3);
       border-top: 1px solid var(--border);
-      padding: 48px 24px;
+      padding: 32px 24px;
+      text-align: center;
     }
-    .footer-row {
-      max-width: 976px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 32px; flex-wrap: wrap;
+    .footer-meta {
+      font-size: 12px; line-height: 18px;
+      letter-spacing: 0.4px;
+      color: var(--text-faint);
     }
-    .footer-brand {
-      font-weight: 900; font-size: 20px; line-height: 28px;
-      letter-spacing: -1px; text-transform: uppercase;
-      color: var(--accent); opacity: 0.5;
-    }
-    .footer-links {
-      display: flex; gap: 32px; flex-wrap: wrap;
-      flex: 1; justify-content: center;
-    }
-    .footer-link {
-      font-size: 11px; line-height: 16px;
-      letter-spacing: 2.2px; text-transform: uppercase;
-      color: var(--text-dim);
-      transition: color .2s;
-    }
-    .footer-link:hover { color: var(--text); }
-    .footer-meta { font-size: 11px; line-height: 16px; color: var(--text-faint); max-width: 220px; }
 
     /* ── FAB ── */
     .fab {
@@ -599,9 +580,9 @@
     <a href="index.html" class="topbar-brand">ECEUH</a>
     <nav class="topbar-nav">
       <a href="#dashboard" class="topbar-link active">Dashboard</a>
-      <a href="#archives" class="topbar-link">Courses</a>
-      <a href="professors.html" class="topbar-link">Professors</a>
-      <a href="#labs" class="topbar-link">Labs</a>
+      <a href="#archives" class="topbar-link">Archives</a>
+      <a href="professors.html" class="topbar-link">Faculty</a>
+      <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="topbar-link">GitHub</a>
     </nav>
     <div class="topbar-actions">
       <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
@@ -785,72 +766,65 @@
             <h2 class="archives-title">Course Archives</h2>
             <p class="archives-desc">Unit walkthroughs, past exams, and formula sheets for every tracked course.</p>
           </div>
-          <a href="#archives" class="archives-cta">
-            <span>View All Archives</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
         </div>
 
         <div class="archives-grid">
           <a href="dld.html" class="archive-card">
-            <div class="archive-art art-analog"></div>
-            <div class="archive-meta">
-              <div>
+            <div class="archive-thumb">
+              <div class="archive-art" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80&auto=format&fit=crop');"></div>
+              <div class="archive-meta">
                 <div class="archive-code">ECE-3441</div>
                 <div class="archive-name">Digital Logic Design</div>
               </div>
-              <div class="archive-stat">
-                <span class="left">6 units</span>
-                <span class="right">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 22 12 18.3 18.2 22l-1.7-7.9L22 9.3l-7.2-.7z"/></svg>
-                  24 problems
-                </span>
-              </div>
+            </div>
+            <div class="archive-stat">
+              <span class="left">6 Units</span>
+              <span class="badge top-pick">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 22 12 18.3 18.2 22l-1.7-7.9L22 9.3l-7.2-.7z"/></svg>
+                Top Pick
+              </span>
             </div>
           </a>
 
           <a href="circuits2.html" class="archive-card">
-            <div class="archive-art art-semi"></div>
-            <div class="archive-meta">
-              <div>
+            <div class="archive-thumb">
+              <div class="archive-art" style="background-image:url('https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=900&q=80&auto=format&fit=crop');"></div>
+              <div class="archive-meta">
                 <div class="archive-code">ECE-2202</div>
                 <div class="archive-name">Circuits 2</div>
               </div>
-              <div class="archive-stat">
-                <span class="left">AC · Phasors</span>
-                <span class="right">3 cr.</span>
-              </div>
+            </div>
+            <div class="archive-stat">
+              <span class="left">8 Units</span>
+              <span class="badge">Advanced</span>
             </div>
           </a>
 
           <a href="cprog.html" class="archive-card">
-            <div class="archive-art art-control"></div>
-            <div class="archive-meta">
-              <div>
+            <div class="archive-thumb">
+              <div class="archive-art" style="background-image:url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80&auto=format&fit=crop');"></div>
+              <div class="archive-meta">
                 <div class="archive-code">ECE-3331</div>
                 <div class="archive-name">Programming with C</div>
               </div>
-              <div class="archive-stat">
-                <span class="left">Pointers · Memory</span>
-                <span class="right">3 cr.</span>
-              </div>
+            </div>
+            <div class="archive-stat">
+              <span class="left">8 Units</span>
+              <span class="badge">Fundamental</span>
             </div>
           </a>
 
           <a href="professors.html" class="archive-card">
-            <div class="archive-art art-vlsi"></div>
-            <div class="archive-meta">
-              <div>
-                <div class="archive-code">RMP · Spring '26</div>
+            <div class="archive-thumb">
+              <div class="archive-art" style="background-image:url('https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80&auto=format&fit=crop');"></div>
+              <div class="archive-meta">
+                <div class="archive-code">RMP · Spring &rsquo;26</div>
                 <div class="archive-name">Professor Ratings</div>
               </div>
-              <div class="archive-stat">
-                <span class="left">4 professors</span>
-                <span class="right">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 9.2 8.6 2 9.3l5.5 4.8L5.8 22 12 18.3 18.2 22l-1.7-7.9L22 9.3l-7.2-.7z"/></svg>
-                  Browse
-                </span>
-              </div>
+            </div>
+            <div class="archive-stat">
+              <span class="left">4 Faculty</span>
+              <span class="badge">Reference</span>
             </div>
           </a>
         </div>
@@ -860,16 +834,7 @@
 
     <!-- ── FOOTER ── -->
     <footer class="site-footer">
-      <div class="footer-row">
-        <span class="footer-brand">ECEUH</span>
-        <nav class="footer-links">
-          <a href="#dashboard" class="footer-link">Dashboard</a>
-          <a href="#archives" class="footer-link">Archives</a>
-          <a href="professors.html" class="footer-link">Faculty</a>
-          <a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-        </nav>
-        <p class="footer-meta">Built for the UH EE Discord community. For students, by a student.</p>
-      </div>
+      <p class="footer-meta">Built for the UH EE Discord community. For students, by a student.</p>
     </footer>
   </main>
 

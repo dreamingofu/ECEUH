@@ -1068,8 +1068,25 @@
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
+  <link rel="stylesheet" href="theme.css" />
 </head>
-<body>
+<body class="eceuh-shell">
+<header class="eceuh-topbar">
+  <a href="index.html" class="eceuh-brand">ECEUH</a>
+  <nav>
+    <ul class="eceuh-nav">
+      <li><a href="index.html" class="">Dashboard</a></li>
+      <li><a href="index.html#archives" class="active">Archives</a></li>
+      <li><a href="professors.html" class="">Faculty</a></li>
+      <li><a href="https://github.com/dreamingofu/eceuh" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </nav>
+  <div class="eceuh-actions">
+    <button class="eceuh-iconbtn" id="eceuh-theme-toggle" aria-label="Toggle theme" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
 
   <!-- Circuit bg -->
   <div class="circuit-bg"></div>
@@ -1701,5 +1718,8 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
   </script>
+<footer class="eceuh-footer">
+  <p>Built for the UH EE Discord community. For students, by a student.</p>
+</footer>
 </body>
 </html>

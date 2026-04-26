@@ -1,0 +1,129 @@
+/* ECEUH shared theme — standardized topbar + footer for all pages. */
+
+:root {
+  --eceuh-serif: 'Lora', 'Liberation Serif', Georgia, serif;
+  --eceuh-sans:  'Inter', system-ui, -apple-system, sans-serif;
+  --eceuh-mono:  'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace;
+}
+
+/* ── Standardized topbar ────────────────────────────────────────────────── */
+.eceuh-topbar {
+  position: fixed !important;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(26, 26, 46, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  font-family: var(--eceuh-sans);
+}
+html.light .eceuh-topbar {
+  background: rgba(244, 236, 234, 0.92) !important;
+  border-bottom-color: rgba(26, 26, 46, 0.08) !important;
+}
+
+.eceuh-brand {
+  font-family: var(--eceuh-sans) !important;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #FF6363;
+  text-decoration: none;
+}
+
+.eceuh-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.eceuh-nav a {
+  font-family: var(--eceuh-sans) !important;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.35px;
+  text-transform: uppercase;
+  color: #94A3B8;
+  text-decoration: none;
+  padding-bottom: 4px;
+  transition: color .2s;
+}
+.eceuh-nav a:hover { color: #FFFFFF; }
+.eceuh-nav a.active {
+  color: #FF6363;
+  border-bottom: 2px solid #FF6363;
+}
+html.light .eceuh-nav a { color: #475569; }
+html.light .eceuh-nav a:hover { color: #1A1A2E; }
+
+.eceuh-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.eceuh-iconbtn {
+  width: 36px; height: 36px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  color: #94A3B8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.eceuh-iconbtn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+.eceuh-iconbtn svg { width: 20px; height: 20px; }
+html.light .eceuh-iconbtn { color: #475569; }
+html.light .eceuh-iconbtn:hover { color: #1A1A2E; background: rgba(26, 26, 46, 0.06); }
+
+/* Hide page padding-top trick: pages need 56px top space.
+   We add it directly to body via a class. */
+body.eceuh-shell { padding-top: 56px !important; }
+
+/* ── Standardized footer ────────────────────────────────────────────────── */
+.eceuh-footer {
+  background: rgba(38, 24, 23, 0.3) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 32px 24px !important;
+  text-align: center !important;
+  font-family: var(--eceuh-sans);
+}
+.eceuh-footer p {
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.4px;
+  color: #475569;
+  margin: 0;
+}
+html.light .eceuh-footer p { color: #64748B; }
+
+/* ── Mobile menu (only used by index.html sidebar; harmless elsewhere) ─── */
+.eceuh-menu-btn { display: none; }
+@media (max-width: 900px) {
+  .eceuh-nav { display: none !important; }
+  .eceuh-menu-btn { display: grid; }
+  .eceuh-topbar { padding: 0 16px; }
+}
+
+/* ── Hide legacy quirks that conflict with the new topbar/footer ──────── */
+body.eceuh-shell .topbar:not(.eceuh-topbar),
+body.eceuh-shell nav.topbar:not(.eceuh-topbar) {
+  display: none !important;
+}
+body.eceuh-shell footer:not(.eceuh-footer) {
+  display: none !important;
+}

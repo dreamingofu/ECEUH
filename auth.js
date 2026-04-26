@@ -310,8 +310,8 @@
     slot.id = 'eceuh-auth-slot';
     slot.style.cssText = 'position:relative;display:inline-flex;align-items:center;';
 
-    // Find a host: prefer .topbar-actions (new layout), then .topbar-right (old)
-    const host = document.querySelector('.topbar-actions, .topbar-right');
+    // Find a host: prefer .eceuh-actions (shared topbar), then .topbar-actions (home), then .topbar-right (legacy)
+    const host = document.querySelector('.eceuh-actions, .topbar-actions, .topbar-right');
     if (!host) return;
 
     // Hide the placeholder "Account" icon button on the new layout
@@ -441,11 +441,25 @@
     });
   }
 
+  /* ───── Theme toggle wiring (for the standardized topbar) ───── */
+  function wireThemeToggle() {
+    const btn = document.getElementById('eceuh-theme-toggle');
+    if (!btn || btn.__bound) return;
+    btn.__bound = true;
+    btn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const next = root.classList.contains('light') ? 'dark' : 'light';
+      if (next === 'light') root.classList.add('light'); else root.classList.remove('light');
+      localStorage.setItem('ee-theme', next);
+    });
+  }
+
   /* ───── Boot ───── */
   function boot() {
     injectStyles();
     buildModal();
     injectAuthSlot();
+    wireThemeToggle();
     bindProgress();
 
     const c = client();
