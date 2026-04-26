@@ -313,7 +313,7 @@
     const navLinks = [
       { key: 'dashboard', href: 'index.html',           label: 'Dashboard',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>' },
-      { key: 'archives',  href: 'index.html#archives',  label: 'Course Archives',
+      { key: 'archives',  href: 'archives.html',        label: 'Course Archives',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>' },
       { key: 'faculty',   href: 'professors.html',      label: 'Faculty',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M16 11a4 4 0 0 0 0-8"/></svg>' },
@@ -325,6 +325,7 @@
     const activeMap = {
       'index.html': 'dashboard',
       'professors.html': 'faculty',
+      'archives.html': 'archives',
       'dld.html': 'archives',
       'circuits2.html': 'archives',
       'cprog.html': 'archives',

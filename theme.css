@@ -286,6 +286,28 @@ body.eceuh-shell .shell { padding-left: 0 !important; padding-top: 0 !important;
 /* Collapsible pages: body has no permanent left offset; sidebar slides in on top. */
 body.eceuh-shell.eceuh-collapsible { padding-left: 0 !important; }
 
+/* ── Card unification — soft rounded bento aesthetic everywhere ────── */
+.card, .topic-card, .prof-card, .future-card, .resource-card, .guide-card {
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html.light .card,
+html.light .topic-card,
+html.light .prof-card,
+html.light .future-card,
+html.light .resource-card,
+html.light .guide-card {
+  border-color: rgba(26, 26, 46, 0.10) !important;
+}
+.card::before, .card::after,
+.topic-card::before, .topic-card::after,
+.future-card::before, .future-card::after,
+.prof-card::before, .prof-card::after,
+.resource-card::before, .resource-card::after,
+.guide-card::before, .guide-card::after {
+  display: none !important;
+}
+
 /* ── Standardized footer ──────────────────────────────────────────────── */
 .eceuh-footer {
   background: rgba(38, 24, 23, 0.3) !important;

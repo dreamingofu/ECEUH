@@ -319,7 +319,8 @@
       cursor: auto !important;
     }
     body::before, body::after,
-    .bg-glow, .grid-bg, .particles, .scanlines, .scanline { display: none !important; }
+    .bg-glow, .grid-bg, .particles, .scanlines, .scanline,
+    .circuit-bg, .noise-bg, .vignette { display: none !important; }
 
     /* Typography mapping */
     h1, h2, h3, h4, h5, h6,
@@ -392,6 +393,209 @@
       box-shadow: none !important;
     }
 
+    /* ── Professor cards: match the home page bento aesthetic ─────────── */
+    .course-block {
+      background: #261817 !important;
+      border: 1px solid var(--border-2) !important;
+      border-radius: 24px !important;
+      overflow: hidden !important;
+      margin-bottom: 24px !important;
+    }
+    html.light .course-block {
+      background: #fff5f3 !important;
+      border-color: rgba(26,26,46,0.10) !important;
+    }
+    .course-block-header {
+      padding: 24px 28px !important;
+      background: transparent !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+    .course-block-title {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 18px !important;
+      letter-spacing: -0.2px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+    }
+    .tab-row {
+      background: transparent !important;
+      border-bottom: 1px solid var(--border) !important;
+      padding: 0 12px;
+    }
+    .tab-btn {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.6px !important;
+      padding: 14px 20px !important;
+      background: transparent !important;
+      border-right: none !important;
+      border-bottom: 2px solid transparent !important;
+      color: var(--text-dim) !important;
+      flex: 0 0 auto !important;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn:hover { color: var(--text) !important; background: transparent !important; }
+    .tab-btn.active {
+      color: #FF6363 !important;
+      background: transparent !important;
+      border-bottom-color: #FF6363 !important;
+    }
+
+    .prof-card {
+      background: transparent !important;
+      padding: 32px !important;
+      overflow: visible !important;
+      transition: none !important;
+    }
+    .prof-card::before, .prof-card::after { display: none !important; }
+    .prof-card:hover { background: transparent !important; }
+    .prof-card:hover::before, .prof-card:hover::after { display: none !important; }
+
+    .prof-avatar {
+      width: 56px !important;
+      height: 56px !important;
+      border-radius: 9999px !important;
+      background: linear-gradient(135deg, #FF6363, #a83838) !important;
+      color: #fff !important;
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 18px !important;
+      letter-spacing: 0.5px !important;
+      border: none !important;
+      margin-bottom: 16px !important;
+      box-shadow: none !important;
+    }
+    .prof-card:hover .prof-avatar {
+      box-shadow: none !important;
+      border: none !important;
+    }
+    .prof-name {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 22px !important;
+      line-height: 28px !important;
+      letter-spacing: -0.3px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+      margin-bottom: 6px !important;
+    }
+    .prof-card:hover .prof-name { color: var(--text) !important; }
+    .prof-dept {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 13px !important;
+      color: var(--text-dim) !important;
+      margin-bottom: 24px !important;
+    }
+    .prof-course-tag {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+      padding: 4px 10px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,99,99,0.12) !important;
+      color: #FF6363 !important;
+      border: none !important;
+    }
+    .tag-dld, .tag-c2, .tag-cprog {
+      background: rgba(255,99,99,0.12) !important;
+      color: #FF6363 !important;
+      border: none !important;
+    }
+    .ratings { gap: 14px !important; margin-bottom: 24px !important; }
+    .rating-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 11px !important;
+      letter-spacing: 0.4px !important;
+      color: var(--text-dim) !important;
+    }
+    .rating-val {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+    }
+    .val-high, .val-mid, .val-low { color: #FF6363 !important; }
+    .meter {
+      height: 6px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,255,255,0.06) !important;
+    }
+    html.light .meter { background: rgba(26,26,46,0.08) !important; }
+    .meter-fill { border-radius: 9999px !important; box-shadow: none !important; }
+    .fill-high, .fill-mid, .fill-low { background: #FF6363 !important; box-shadow: none !important; }
+
+    .prof-footer {
+      padding-top: 18px !important;
+      border-top: 1px solid var(--border) !important;
+    }
+    .rmp-link {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 12px !important;
+      letter-spacing: 0.2px !important;
+      padding: 8px 14px !important;
+      border-radius: 9999px !important;
+      background: rgba(255,99,99,0.10) !important;
+      color: #FF6363 !important;
+      border: 1px solid rgba(255,99,99,0.25) !important;
+      box-shadow: none !important;
+    }
+    .rmp-link:hover {
+      background: rgba(255,99,99,0.16) !important;
+      border-color: #FF6363 !important;
+      box-shadow: none !important;
+    }
+    .overall-num {
+      font-family: 'Lora', serif !important;
+      font-weight: 700 !important;
+      font-size: 28px !important;
+      color: #FF6363 !important;
+    }
+    .overall-label {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      letter-spacing: 1px !important;
+    }
+
+    /* Guide cards too — match the bento style */
+    .guide-grid {
+      background: transparent !important;
+      border: none !important;
+      gap: 18px !important;
+    }
+    .guide-card {
+      background: #261817 !important;
+      border: 1px solid var(--border-2) !important;
+      border-radius: 18px !important;
+      padding: 24px !important;
+    }
+    html.light .guide-card {
+      background: #fff5f3 !important;
+      border-color: rgba(26,26,46,0.10) !important;
+    }
+    .guide-card:hover { background: #261817 !important; }
+    html.light .guide-card:hover { background: #fff5f3 !important; }
+    .guide-step {
+      font-family: 'Lora', serif !important;
+      font-size: 28px !important;
+      color: #FF6363 !important;
+      text-shadow: none !important;
+    }
+    .guide-title {
+      font-family: 'Lora', serif !important;
+      font-size: 16px !important;
+      letter-spacing: -0.2px !important;
+      text-transform: none !important;
+      color: var(--text) !important;
+    }
+    .guide-desc { font-family: 'Inter', sans-serif !important; line-height: 1.65 !important; }
+    .guide-desc code {
+      font-family: 'JetBrains Mono', monospace !important;
+      color: #FF6363 !important;
+      background: rgba(255,99,99,0.12) !important;
+      border-radius: 4px !important;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
