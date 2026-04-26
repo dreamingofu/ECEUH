@@ -48,6 +48,37 @@ body.course-ui {
   padding: 44px 32px 72px;
 }
 
+.course-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-bottom: 8px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--cp-border-strong);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--cp-text-muted);
+  font-family: var(--cp-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform .22s ease, border-color .22s ease, color .22s ease, background .22s ease;
+}
+
+html.light .course-back {
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.course-back:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 99, 99, 0.34);
+  color: var(--cp-accent);
+  background: rgba(255, 99, 99, 0.08);
+}
+
 .page-stack {
   display: flex;
   flex-direction: column;
@@ -625,6 +656,17 @@ html.light .external-card {
   font-size: 13px;
   line-height: 18px;
   text-align: center;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 980px) {
