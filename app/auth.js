@@ -529,6 +529,58 @@
     });
   }
 
+  /* ───── Page transitions: fade out before navigating to a local page ─ */
+  function setupPageTransitions() {
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href) return;
+      // Skip new-tab, external, anchor, mailto, tel, javascript: links
+      if (a.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (/^(https?:|mailto:|tel:|javascript:)/.test(href)) return;
+      if (href.startsWith('#')) return;
+      // Same-document hash navigation
+      if (href.includes('#')) {
+        const [path] = href.split('#');
+        if (!path || path === location.pathname.split('/').pop()) return;
+      }
+      e.preventDefault();
+      document.body.classList.add('leaving');
+      setTimeout(() => { window.location.href = href; }, 220);
+    });
+    // Ensure the leaving class is cleared if the user comes back via bfcache
+    window.addEventListener('pageshow', () => {
+      document.body.classList.remove('leaving');
+    });
+  }
+
+  /* ───── Click ripple on primary buttons ───── */
+  function setupRipple() {
+    const SELECTOR = '.signin-cta, .pick-cta, .picker-btn.save, .fab, .edit-btn';
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest(SELECTOR);
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'eceuh-ripple';
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top  = (e.clientY - rect.top  - size / 2) + 'px';
+      // Make sure the host can position the ripple
+      const cs = getComputedStyle(btn);
+      if (cs.position === 'static') btn.style.position = 'relative';
+      const prevOverflow = btn.style.overflow;
+      btn.style.overflow = 'hidden';
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => {
+        ripple.remove();
+        btn.style.overflow = prevOverflow;
+      });
+    });
+  }
+
   /* ───── Boot ───── */
   function boot() {
     initTheme();
@@ -538,6 +590,8 @@
     renderSlot();
     wireThemeToggle();
     bindProgress();
+    setupPageTransitions();
+    setupRipple();
 
     const c = client();
     if (c) {
