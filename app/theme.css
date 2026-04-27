@@ -315,10 +315,10 @@ html.light .guide-card {
 
 /* ── Standardized footer ──────────────────────────────────────────────── */
 .eceuh-footer {
-  background: rgba(38, 24, 23, 0.3) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-  padding: 32px 24px !important;
-  text-align: center !important;
+background: transparent;
+  border-top: 1px solid var(--eceuh-border);
+  padding: 32px 24px;
+  text-align: center;
   font-family: var(--eceuh-sans);
 }
 .eceuh-footer p {
