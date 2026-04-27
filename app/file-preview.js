@@ -12,9 +12,15 @@
     style.id = 'file-preview-styles';
     style.textContent = `
       .file-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      
+      /* 1. MAIN BUTTONS SIZING */
       .file-actions .action-btn,
       .file-actions .action-btn-ghost {
         display: inline-flex; align-items: center; gap: 6px;
+        justify-content: center;
+        width: 135px; 
+        box-sizing: border-box; 
+        flex: none; 
         padding: 8px 14px;
         border-radius: 9999px;
         font-family: 'Inter', sans-serif;
@@ -26,29 +32,20 @@
         border: 1px solid transparent;
         transition: filter .15s, background .15s, border-color .15s, transform .1s;
       }
-      .file-actions .action-btn {
-        background: #FF6363;
-        color: #fff;
-      }
+      
+      .file-actions .action-btn { background: #FF6363; color: #fff; }
       .file-actions .action-btn:hover { filter: brightness(1.08); }
       .file-actions .action-btn:active { transform: scale(0.96); }
-      .file-actions .action-btn-ghost {
-        background: rgba(255, 99, 99, 0.10);
-        color: #FF6363;
-        border-color: rgba(255, 99, 99, 0.25);
-      }
-      .file-actions .action-btn-ghost:hover {
-        background: rgba(255, 99, 99, 0.18);
-        border-color: #FF6363;
-      }
+      .file-actions .action-btn-ghost { background: rgba(255, 99, 99, 0.10); color: #FF6363; border-color: rgba(255, 99, 99, 0.25); }
+      .file-actions .action-btn-ghost:hover { background: rgba(255, 99, 99, 0.18); border-color: #FF6363; }
       .file-actions .action-btn-ghost:active { transform: scale(0.96); }
-      .file-actions .action-btn svg, .file-actions .action-btn-ghost svg {
-        width: 14px; height: 14px;
-      }
+      .file-actions .action-btn svg, .file-actions .action-btn-ghost svg { width: 14px; height: 14px; }
 
       .versions-menu { position: relative; }
+      
+      /* 2. VERSIONS BUTTON SIZING (MATCHES 135px EXACTLY) */
       .versions-menu summary {
-        display: inline-flex; align-items: center; gap: 6px;
+        display: inline-flex; align-items: center; justify-content: space-between; gap: 6px;
         padding: 8px 14px;
         border-radius: 9999px;
         background: rgba(255, 255, 255, 0.05);
@@ -60,35 +57,56 @@
         letter-spacing: 0.4px;
         list-style: none;
         cursor: pointer;
+        width: 135px; 
+        box-sizing: border-box; 
+        flex: none; 
       }
-      html.light .versions-menu summary {
-        background: rgba(26, 26, 46, 0.04);
-        border-color: rgba(26, 26, 46, 0.10);
-        color: #475569;
+      
+      /* The window that clips the text */
+      .marquee-container {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
       }
+      
+      /* Only applies the fade mask if JS detects overflow */
+      .marquee-container.is-overflowing {
+        text-align: left;
+        -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+        mask-image: linear-gradient(to right, black 80%, transparent 100%);
+      }
+      
+      /* The text that slides */
+      .active-ver-label {
+        display: inline-block;
+      }
+      
+      /* Trigger the 3 second looping slide ONLY if overflowing */
+      .marquee-container.is-overflowing .active-ver-label {
+        animation: slide-text 3s ease-in-out infinite alternate;
+      }
+      
+      /* Uses a CSS variable calculated by JS to pan exactly to the end of the word */
+      @keyframes slide-text {
+        0%, 15% { transform: translateX(0); }
+        85%, 100% { transform: translateX(var(--scroll-dist, -20px)); }
+      }
+        
+      html.light .versions-menu summary { background: rgba(26, 26, 46, 0.04); border-color: rgba(26, 26, 46, 0.10); color: #475569; }
       .versions-menu summary::-webkit-details-marker { display: none; }
       .versions-menu summary:hover { color: #fff; border-color: #FF6363; }
       html.light .versions-menu summary:hover { color: #1A1A2E; }
-      .versions-menu summary::after {
-        content: '▾'; font-size: 10px; line-height: 1; margin-left: 2px;
-      }
+      .versions-menu summary::after { content: '▾'; font-size: 10px; line-height: 1; margin-left: 2px; }
       .versions-menu[open] summary::after { content: '▴'; }
       .versions-list {
-        position: absolute;
-        right: 0; top: calc(100% + 6px);
-        min-width: 200px;
-        background: #0f0f1c;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 6px;
-        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        z-index: 50;
-        display: flex; flex-direction: column; gap: 2px;
+        position: absolute; right: 0; top: calc(100% + 6px); min-width: 200px;
+        background: #0f0f1c; border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px; padding: 6px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        z-index: 50; display: flex; flex-direction: column; gap: 2px;
         animation: vmFade .15s ease-out;
       }
-      html.light .versions-list {
-        background: #fff5f3; border-color: rgba(26, 26, 46, 0.12);
-      }
+      html.light .versions-list { background: #fff5f3; border-color: rgba(26, 26, 46, 0.12); }
       @keyframes vmFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
       .versions-list a, .versions-list button {
         display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -97,62 +115,29 @@
         text-decoration: none; cursor: pointer; text-align: left; width: 100%;
       }
       html.light .versions-list a, html.light .versions-list button { color: #1A1A2E; }
-      .versions-list a:hover, .versions-list button:hover {
-        background: rgba(255, 99, 99, 0.12); color: #FF6363;
-      }
-      .versions-list .ext {
-        font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;
-      }
+      .versions-list a:hover, .versions-list button:hover { background: rgba(255, 99, 99, 0.12); color: #FF6363; }
+      .versions-list .ext { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8; }
 
       /* ── Preview modal ── */
       #file-preview-modal { position: fixed; inset: 0; display: none; z-index: 1500; }
       #file-preview-modal.open { display: block; animation: fpFade .2s ease-out; }
       @keyframes fpFade { from { opacity: 0; } to { opacity: 1; } }
-      #file-preview-modal .preview-backdrop {
-        position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-      }
-      #file-preview-modal .preview-shell {
-        position: absolute; top: 32px; bottom: 32px; left: 32px; right: 32px;
-        background: #0f0f1c; border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 18px; display: flex; flex-direction: column;
-        overflow: hidden; box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6);
-      }
-      #file-preview-modal .preview-head {
-        padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
-        display: flex; align-items: center; justify-content: space-between; gap: 16px; flex: none;
-      }
-      #file-preview-modal .preview-title {
-        font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #fff;
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0;
-      }
+      #file-preview-modal .preview-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      #file-preview-modal .preview-shell { position: absolute; top: 32px; bottom: 32px; left: 32px; right: 32px; background: #0f0f1c; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6); }
+      #file-preview-modal .preview-head { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex: none; }
+      #file-preview-modal .preview-title { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
       #file-preview-modal .preview-actions { display: flex; align-items: center; gap: 6px; flex: none; }
-      #file-preview-modal .preview-actions a,
-      #file-preview-modal .preview-actions button {
-        display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px;
-        border-radius: 9999px; background: rgba(255, 255, 255, 0.06); color: #e2e8f0;
-        text-decoration: none; font-family: 'Inter', sans-serif; font-size: 12px;
-        font-weight: 600; border: none; cursor: pointer; transition: background .15s, color .15s;
-      }
-      #file-preview-modal .preview-actions a:hover,
-      #file-preview-modal .preview-actions button:hover { background: rgba(255, 99, 99, 0.2); color: #fff; }
+      #file-preview-modal .preview-actions a, #file-preview-modal .preview-actions button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9999px; background: rgba(255, 255, 255, 0.06); color: #e2e8f0; text-decoration: none; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; border: none; cursor: pointer; transition: background .15s, color .15s; }
+      #file-preview-modal .preview-actions a:hover, #file-preview-modal .preview-actions button:hover { background: rgba(255, 99, 99, 0.2); color: #fff; }
       #file-preview-modal .preview-actions svg { width: 14px; height: 14px; }
       #file-preview-modal .preview-frame { flex: 1; width: 100%; border: none; background: #fff; }
-      #file-preview-modal .preview-fallback {
-        flex: 1; display: none; align-items: center; justify-content: center;
-        flex-direction: column; gap: 12px; padding: 40px; text-align: center;
-        color: #94A3B8; font-family: 'Inter', sans-serif;
-      }
+      #file-preview-modal .preview-fallback { flex: 1; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 40px; text-align: center; color: #94A3B8; font-family: 'Inter', sans-serif; }
       #file-preview-modal .preview-fallback strong { color: #fff; font-size: 16px; display: block; }
       #file-preview-modal .preview-fallback a { color: #FF6363; text-decoration: underline; }
       #file-preview-modal.fallback .preview-frame { display: none; }
       #file-preview-modal.fallback .preview-fallback { display: flex; }
-
       body.preview-open { overflow: hidden; }
-
-      @media (max-width: 700px) {
-        #file-preview-modal .preview-shell { top: 0; bottom: 0; left: 0; right: 0; border-radius: 0; }
-      }
+      @media (max-width: 700px) { #file-preview-modal .preview-shell { top: 0; bottom: 0; left: 0; right: 0; border-radius: 0; } }
     `;
     document.head.appendChild(style);
 
@@ -248,10 +233,9 @@
       const primaryExt = (primary.url.split('?')[0].split('.').pop() || '').toLowerCase();
       const verName = primary.label || primaryExt.toUpperCase();
       
-      // Update: Unified versions dropdown using data attributes to swap
       const versionsBlock = item.versions.length > 1 ? `
         <details class="versions-menu">
-          <summary>Version: <span class="active-ver-label">${verName}</span></summary>
+          <summary><div class="marquee-container"><span class="active-ver-label">${verName}</span></div></summary>
           <div class="versions-list">
             ${item.versions.map(v => {
               const vExt = (v.url.split('?')[0].split('.').pop() || '').toUpperCase();
@@ -295,6 +279,25 @@
     }).join('');
   }
 
+  /* ───── Checks widths to apply scrolling ONLY if needed ───── */
+  function updateMarquees() {
+    document.querySelectorAll('.marquee-container').forEach(container => {
+      const label = container.querySelector('.active-ver-label');
+      if (!label) return;
+      
+      // Temporarily remove overflow styling to measure true width
+      container.classList.remove('is-overflowing');
+      
+      const difference = label.scrollWidth - container.clientWidth;
+      
+      if (difference > 0) {
+        // If it overflows, calculate exactly how far it needs to slide and apply animation
+        container.style.setProperty('--scroll-dist', `-${difference + 8}px`);
+        container.classList.add('is-overflowing');
+      }
+    });
+  }
+
   /* ───── Auto-upgrade old static cards (single Open File link) ───── */
   function upgradeLegacy() {
     document.querySelectorAll('.file-entry').forEach((entry) => {
@@ -327,25 +330,22 @@
       const card = swapBtn.closest('.file-entry');
       const detailsMenu = swapBtn.closest('details');
 
-      // Grab the new data from the clicked version button
       const newUrl = swapBtn.dataset.url;
       const newLabel = swapBtn.dataset.label;
       const newTitle = swapBtn.dataset.title;
       const newExt = swapBtn.dataset.ext;
 
-      // Update the main Preview and Download buttons on the card
       const previewBtn = card.querySelector('.dyn-preview');
       const downloadBtn = card.querySelector('.dyn-download');
       
       if (previewBtn) {
         previewBtn.dataset.previewSrc = newUrl;
-        previewBtn.dataset.previewName = newTitle + ' — ' + newLabel; // Add version to modal title
+        previewBtn.dataset.previewName = newTitle + ' — ' + newLabel;
       }
       if (downloadBtn) {
         downloadBtn.href = newUrl;
       }
 
-      // Update the visual text labels on the card
       const activeVerLabel = card.querySelector('.active-ver-label');
       if (activeVerLabel) activeVerLabel.textContent = newLabel;
 
@@ -354,12 +354,14 @@
         fileLabel.textContent = newLabel.toUpperCase() === newExt.toUpperCase() ? newLabel : newLabel + ' · ' + newExt;
       }
 
-      // Close the dropdown menu
       if (detailsMenu) detailsMenu.removeAttribute('open');
+      
+      // Check if the newly selected word needs to scroll
+      setTimeout(updateMarquees, 10); 
       return; 
     }
 
-    // 2. Handle Preview Modal Opening (Your original listener)
+    // 2. Handle Preview Modal Opening
     const target = e.target.closest('[data-preview-src]');
     if (!target) return;
     e.preventDefault();
@@ -377,12 +379,18 @@
       if (host) renderCards(host, window.FILE_DATA);
     }
     upgradeLegacy();
+    
+    // Check all buttons on page load to see if they need to scroll
+    setTimeout(updateMarquees, 50); 
   }
 
   window.eceuhFilePreview = {
     open: openModal,
     close: closeModal,
-    render: (host, items) => renderCards(host, items),
+    render: (host, items) => {
+      renderCards(host, items);
+      setTimeout(updateMarquees, 50); 
+    },
     upgradeLegacy,
   };
 
