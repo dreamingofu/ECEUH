@@ -345,11 +345,11 @@
         </details>
       ` : '';
       return `
-        <article class="file-entry" data-type="${item.type || 'reference'}">
+        <article class="file-entry" data-type="${item.type || 'reference'}" data-upgraded="1">
           <div class="file-content">
             <div class="file-meta">
               <span class="type-chip ${item.type || 'reference'}">${item.label || (item.type || 'Reference')}</span>
-              <span class="file-label">${verName} · ${primaryExt.toUpperCase()}</span>
+              <span class="file-label">${verName.toUpperCase() === primaryExt.toUpperCase() ? verName : verName + ' · ' + primaryExt.toUpperCase()}</span>
             </div>
             <h3 class="file-title">${item.title}</h3>
             ${item.desc ? `<p class="file-desc">${item.desc}</p>` : ''}
