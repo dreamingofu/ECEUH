@@ -1,29 +1,5 @@
 /* ECEUH file preview module
    Drop-in script for any course file library page.
-
-   Usage:
-   1) Define a global FILE_DATA array in your page like:
-        const FILE_DATA = [
-          {
-            type: 'homework',          // chip class: quiz | exam | reference | homework | lab
-            label: 'Homework',         // chip label
-            title: 'HW1 — Tagged',
-            desc:  'Spring 2026 homework 1',
-            date:  'Apr 2026',
-            versions: [
-              { label: 'PDF',  url: 'https://.../HW1.pdf'  },
-              { label: 'DOCX', url: 'https://.../HW1.docx' }
-            ]
-          },
-          ...
-        ];
-   2) Add an empty <div class="file-list" id="file-list"></div> where cards
-      should render.
-   3) Include this script with `defer`.
-
-   The module also auto-binds to any pre-existing <article class="file-entry">
-   that has a single <a class="action-btn" href="…"> — it upgrades that link
-   into a Preview + Download pair so old static pages keep working.
 */
 (function () {
   if (window.eceuhFilePreview) return;
@@ -70,9 +46,7 @@
         width: 14px; height: 14px;
       }
 
-      .versions-menu {
-        position: relative;
-      }
+      .versions-menu { position: relative; }
       .versions-menu summary {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 8px 14px;
@@ -96,9 +70,7 @@
       .versions-menu summary:hover { color: #fff; border-color: #FF6363; }
       html.light .versions-menu summary:hover { color: #1A1A2E; }
       .versions-menu summary::after {
-        content: '▾';
-        font-size: 10px; line-height: 1;
-        margin-left: 2px;
+        content: '▾'; font-size: 10px; line-height: 1; margin-left: 2px;
       }
       .versions-menu[open] summary::after { content: '▴'; }
       .versions-list {
@@ -115,120 +87,64 @@
         animation: vmFade .15s ease-out;
       }
       html.light .versions-list {
-        background: #fff5f3;
-        border-color: rgba(26, 26, 46, 0.12);
+        background: #fff5f3; border-color: rgba(26, 26, 46, 0.12);
       }
       @keyframes vmFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
       .versions-list a, .versions-list button {
         display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        padding: 10px 12px;
-        border-radius: 8px;
-        background: none; border: none;
-        color: #e2e8f0;
-        font-family: 'Inter', sans-serif;
-        font-size: 12px;
-        text-decoration: none;
-        cursor: pointer;
-        text-align: left;
+        padding: 10px 12px; border-radius: 8px; background: none; border: none;
+        color: #e2e8f0; font-family: 'Inter', sans-serif; font-size: 12px;
+        text-decoration: none; cursor: pointer; text-align: left; width: 100%;
       }
       html.light .versions-list a, html.light .versions-list button { color: #1A1A2E; }
       .versions-list a:hover, .versions-list button:hover {
-        background: rgba(255, 99, 99, 0.12);
-        color: #FF6363;
+        background: rgba(255, 99, 99, 0.12); color: #FF6363;
       }
       .versions-list .ext {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-        color: #94A3B8;
+        font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #94A3B8;
       }
 
       /* ── Preview modal ── */
-      #file-preview-modal {
-        position: fixed; inset: 0;
-        display: none;
-        z-index: 1500;
-      }
+      #file-preview-modal { position: fixed; inset: 0; display: none; z-index: 1500; }
       #file-preview-modal.open { display: block; animation: fpFade .2s ease-out; }
       @keyframes fpFade { from { opacity: 0; } to { opacity: 1; } }
       #file-preview-modal .preview-backdrop {
-        position: absolute; inset: 0;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
+        position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
       }
       #file-preview-modal .preview-shell {
-        position: absolute;
-        top: 32px; bottom: 32px; left: 32px; right: 32px;
-        background: #0f0f1c;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 18px;
-        display: flex; flex-direction: column;
-        overflow: hidden;
-        box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6);
+        position: absolute; top: 32px; bottom: 32px; left: 32px; right: 32px;
+        background: #0f0f1c; border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px; display: flex; flex-direction: column;
+        overflow: hidden; box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6);
       }
       #file-preview-modal .preview-head {
-        padding: 14px 18px;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-        display: flex; align-items: center; justify-content: space-between;
-        gap: 16px;
-        flex: none;
+        padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: space-between; gap: 16px; flex: none;
       }
       #file-preview-modal .preview-title {
-        font-family: 'Inter', sans-serif;
-        font-size: 13px;
-        font-weight: 700;
-        color: #fff;
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        flex: 1; min-width: 0;
+        font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; color: #fff;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0;
       }
       #file-preview-modal .preview-actions { display: flex; align-items: center; gap: 6px; flex: none; }
       #file-preview-modal .preview-actions a,
       #file-preview-modal .preview-actions button {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 7px 12px;
-        border-radius: 9999px;
-        background: rgba(255, 255, 255, 0.06);
-        color: #e2e8f0;
-        text-decoration: none;
-        font-family: 'Inter', sans-serif;
-        font-size: 12px;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-        transition: background .15s, color .15s;
+        display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px;
+        border-radius: 9999px; background: rgba(255, 255, 255, 0.06); color: #e2e8f0;
+        text-decoration: none; font-family: 'Inter', sans-serif; font-size: 12px;
+        font-weight: 600; border: none; cursor: pointer; transition: background .15s, color .15s;
       }
       #file-preview-modal .preview-actions a:hover,
-      #file-preview-modal .preview-actions button:hover {
-        background: rgba(255, 99, 99, 0.2);
-        color: #fff;
-      }
+      #file-preview-modal .preview-actions button:hover { background: rgba(255, 99, 99, 0.2); color: #fff; }
       #file-preview-modal .preview-actions svg { width: 14px; height: 14px; }
-      #file-preview-modal .preview-frame {
-        flex: 1;
-        width: 100%;
-        border: none;
-        background: #fff;
-      }
+      #file-preview-modal .preview-frame { flex: 1; width: 100%; border: none; background: #fff; }
       #file-preview-modal .preview-fallback {
-        flex: 1;
-        display: none;
-        align-items: center; justify-content: center;
-        flex-direction: column;
-        gap: 12px;
-        padding: 40px;
-        text-align: center;
-        color: #94A3B8;
-        font-family: 'Inter', sans-serif;
+        flex: 1; display: none; align-items: center; justify-content: center;
+        flex-direction: column; gap: 12px; padding: 40px; text-align: center;
+        color: #94A3B8; font-family: 'Inter', sans-serif;
       }
-      #file-preview-modal .preview-fallback strong {
-        color: #fff;
-        font-size: 16px;
-        display: block;
-      }
-      #file-preview-modal .preview-fallback a {
-        color: #FF6363;
-        text-decoration: underline;
-      }
+      #file-preview-modal .preview-fallback strong { color: #fff; font-size: 16px; display: block; }
+      #file-preview-modal .preview-fallback a { color: #FF6363; text-decoration: underline; }
       #file-preview-modal.fallback .preview-frame { display: none; }
       #file-preview-modal.fallback .preview-fallback { display: flex; }
 
@@ -331,35 +247,45 @@
       const primary = pickPrimary(item.versions);
       const primaryExt = (primary.url.split('?')[0].split('.').pop() || '').toLowerCase();
       const verName = primary.label || primaryExt.toUpperCase();
+      
+      // Update: Unified versions dropdown using data attributes to swap
       const versionsBlock = item.versions.length > 1 ? `
         <details class="versions-menu">
-          <summary>${item.versions.map(v => v.label || (v.url.split('.').pop() || '').toUpperCase()).join(' · ')}</summary>
+          <summary>Version: <span class="active-ver-label">${verName}</span></summary>
           <div class="versions-list">
-            ${item.versions.map(v => `
-              <a href="${v.url}" target="_blank" rel="noopener" data-preview-src="${v.url}" data-preview-name="${(item.title + ' — ' + (v.label || ''))}">
-                <span>${v.label || ''}</span>
-                <span class="ext">${(v.url.split('?')[0].split('.').pop() || '').toUpperCase()}</span>
-              </a>
-            `).join('')}
+            ${item.versions.map(v => {
+              const vExt = (v.url.split('?')[0].split('.').pop() || '').toUpperCase();
+              const vLabel = v.label || vExt;
+              return `
+              <button type="button" class="version-swap-btn" 
+                data-url="${v.url}" 
+                data-label="${vLabel}" 
+                data-ext="${vExt}" 
+                data-title="${item.title}">
+                <span>${vLabel}</span>
+                <span class="ext">${vExt}</span>
+              </button>
+            `}).join('')}
           </div>
         </details>
       ` : '';
+      
       return `
         <article class="file-entry" data-type="${item.type || 'reference'}" data-upgraded="1">
           <div class="file-content">
             <div class="file-meta">
               <span class="type-chip ${item.type || 'reference'}">${item.label || (item.type || 'Reference')}</span>
-              <span class="file-label">${verName.toUpperCase() === primaryExt.toUpperCase() ? verName : verName + ' · ' + primaryExt.toUpperCase()}</span>
+              <span class="file-label dynamic-file-label">${verName.toUpperCase() === primaryExt.toUpperCase() ? verName : verName + ' · ' + primaryExt.toUpperCase()}</span>
             </div>
             <h3 class="file-title">${item.title}</h3>
             ${item.desc ? `<p class="file-desc">${item.desc}</p>` : ''}
           </div>
           <div class="file-actions">
             ${item.date ? `<span class="file-date">${item.date}</span>` : ''}
-            <button class="action-btn-ghost" data-preview-src="${primary.url}" data-preview-name="${item.title}">
+            <button class="action-btn-ghost dyn-preview" data-preview-src="${primary.url}" data-preview-name="${item.title}">
               ${iconSvg('preview')} Preview
             </button>
-            <a class="action-btn" href="${primary.url}" download>
+            <a class="action-btn dyn-download" href="${primary.url}" download>
               ${iconSvg('download')} Download
             </a>
             ${versionsBlock}
@@ -378,15 +304,13 @@
       const url = link.href;
       if (!url || url === window.location.href) return;
       const title = entry.querySelector('.file-title')?.textContent?.trim() || 'File';
-      const ext = (url.split('?')[0].split('.').pop() || '').toLowerCase();
       const actions = entry.querySelector('.file-actions');
-      // Replace the old single link with Preview + Download
       link.remove();
       actions.insertAdjacentHTML('beforeend', `
-        <button class="action-btn-ghost" data-preview-src="${url}" data-preview-name="${title.replace(/"/g, '&quot;')}">
+        <button class="action-btn-ghost dyn-preview" data-preview-src="${url}" data-preview-name="${title.replace(/"/g, '&quot;')}">
           ${iconSvg('preview')} Preview
         </button>
-        <a class="action-btn" href="${url}" download>
+        <a class="action-btn dyn-download" href="${url}" download>
           ${iconSvg('download')} Download
         </a>
       `);
@@ -396,6 +320,46 @@
 
   /* ───── Bind clicks (event delegation) ───── */
   document.addEventListener('click', (e) => {
+    // 1. Handle Version Swapping
+    const swapBtn = e.target.closest('.version-swap-btn');
+    if (swapBtn) {
+      e.preventDefault();
+      const card = swapBtn.closest('.file-entry');
+      const detailsMenu = swapBtn.closest('details');
+
+      // Grab the new data from the clicked version button
+      const newUrl = swapBtn.dataset.url;
+      const newLabel = swapBtn.dataset.label;
+      const newTitle = swapBtn.dataset.title;
+      const newExt = swapBtn.dataset.ext;
+
+      // Update the main Preview and Download buttons on the card
+      const previewBtn = card.querySelector('.dyn-preview');
+      const downloadBtn = card.querySelector('.dyn-download');
+      
+      if (previewBtn) {
+        previewBtn.dataset.previewSrc = newUrl;
+        previewBtn.dataset.previewName = newTitle + ' — ' + newLabel; // Add version to modal title
+      }
+      if (downloadBtn) {
+        downloadBtn.href = newUrl;
+      }
+
+      // Update the visual text labels on the card
+      const activeVerLabel = card.querySelector('.active-ver-label');
+      if (activeVerLabel) activeVerLabel.textContent = newLabel;
+
+      const fileLabel = card.querySelector('.dynamic-file-label');
+      if (fileLabel) {
+        fileLabel.textContent = newLabel.toUpperCase() === newExt.toUpperCase() ? newLabel : newLabel + ' · ' + newExt;
+      }
+
+      // Close the dropdown menu
+      if (detailsMenu) detailsMenu.removeAttribute('open');
+      return; 
+    }
+
+    // 2. Handle Preview Modal Opening (Your original listener)
     const target = e.target.closest('[data-preview-src]');
     if (!target) return;
     e.preventDefault();
@@ -408,7 +372,6 @@
   /* ───── Boot ───── */
   function boot() {
     injectModal();
-    // If page exposed a FILE_DATA + #file-list, render cards
     if (window.FILE_DATA && Array.isArray(window.FILE_DATA)) {
       const host = document.getElementById('file-list');
       if (host) renderCards(host, window.FILE_DATA);
