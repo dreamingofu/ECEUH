@@ -231,12 +231,13 @@
     /* ── HERO / COMMAND PALETTE ── */
     .hero {
       position: relative;
+      z-index: 10;
       padding: 4px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 24px;
       box-shadow: var(--shadow-card);
-      overflow: hidden;
+      overflow: visible;
     }
     .hero::before {
       content: '';
@@ -258,6 +259,7 @@
       -webkit-backdrop-filter: blur(6px);
       display: flex; flex-direction: column; gap: 48px;
       z-index: 1;
+      overflow: visible;
     }
     .hero-row {
       display: flex; align-items: center; justify-content: space-between;
@@ -302,6 +304,7 @@
       border-radius: 16px;
       padding: 26px 96px 26px 64px;
     }
+    .palette-shell { position: relative; z-index: 30; }
     .palette-icon {
       position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
       width: 18px; height: 18px;
@@ -319,6 +322,69 @@
     .palette-keys {
       position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
       display: flex; align-items: center; gap: 8px;
+    }
+    .search-results {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 10px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-2);
+      border-radius: 18px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      max-height: min(420px, 55vh);
+      overflow-y: auto;
+      display: none;
+      z-index: 40;
+    }
+    .search-results.open { display: block; }
+    .search-results::-webkit-scrollbar { width: 8px; }
+    .search-results::-webkit-scrollbar-track { background: transparent; }
+    .search-results::-webkit-scrollbar-thumb {
+      background: var(--border-2);
+      border-radius: 999px;
+    }
+    .search-results::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    .search-result {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: background .18s ease;
+    }
+    .search-result:last-child { border-bottom: none; }
+    .search-result:hover,
+    .search-result.active { background: var(--bg-active); }
+    .search-result-main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .search-result-type {
+      font-size: 10px; line-height: 14px;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .search-result-title {
+      font-family: var(--serif);
+      font-size: 18px; line-height: 22px;
+      color: var(--text);
+    }
+    .search-result-desc {
+      font-size: 13px; line-height: 18px;
+      color: var(--text-muted);
+    }
+    .search-result-meta {
+      font-family: var(--mono);
+      font-size: 11px; line-height: 15px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .search-empty {
+      padding: 16px 18px;
+      color: var(--text-muted);
+      font-size: 14px; line-height: 20px;
     }
     .key {
       font-family: var(--mono);
@@ -736,6 +802,53 @@
       .palette input { font-size: 16px; }
       .fab { right: 16px; bottom: 16px; width: 56px; height: 56px; }
     }
+    @media (max-width: 760px) {
+      .hero-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .avatar-stack {
+        align-self: flex-start;
+      }
+      .bento-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .edit-btn {
+        min-height: 40px;
+      }
+      .search-results {
+        max-height: min(52vh, 360px);
+      }
+      .search-result {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .search-result-meta {
+        white-space: normal;
+      }
+    }
+    @media (max-width: 560px) {
+      .hero-title {
+        font-size: clamp(34px, 11vw, 46px);
+      }
+      .hero-desc {
+        font-size: 15px;
+        line-height: 24px;
+      }
+      .palette {
+        padding: 18px 16px 18px 48px;
+      }
+      .search-result-title {
+        font-size: 16px;
+        line-height: 20px;
+      }
+      .search-result-desc {
+        font-size: 12px;
+        line-height: 17px;
+      }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
@@ -761,11 +874,14 @@
             </div>
           </div>
 
-          <form class="palette" onsubmit="event.preventDefault(); document.getElementById('archives').scrollIntoView({behavior:'smooth'});">
-            <svg class="palette-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="search" placeholder="Access course archives, lab journals, or faculty papers…" aria-label="Search the knowledge base"/>
-            <span class="palette-keys"><span class="key">⌘</span><span class="key">K</span></span>
-          </form>
+          <div class="palette-shell">
+            <form class="palette" id="search-form">
+              <svg class="palette-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="search" id="search-input" placeholder="Search live course files, archives, and faculty pages…" aria-label="Search the knowledge base" autocomplete="off"/>
+              <span class="palette-keys"><span class="key">⌘</span><span class="key">K</span></span>
+            </form>
+            <div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div>
+          </div>
         </div>
       </section>
 
@@ -959,6 +1075,133 @@
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         palette && palette.focus();
+      }
+    });
+
+    const SEARCH_INDEX = [
+      { type: 'Course', title: 'Digital Logic Design', desc: 'Course hub for topics, file library, and external resources.', href: 'dld.html', meta: 'ECE-3441', keywords: ['dld', 'digital logic', 'logic design', 'boolean algebra', 'fsm'] },
+      { type: 'Course', title: 'Circuits 2', desc: 'Course hub for phasors, RLC work, files, and references.', href: 'circuits2.html', meta: 'ECE-2202', keywords: ['circuits', 'phasors', 'rlc', 'bode', 'laplace'] },
+      { type: 'Course', title: 'Programming with C', desc: 'Course hub for pointers, memory, file library, and references.', href: 'cprog.html', meta: 'ECE-3331', keywords: ['c', 'programming', 'pointers', 'memory', 'algorithms'] },
+      { type: 'Reference', title: 'Professor Ratings', desc: 'Faculty ratings and professor reference pages.', href: 'professors.html', meta: 'Faculty', keywords: ['professors', 'faculty', 'ratings', 'rmp'] },
+      { type: 'Topics', title: 'DLD Topics', desc: 'Boolean algebra, logic gates, K-maps, sequential logic, and FSMs.', href: 'dld-topics.html', meta: 'Unit map', keywords: ['dld topics', 'kmap', 'logic gates', 'sequential'] },
+      { type: 'Files', title: 'DLD File Library', desc: 'Bucket-backed classwork, review packets, and reference docs.', href: 'dld-resources.html', meta: 'R2 files', keywords: ['dld files', 'cw1', 'cw2', 'cw3', 'cw4', 'cw5'] },
+      { type: 'Links', title: 'DLD External Resources', desc: 'NandGame, Logic.ly, MIT OCW, and other DLD references.', href: 'dld-links.html', meta: 'External', keywords: ['nandgame', 'logic.ly', 'mit ocw'] },
+      { type: 'Topics', title: 'Circuits 2 Topics', desc: 'Sinusoidal steady-state, impedance, AC power, filters, and Laplace.', href: 'circuits2-topics.html', meta: 'Unit map', keywords: ['circuits topics', 'steady-state', 'ac power', 'filters'] },
+      { type: 'Files', title: 'Circuits 2 File Library', desc: 'Syllabus, homework solutions, review packets, and quiz files.', href: 'circuits2-files.html', meta: 'R2 files', keywords: ['syllabus', 'homework 4', 'quiz 1', 'quiz 2 solution', 'exam 2 formula', 'review problems'] },
+      { type: 'Links', title: 'Circuits 2 External Resources', desc: 'Circuit simulators and study references for AC analysis.', href: 'circuits2-links.html', meta: 'External', keywords: ['falstad', 'ltspice', 'all about circuits', 'khan academy'] },
+      { type: 'Topics', title: 'C Programming Topics', desc: 'Fundamentals, pointers, arrays, memory, structs, file I/O, and algorithms.', href: 'cprog-topics.html', meta: 'Unit map', keywords: ['c topics', 'pointers', 'arrays', 'file io', 'algorithms'] },
+      { type: 'Files', title: 'C Programming File Library', desc: 'Dedicated course file library for quizzes, exams, and reference sheets.', href: 'cprog-files.html', meta: 'Course files', keywords: ['c files', 'quiz', 'exam', 'reference'] },
+      { type: 'Links', title: 'C Programming External Resources', desc: 'cppreference, Valgrind, GCC docs, and debugging tools.', href: 'cprog-links.html', meta: 'External', keywords: ['cppreference', 'valgrind', 'gcc', 'compiler explorer'] },
+      { type: 'File', title: 'ECE3441 SP26 CW1', desc: 'Digital Logic Design classwork PDF from the live Cloudflare R2 bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW1.pdf', meta: 'PDF · R2', keywords: ['cw1', 'ece3441', 'dld pdf'] },
+      { type: 'File', title: 'ECE3441 SP26 CW2', desc: 'Editable DLD classwork DOCX from the live Cloudflare R2 bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx', meta: 'DOCX · R2', keywords: ['cw2', 'docx', 'ece3441'] },
+      { type: 'File', title: 'ECE3441 SP26 CW3', desc: 'DLD classwork PDF surfaced from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW3-1.pdf', meta: 'PDF · R2', keywords: ['cw3', 'ece3441'] },
+      { type: 'File', title: 'ECE3441 SP26 CW4', desc: 'DLD review-style PDF from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf', meta: 'PDF · R2', keywords: ['cw4', 'review'] },
+      { type: 'File', title: 'ECE3441 SP26 CW5', desc: 'DLD practice PDF linked from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW5.pdf', meta: 'PDF · R2', keywords: ['cw5', 'practice'] },
+      { type: 'File', title: 'Circuits 2 Syllabus', desc: 'Spring 2026 ECE2202 syllabus file from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Syllabus-S26-ECE2202.pdf', meta: 'PDF · R2', keywords: ['circuits syllabus', 'ece2202', 'spring 2026'] },
+      { type: 'File', title: 'Homework 4 Solutions', desc: 'Circuits 2 homework solutions file from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Homework%204%20solutions.pdf', meta: 'PDF · R2', keywords: ['homework 4', 'circuits solutions'] },
+      { type: 'File', title: 'Circuits 2 Quiz 1 Packet', desc: 'First Circuits 2 quiz packet from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Circuits%202_quiz1%201.pdf', meta: 'PDF · R2', keywords: ['quiz 1', 'circuits 2'] },
+      { type: 'File', title: 'Exam 2 Review Problems', desc: 'Tagged review packet for Circuits 2 exam preparation.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Exam%202%20Review%20Problems%20-%20Tagged.pdf', meta: 'PDF · R2', keywords: ['exam 2', 'review problems'] },
+      { type: 'File', title: 'Exam 2 Formula Sheet', desc: 'Editable DOCX formula sheet for Circuits 2.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx', meta: 'DOCX · R2', keywords: ['formula sheet', 'docx', 'exam 2'] },
+      { type: 'File', title: 'Quiz 2 Solution', desc: 'Solution PDF for the second Circuits 2 quiz.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf', meta: 'PDF · R2', keywords: ['quiz 2 solution', 'ece2202'] }
+    ];
+
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    let activeSearchIndex = -1;
+    let currentResults = [];
+
+    function scoreSearch(item, query) {
+      const q = query.toLowerCase().trim();
+      const haystack = `${item.title} ${item.desc} ${item.meta} ${(item.keywords || []).join(' ')}`.toLowerCase();
+      if (!haystack.includes(q)) return -1;
+      if (item.title.toLowerCase() === q) return 200;
+      if (item.title.toLowerCase().startsWith(q)) return 140;
+      if ((item.keywords || []).some((keyword) => keyword.toLowerCase() === q)) return 120;
+      if ((item.keywords || []).some((keyword) => keyword.toLowerCase().includes(q))) return 90;
+      if (item.desc.toLowerCase().includes(q)) return 60;
+      return 40;
+    }
+
+    function renderSearchResults(results) {
+      currentResults = results;
+      activeSearchIndex = results.length ? 0 : -1;
+      if (!results.length) {
+        searchResults.innerHTML = '<div class="search-empty">No matching courses or files yet. Try a course code, topic, or file name.</div>';
+        searchResults.classList.add('open');
+        return;
+      }
+      searchResults.innerHTML = results.map((item, index) => `
+        <a class="search-result ${index === activeSearchIndex ? 'active' : ''}" href="${item.href}" ${item.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} data-search-index="${index}">
+          <div class="search-result-main">
+            <span class="search-result-type">${item.type}</span>
+            <span class="search-result-title">${item.title}</span>
+            <span class="search-result-desc">${item.desc}</span>
+          </div>
+          <span class="search-result-meta">${item.meta}</span>
+        </a>
+      `).join('');
+      searchResults.classList.add('open');
+    }
+
+    function updateActiveResult(nextIndex) {
+      const links = Array.from(searchResults.querySelectorAll('.search-result'));
+      if (!links.length) return;
+      activeSearchIndex = (nextIndex + links.length) % links.length;
+      links.forEach((link, index) => link.classList.toggle('active', index === activeSearchIndex));
+    }
+
+    function runSearch(query) {
+      const trimmed = query.trim();
+      if (!trimmed) {
+        searchResults.classList.remove('open');
+        searchResults.innerHTML = '';
+        currentResults = [];
+        activeSearchIndex = -1;
+        return;
+      }
+      const results = SEARCH_INDEX
+        .map((item) => ({ item, score: scoreSearch(item, trimmed) }))
+        .filter((entry) => entry.score >= 0)
+        .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
+        .slice(0, 8)
+        .map((entry) => entry.item);
+      renderSearchResults(results);
+    }
+
+    searchInput.addEventListener('input', () => runSearch(searchInput.value));
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) runSearch(searchInput.value);
+    });
+    searchInput.addEventListener('keydown', (event) => {
+      if (!currentResults.length) return;
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        updateActiveResult(activeSearchIndex + 1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        updateActiveResult(activeSearchIndex - 1);
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        const target = currentResults[activeSearchIndex] || currentResults[0];
+        if (target) window.location.href = target.href;
+      } else if (event.key === 'Escape') {
+        searchResults.classList.remove('open');
+      }
+    });
+
+    searchForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (currentResults.length) {
+        window.location.href = currentResults[activeSearchIndex] ? currentResults[activeSearchIndex].href : currentResults[0].href;
+      } else {
+        document.getElementById('archives').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!searchForm.contains(event.target) && !searchResults.contains(event.target)) {
+        searchResults.classList.remove('open');
       }
     });
 

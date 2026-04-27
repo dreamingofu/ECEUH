@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - Circuits 2 Topics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="course-pages.js" defer></script>
+</head>
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <div><div class="hero-kicker">Circuits 2</div><h1 class="hero-title">Topics</h1><p class="hero-desc">The dedicated map for the eight-unit circuits sequence.</p></div>
+            <div class="hero-code">UNIT_MAP</div>
+          </div>
+        </div>
+      </section>
+      <section class="section-card">
+        <div class="section-inner">
+          <div class="section-header"><div><div class="section-kicker">01 // Course Content</div><h2 class="section-title">Unit Breakdown</h2></div></div>
+          <div class="topic-grid">
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_01</span><span class="topic-status active">Active</span></div><h3 class="topic-title">Sinusoidal Steady-State Analysis</h3><p class="topic-desc">Response of circuits driven by sinusoids, RMS values, steady-state assumptions, and frequency-aware behavior.</p><div class="topic-tags"><span class="chip">Sinusoids</span><span class="chip">RMS</span><span class="chip">Steady State</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_02</span><span class="topic-status active">Active</span></div><h3 class="topic-title">Phasors &amp; Complex Impedance</h3><p class="topic-desc">Transform voltage and current into phasor form, then work with impedance in complex notation for cleaner AC analysis.</p><div class="topic-tags"><span class="chip">Phasors</span><span class="chip">Impedance</span><span class="chip">Complex Plane</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_03</span><span class="topic-status pending">In Progress</span></div><h3 class="topic-title">AC Power Analysis</h3><p class="topic-desc">Real, reactive, and apparent power with power factor and complex power relationships.</p><div class="topic-tags"><span class="chip">Power Factor</span><span class="chip">Reactive Power</span><span class="chip">Complex Power</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_04</span><span class="topic-status pending">In Progress</span></div><h3 class="topic-title">Series &amp; Parallel RLC Circuits</h3><p class="topic-desc">Transient intuition meets steady-state resonance, damping, and frequency-selective behavior in RLC networks.</p><div class="topic-tags"><span class="chip">Resonance</span><span class="chip">Damping</span><span class="chip">RLC</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_05</span><span class="topic-status upcoming">Upcoming</span></div><h3 class="topic-title">Frequency Response &amp; Bode Plots</h3><p class="topic-desc">Construct and interpret transfer functions in magnitude and phase across frequency.</p><div class="topic-tags"><span class="chip">Bode Plots</span><span class="chip">dB</span><span class="chip">Transfer Functions</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_06</span><span class="topic-status upcoming">Upcoming</span></div><h3 class="topic-title">Active Filters &amp; Op-Amps</h3><p class="topic-desc">Low-pass, high-pass, and band-pass filter topologies implemented with op-amp stages.</p><div class="topic-tags"><span class="chip">Low-Pass</span><span class="chip">Op-Amps</span><span class="chip">Butterworth</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_07</span><span class="topic-status upcoming">Upcoming</span></div><h3 class="topic-title">Three-Phase Circuits</h3><p class="topic-desc">Line and phase relationships, Y and Delta configurations, and power in balanced three-phase systems.</p><div class="topic-tags"><span class="chip">Three Phase</span><span class="chip">Y/Delta</span><span class="chip">Power</span></div></article>
+            <article class="topic-card"><div class="topic-row"><span class="topic-code">UNIT_08</span><span class="topic-status upcoming">Upcoming</span></div><h3 class="topic-title">Laplace Transform &amp; Circuit Analysis</h3><p class="topic-desc">Bring initial conditions, poles, zeros, and the s-domain into the analysis toolkit.</p><div class="topic-tags"><span class="chip">s-Domain</span><span class="chip">Poles/Zeros</span><span class="chip">Inverse Laplace</span></div></article>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

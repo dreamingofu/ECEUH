@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(){try{if(localStorage.getItem("ee-theme")==="light")document.documentElement.classList.add("light")}catch(e){}})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EE - Programming with C</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="course-pages.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="course-pages.js" defer></script>
+</head>
+<body class="eceuh-shell eceuh-collapsible course-ui">
+  <main class="course-page">
+    <div class="page-stack">
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <div>
+              <div class="hero-kicker">Course Hub</div>
+              <h1 class="hero-title">Programming with C</h1>
+              <p class="hero-desc">The C course now follows the same clean structure as the rest of the site: one hub, three consistent cards, and dedicated pages for the real content.</p>
+            </div>
+            <div class="hero-code">ECE_3331</div>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">8</span>
+              <span class="hero-stat-label">Core Units</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">6</span>
+              <span class="hero-stat-label">Course File Slots</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">3</span>
+              <span class="hero-stat-label">Destinations</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="hub-grid">
+          <a class="hub-card" href="cprog-topics.html">
+            <div class="hub-media">
+              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80&auto=format&fit=crop');"></div>
+              <div class="hub-meta">
+                <div class="hub-meta-code">C // Topics</div>
+                <div class="hub-meta-title">Topics</div>
+              </div>
+            </div>
+            <div class="hub-body">
+              <h2 class="hub-body-title">Syntax, Memory, Data Structures</h2>
+              <p class="hub-body-text">Move the unit map into its own page so students can focus on the progression from fundamentals to pointers, file I/O, and classic data structures.</p>
+              <div class="hub-tags">
+                <span class="hub-tag">Pointers</span>
+                <span class="hub-tag">Memory</span>
+                <span class="hub-tag">Algorithms</span>
+              </div>
+              <div class="hub-footer">
+                <span>Open unit coverage</span>
+                <span class="hub-arrow">View -></span>
+              </div>
+            </div>
+          </a>
+
+          <a class="hub-card" href="cprog-files.html">
+            <div class="hub-media">
+              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80&auto=format&fit=crop');"></div>
+              <div class="hub-meta">
+                <div class="hub-meta-code">C // Library</div>
+                <div class="hub-meta-title">File Library</div>
+              </div>
+            </div>
+            <div class="hub-body">
+              <h2 class="hub-body-title">Practice Files and Reference Sheets</h2>
+              <p class="hub-body-text">Keep the file library visually aligned with the DLD page while giving the C course its own destination for quizzes, exams, and references.</p>
+              <div class="hub-tags">
+                <span class="hub-tag">Quizzes</span>
+                <span class="hub-tag">Exams</span>
+                <span class="hub-tag">Reference Cards</span>
+              </div>
+              <div class="hub-footer">
+                <span>Open the file stack</span>
+                <span class="hub-arrow">Browse -></span>
+              </div>
+            </div>
+          </a>
+
+          <a class="hub-card" href="cprog-links.html">
+            <div class="hub-media">
+              <div class="hub-art" style="background-image:url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=1200&q=80&auto=format&fit=crop');"></div>
+              <div class="hub-meta">
+                <div class="hub-meta-code">C // Links</div>
+                <div class="hub-meta-title">External Resources</div>
+              </div>
+            </div>
+            <div class="hub-body">
+              <h2 class="hub-body-title">Docs, Debugging, and Practice Tools</h2>
+              <p class="hub-body-text">Curated references for C syntax, compiler behavior, debugging, and memory tools get a proper destination page instead of a tiny block on the course page.</p>
+              <div class="hub-tags">
+                <span class="hub-tag">cppreference</span>
+                <span class="hub-tag">Valgrind</span>
+                <span class="hub-tag">GCC Docs</span>
+              </div>
+              <div class="hub-footer">
+                <span>Open the reference deck</span>
+                <span class="hub-arrow">Explore -></span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <p class="page-footer">Programming with C now shares the same navigation rhythm as the other course hubs, which should make the whole site feel a lot more intentional.</p>
+    </div>
+  </main>
+</body>
+</html>
