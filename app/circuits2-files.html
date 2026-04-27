@@ -13,40 +13,166 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
   <script src="course-pages.js" defer></script>
+  <script src="file-preview.js" defer></script>
 </head>
 <body class="eceuh-shell eceuh-collapsible course-ui">
   <main class="course-page">
     <div class="page-stack">
-      <section class="hero-card"><div class="hero-inner"><div class="hero-top"><div><div class="hero-kicker">Circuits 2</div><h1 class="hero-title">File Library</h1><p class="hero-desc">A dedicated bucket-backed library page for the core Circuits 2 documents.</p></div><div class="hero-code">R2_SYNC</div></div></div></section>
+      <section class="hero-card">
+        <div class="hero-inner">
+          <div class="hero-top">
+            <div>
+              <div class="hero-kicker">Circuits 2</div>
+              <h1 class="hero-title">File Library</h1>
+              <p class="hero-desc">Bucket-backed homework, quizzes, exam reviews and references for ECE 2202. Preview anything inline or grab the editable DOCX where it exists.</p>
+            </div>
+            <div class="hero-code">R2_SYNC</div>
+          </div>
+        </div>
+      </section>
+
       <section class="section-card">
         <div class="section-inner">
-          <div class="section-header"><div><div class="section-kicker">01 // Practice Files</div><h2 class="section-title">Linked Course Files</h2></div></div>
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">01 // Practice Files</div>
+              <h2 class="section-title">Linked Course Files</h2>
+              <p class="section-subtitle">Preview opens the file inline; Download forces a save. PDFs render directly, DOCX files use the Office Online viewer.</p>
+            </div>
+          </div>
+
           <div class="filter-row">
             <button class="filter-btn active" data-filter="all">All Files</button>
+            <button class="filter-btn" data-filter="homework">Homework</button>
             <button class="filter-btn" data-filter="quiz">Quizzes</button>
             <button class="filter-btn" data-filter="exam">Exams</button>
-            <button class="filter-btn" data-filter="reference">Reference Docs</button>
+            <button class="filter-btn" data-filter="reference">Reference</button>
           </div>
-          <div class="file-list">
-            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Course Syllabus</h3><p class="file-desc">Spring 2026 ECE2202 syllabus, linked directly from the public bucket.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Syllabus-S26-ECE2202.pdf" target="_blank" rel="noopener">Open File</a></div></article>
-            <article class="file-entry" data-type="reference"><div><div class="file-meta"><span class="type-chip reference">Reference</span><span class="file-label">Bucket Sync · DOCX</span></div><h3 class="file-title">Exam 2 Formula Sheet</h3><p class="file-desc">Editable formula sheet stored as a DOCX for quick revision or last-minute cleanup before the exam.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx" target="_blank" rel="noopener">Open File</a></div></article>
-            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Quiz 1 Packet</h3><p class="file-desc">The first Circuits 2 quiz packet now lives in the dedicated file page instead of an inline resource card.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Circuits%202_quiz1%201.pdf" target="_blank" rel="noopener">Open File</a></div></article>
-            <article class="file-entry" data-type="quiz"><div><div class="file-meta"><span class="type-chip quiz">Quiz</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Quiz 2 Solution</h3><p class="file-desc">Second quiz solution file, ready to open from the same visual system used by the DLD library page.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf" target="_blank" rel="noopener">Open File</a></div></article>
-            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Exam 2 Review Problems</h3><p class="file-desc">Tagged review packet for the second exam with the same card style as the rest of the site.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Exam%202%20Review%20Problems%20-%20Tagged.pdf" target="_blank" rel="noopener">Open File</a></div></article>
-            <article class="file-entry" data-type="exam"><div><div class="file-meta"><span class="type-chip exam">Exam</span><span class="file-label">Bucket Sync · PDF</span></div><h3 class="file-title">Homework 4 Solutions</h3><p class="file-desc">Worked solutions file promoted into the same library system so it is easier to find from the course hub.</p></div><div class="file-actions"><span class="file-date">Synced Apr 2026</span><a class="action-btn" href="https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Homework%204%20solutions.pdf" target="_blank" rel="noopener">Open File</a></div></article>
-          </div>
+
+          <div class="file-list" id="file-list"></div>
         </div>
       </section>
     </div>
   </main>
+
   <script>
-    const c2Buttons = Array.from(document.querySelectorAll('[data-filter]'));
-    const c2Entries = Array.from(document.querySelectorAll('.file-entry'));
-    function c2Filter(type) {
-      c2Entries.forEach((entry) => entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type));
-      c2Buttons.forEach((button) => button.classList.toggle('active', button.dataset.filter === type));
-    }
-    c2Buttons.forEach((button) => button.addEventListener('click', () => c2Filter(button.dataset.filter)));
+    /* Each item: { type, label, title, desc, date, versions: [{ label, url }] }
+       File-preview.js renders a Preview + Download button; if there's more than
+       one version a "Versions" pill appears that opens a list of all formats. */
+    const BUCKET = 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II';
+
+    window.FILE_DATA = [
+      // ── Reference ──────────────────────────────────────────
+      {
+        type: 'reference', label: 'Syllabus',
+        title: 'Course Syllabus', desc: 'Spring 2026 ECE 2202 syllabus.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Syllabus-S26-ECE2202.pdf' }]
+      },
+      {
+        type: 'reference', label: 'Reference',
+        title: 'Exam 2 Formula Sheet', desc: 'Editable formula sheet — annotate and reprint before the exam.', date: 'S26',
+        versions: [{ label: 'DOCX', url: BUCKET + '/Formula%20Sheet%20Exam%202.docx' }]
+      },
+
+      // ── Quizzes ─────────────────────────────────────────────
+      {
+        type: 'quiz', label: 'Quiz',
+        title: 'Quiz 1 Packet', desc: 'First Circuits 2 quiz packet.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Circuits%202_quiz1%201.pdf' }]
+      },
+      {
+        type: 'quiz', label: 'Quiz',
+        title: 'Quiz 2 — Solution', desc: 'Worked solution for the second quiz.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz2_spring2026_solution.pdf' }]
+      },
+
+      // ── Homework (Spring 2026) ──────────────────────────────
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW1 — Tagged', desc: 'Spring 2026 homework 1 with tagged answer steps.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW1%20-%20Tagged.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW1.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW2 — Tagged (Fall 25)', desc: 'Carry-over homework 2 from Fall 2025; same problem set.', date: 'F25',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-F25-HW2%20-%20Tagged.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-F25-HW2.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW3 — Tagged', desc: 'Spring 2026 homework 3.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW3%20-%20Tagged%281%29.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW3.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW4 — Tagged', desc: 'Spring 2026 homework 4.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW4%20-%20Tagged%281%29.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW4.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW4 — Solutions', desc: 'Worked solutions for homework 4.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Homework%204%20solutions.pdf' }]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW5 — Tagged', desc: 'Spring 2026 homework 5.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW5%20-%20Tagged.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW5.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW6 — Tagged', desc: 'Spring 2026 homework 6.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW6%20-%20Tagged.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW6.docx' }
+        ]
+      },
+      {
+        type: 'homework', label: 'Homework',
+        title: 'HW7 — Tagged', desc: 'Spring 2026 homework 7.', date: 'S26',
+        versions: [
+          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW7%20-%20Tagged.pdf' },
+          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW7.docx' }
+        ]
+      },
+
+      // ── Exams ───────────────────────────────────────────────
+      {
+        type: 'exam', label: 'Exam',
+        title: 'Exam 2 — Review Problems', desc: 'Tagged review packet for exam 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Exam%202%20Review%20Problems%20-%20Tagged.pdf' }]
+      },
+      {
+        type: 'exam', label: 'Exam',
+        title: 'Exam 3 — Review', desc: 'Editable review document for exam 3.', date: 'S26',
+        versions: [{ label: 'DOCX', url: BUCKET + '/ECE2202-S26-Exam3Review.docx' }]
+      },
+    ];
+
+    // Filter buttons (kept here so logic doesn't depend on a mounted child).
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = Array.from(document.querySelectorAll('[data-filter]'));
+      buttons.forEach((btn) => btn.addEventListener('click', () => {
+        const type = btn.dataset.filter;
+        document.querySelectorAll('.file-entry').forEach((entry) => {
+          entry.classList.toggle('hidden', type !== 'all' && entry.dataset.type !== type);
+        });
+        buttons.forEach((b) => b.classList.toggle('active', b === btn));
+      }));
+    });
   </script>
 </body>
 </html>
