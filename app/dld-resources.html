@@ -43,8 +43,10 @@
 
           <div class="filter-row">
             <button class="filter-btn active" data-filter="all">All Files</button>
-            <button class="filter-btn" data-filter="quiz">Classwork</button>
-            <button class="filter-btn" data-filter="exam">Reviews</button>
+            <button class="filter-btn" data-filter="classwork">Classwork</button>
+            <button class="filter-btn" data-filter="quiz">Quizzes</button>
+            <button class="filter-btn" data-filter="exam">Exams</button>
+            <button class="filter-btn" data-filter="homework">Homework</button>
             <button class="filter-btn" data-filter="reference">Reference</button>
           </div>
 
@@ -58,32 +60,56 @@
     const BUCKET = 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld';
 
     window.FILE_DATA = [
-      // ── Classwork ─────────────────────────────────────────
-      {
-        type: 'quiz', label: 'Classwork',
-        title: 'CW1', desc: 'First DLD classwork handout.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/ECE3441_SP26_CW1.pdf' }]
-      },
-      {
-        type: 'quiz', label: 'Classwork',
-        title: 'CW2', desc: 'Second classwork — Word source so it can be edited or annotated.', date: 'S26',
-        versions: [{ label: 'DOCX', url: BUCKET + '/ECE3441_SP26_CW2.docx' }]
-      },
-      {
-        type: 'quiz', label: 'Classwork',
-        title: 'CW3', desc: 'Third classwork handout.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/ECE3441_SP26_CW3-1.pdf' }]
-      },
-      {
-        type: 'exam', label: 'Review',
-        title: 'CW4', desc: 'Review-style DLD material.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/ECE3441_SP26_CW4-1.pdf' }]
-      },
-      {
-        type: 'exam', label: 'Review',
-        title: 'CW5', desc: 'Second review packet.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/ECE3441_SP26_CW5.pdf' }]
-      },
+      // ── Reference ──────────────────────────────────────────
+      { type: 'reference', label: 'Textbook', title: 'DLD Textbook',
+        desc: 'Full course textbook (~26 MB) — keep it open in another tab.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/DLD_Textbook.pdf' }] },
+
+      // ── Classwork ──────────────────────────────────────────
+      { type: 'classwork', label: 'Classwork', title: 'Classwork 1', desc: 'In-class problem set 1.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_ClassWork1.pdf' }] },
+      { type: 'classwork', label: 'Classwork', title: 'Classwork 2', desc: 'In-class problem set 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_ClassWork2.pdf' }] },
+      { type: 'classwork', label: 'Classwork', title: 'Classwork 3', desc: 'In-class problem set 3.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_ClassWork3.pdf' }] },
+      { type: 'classwork', label: 'Classwork', title: 'Classwork 4', desc: 'In-class problem set 4.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_ClassWork4.pdf' }] },
+      { type: 'classwork', label: 'Classwork', title: 'Classwork 5', desc: 'In-class problem set 5.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_ClassWork5.pdf' }] },
+
+      // ── Quizzes (problem + solution + variants grouped per number) ──
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 1', desc: 'Worked solutions for quiz 1.', date: 'S26',
+        versions: [{ label: 'Solutions', url: BUCKET + '/ECE_3441_Quiz1_Solutions.pdf' }] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 2', desc: 'Quiz 2 problem set with solutions for both variants.', date: 'S26',
+        versions: [
+          { label: 'Quiz',        url: BUCKET + '/ECE_3441_Quiz2.pdf' },
+          { label: 'Variant B Solutions', url: BUCKET + '/ECE_3441_Quiz2B_Solutions.pdf' },
+          { label: 'Variant C Solutions', url: BUCKET + '/ECE_3441_Quiz2C_Solutions.pdf' },
+        ] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 3', desc: 'Quiz 3 with solutions, variant A solutions, and the crib sheet.', date: 'S26',
+        versions: [
+          { label: 'Quiz',                 url: BUCKET + '/ECE_3441_Quiz3.pdf' },
+          { label: 'Solutions',            url: BUCKET + '/ECE_3441_Quiz3_Solutions.pdf' },
+          { label: 'Variant A Solutions',  url: BUCKET + '/ECE_3441_Quiz3A_Solutions.pdf' },
+          { label: 'Crib Sheet',           url: BUCKET + '/ECE_3441_Quiz3-CribSheet.pdf' },
+        ] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 4', desc: 'Quiz 4 with solutions and the variant B set.', date: 'S26',
+        versions: [
+          { label: 'Quiz',                 url: BUCKET + '/ECE_3441_Quiz4.pdf' },
+          { label: 'Solutions',            url: BUCKET + '/ECE_3441_Quiz4_Solutions.pdf' },
+          { label: 'Variant B',            url: BUCKET + '/ECE_3441_Quiz4B.pdf' },
+          { label: 'Variant B Solutions',  url: BUCKET + '/ECE_3441_Quiz4B_Solutions.pdf' },
+        ] },
+
+      // ── Exams ──────────────────────────────────────────────
+      { type: 'exam', label: 'Exam', title: 'Exam 1 — Solutions', desc: 'Worked solutions for exam 1.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE_3441_Exam1_Solutions.pdf' }] },
+
+      // ── Homework practice problems ─────────────────────────
+      { type: 'homework', label: 'Homework', title: 'HW Problem Set', desc: 'Compiled practice problem set for additional reps.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/HW_Problems_Set.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'DLD HW Problems', desc: 'Extra DLD homework practice problems.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/DLD_HW_Problems.pdf' }] },
     ];
 
     document.addEventListener('DOMContentLoaded', () => {

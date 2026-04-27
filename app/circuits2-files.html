@@ -64,102 +64,50 @@
     window.FILE_DATA = [
       // ── Reference ──────────────────────────────────────────
       {
-        type: 'reference', label: 'Syllabus',
-        title: 'Course Syllabus', desc: 'Spring 2026 ECE 2202 syllabus.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/Syllabus-S26-ECE2202.pdf' }]
-      },
-      {
         type: 'reference', label: 'Reference',
-        title: 'Exam 2 Formula Sheet', desc: 'Editable formula sheet — annotate and reprint before the exam.', date: 'S26',
-        versions: [{ label: 'DOCX', url: BUCKET + '/Formula%20Sheet%20Exam%202.docx' }]
+        title: 'Formula Sheet', desc: 'Quick-reference formula sheet for Circuits 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Formula%20Sheet.pdf' }]
       },
 
-      // ── Quizzes ─────────────────────────────────────────────
-      {
-        type: 'quiz', label: 'Quiz',
-        title: 'Quiz 1 Packet', desc: 'First Circuits 2 quiz packet.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/Circuits%202_quiz1%201.pdf' }]
-      },
-      {
-        type: 'quiz', label: 'Quiz',
-        title: 'Quiz 2 — Solution', desc: 'Worked solution for the second quiz.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz2_spring2026_solution.pdf' }]
-      },
+      // ── Homework ───────────────────────────────────────────
+      { type: 'homework', label: 'Homework', title: 'HW1', desc: 'Spring 2026 homework 1.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW1.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW2', desc: 'Spring 2026 homework 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW2.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW3', desc: 'Spring 2026 homework 3.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW3.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW4', desc: 'Spring 2026 homework 4.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW4.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW5', desc: 'Spring 2026 homework 5.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW5.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW6', desc: 'Spring 2026 homework 6.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW6.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW7', desc: 'Spring 2026 homework 7.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW7.pdf' }] },
+      { type: 'homework', label: 'Homework', title: 'HW8', desc: 'Spring 2026 homework 8.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_HW8.pdf' }] },
 
-      // ── Homework (Spring 2026) ──────────────────────────────
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW1 — Tagged', desc: 'Spring 2026 homework 1 with tagged answer steps.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW1%20-%20Tagged.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW1.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW2 — Tagged (Fall 25)', desc: 'Carry-over homework 2 from Fall 2025; same problem set.', date: 'F25',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-F25-HW2%20-%20Tagged.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-F25-HW2.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW3 — Tagged', desc: 'Spring 2026 homework 3.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW3%20-%20Tagged%281%29.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW3.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW4 — Tagged', desc: 'Spring 2026 homework 4.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW4%20-%20Tagged%281%29.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW4.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW4 — Solutions', desc: 'Worked solutions for homework 4.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/Homework%204%20solutions.pdf' }]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW5 — Tagged', desc: 'Spring 2026 homework 5.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW5%20-%20Tagged.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW5.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW6 — Tagged', desc: 'Spring 2026 homework 6.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW6%20-%20Tagged.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW6.docx' }
-        ]
-      },
-      {
-        type: 'homework', label: 'Homework',
-        title: 'HW7 — Tagged', desc: 'Spring 2026 homework 7.', date: 'S26',
-        versions: [
-          { label: 'PDF',  url: BUCKET + '/ECE2202-S26-HW7%20-%20Tagged.pdf' },
-          { label: 'DOCX', url: BUCKET + '/ECE2202-S26-HW7.docx' }
-        ]
-      },
+      // ── Quizzes (solutions only) ───────────────────────────
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 1 — Solutions', desc: 'Worked solutions for quiz 1.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz1_Solutions.pdf' }] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 2 — Solutions', desc: 'Worked solutions for quiz 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz2_Solutions.pdf' }] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 3 — Solutions', desc: 'Worked solutions for quiz 3.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz3_Solutions.pdf' }] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 4 — Solutions', desc: 'Worked solutions for quiz 4.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz4_Solutions.pdf' }] },
+      { type: 'quiz', label: 'Quiz', title: 'Quiz 5 — Solutions', desc: 'Worked solutions for quiz 5.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Quiz5_Solutions.pdf' }] },
 
       // ── Exams ───────────────────────────────────────────────
-      {
-        type: 'exam', label: 'Exam',
-        title: 'Exam 2 — Review Problems', desc: 'Tagged review packet for exam 2.', date: 'S26',
-        versions: [{ label: 'PDF', url: BUCKET + '/Exam%202%20Review%20Problems%20-%20Tagged.pdf' }]
-      },
-      {
-        type: 'exam', label: 'Exam',
-        title: 'Exam 3 — Review', desc: 'Editable review document for exam 3.', date: 'S26',
-        versions: [{ label: 'DOCX', url: BUCKET + '/ECE2202-S26-Exam3Review.docx' }]
-      },
+      { type: 'exam', label: 'Exam', title: 'Exam 1', desc: 'First exam packet.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/Exam_1.pdf' }] },
+      { type: 'exam', label: 'Review', title: 'Exam 1 — Review', desc: 'Review packet for exam 1.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Exam1_Review.pdf' }] },
+      { type: 'exam', label: 'Review', title: 'Exam 2 — Review', desc: 'Review packet for exam 2.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Exam2_Review.pdf' }] },
+      { type: 'exam', label: 'Review', title: 'Exam 3 — Review', desc: 'Review packet for exam 3.', date: 'S26',
+        versions: [{ label: 'PDF', url: BUCKET + '/ECE2202_Exam3_Review.pdf' }] },
     ];
 
     // Filter buttons (kept here so logic doesn't depend on a mounted child).
