@@ -164,6 +164,39 @@ html.light .course-back {
   line-height: 1.7;
 }
 
+.hero-prof-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-family: var(--cp-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  background: rgba(255, 99, 99, 0.10);
+  color: #FF6363;
+  border: 1px solid rgba(255, 99, 99, 0.25);
+  text-decoration: none;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.hero-prof-link:hover {
+  background: rgba(255, 99, 99, 0.18);
+  border-color: #FF6363;
+  transform: translateY(-1px);
+}
+html.light .hero-prof-link {
+  background: rgba(185, 74, 74, 0.10);
+  color: #b94a4a;
+  border-color: rgba(185, 74, 74, 0.25);
+}
+html.light .hero-prof-link:hover {
+  background: rgba(185, 74, 74, 0.18);
+  border-color: #b94a4a;
+}
+
 .hero-stats {
   margin-top: 28px;
   display: grid;

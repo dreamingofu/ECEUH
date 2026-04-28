@@ -174,6 +174,59 @@
     .sem-badge.active { border-color: #4d9fff30; color: var(--blue); background: #4d9fff08; }
     .sem-line { flex: 1; height: 1px; background: var(--border2); }
 
+    /* ── EMPTY-STATE / BROWSE-ALL TOGGLE ── */
+    .empty-active-card {
+      border: 1px dashed rgba(255,99,99,0.30);
+      background: rgba(255,99,99,0.06);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 28px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    html.light .empty-active-card { background: rgba(185,74,74,0.06); border-color: rgba(185,74,74,0.30); }
+    .empty-active-card strong {
+      font-family: 'Lora', serif; font-weight: 700; font-size: 18px; color: var(--text);
+    }
+    .empty-active-card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+    .empty-active-card a {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 9999px;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
+      background: rgba(255,99,99,0.12); color: #FF6363;
+      border: 1px solid rgba(255,99,99,0.25); text-decoration: none;
+      transition: background .15s, border-color .15s;
+    }
+    .empty-active-card a:hover { background: rgba(255,99,99,0.20); border-color: #FF6363; }
+
+    .browse-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 16px 22px; margin-bottom: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;
+      color: var(--text); cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    html.light .browse-toggle { background: rgba(26,26,46,0.03); }
+    .browse-toggle:hover { border-color: rgba(255,99,99,0.40); background: rgba(255,99,99,0.05); }
+    .browse-toggle .chev { transition: transform .2s ease; font-size: 11px; color: var(--text-dim); }
+    .browse-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+    .browse-toggle .count { color: var(--text-dim); font-weight: 500; margin-left: 10px; }
+    .browse-list { display: none; }
+    .browse-list.open { display: block; animation: fadeUp 0.35s ease; }
+
+    .course-block.is-target {
+      box-shadow: 0 0 0 2px rgba(255,99,99,0.55), 0 18px 36px -16px rgba(255,99,99,0.45);
+      animation: targetPulse 1.6s ease-out;
+    }
+    @keyframes targetPulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,99,99,0.55); }
+      40% { box-shadow: 0 0 0 6px rgba(255,99,99,0.18); }
+      100% { box-shadow: 0 0 0 2px rgba(255,99,99,0.55), 0 18px 36px -16px rgba(255,99,99,0.45); }
+    }
+
     /* ── TABBED COURSE BLOCKS ── */
     .course-block { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
     .course-block-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.8rem; background: var(--panel); border-bottom: 1px solid var(--border); }
@@ -751,7 +804,7 @@
       }).join('');
 
       return `
-        <div class="course-block">
+        <div class="course-block" id="prof-${course.id}" data-course="${course.id}">
           <div class="course-block-header">
             <span class="course-block-title">${course.title}</span>
             <span class="prof-course-tag">${course.code.replace(' ', '_')}</span>
@@ -787,18 +840,64 @@
         html += activeList.map(generateCourseBlock).join('');
 
         html += `
-          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 3rem;">
-            <div class="sem-badge">Other Courses</div>
+          <button type="button" class="browse-toggle" id="browse-toggle" aria-expanded="false" aria-controls="browse-list" style="margin-top: 2.5rem;">
+            <span>Browse all ECE courses<span class="count">· ${otherList.length} more</span></span>
+            <span class="chev">▼</span>
+          </button>
+          <div class="browse-list" id="browse-list">
+            ${otherList.map(generateCourseBlock).join('')}
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="empty-active-card">
+            <strong>No active courses picked yet</strong>
+            <p>Choose the classes you're taking on the home page and they'll show up at the top here so you don't have to scroll the full directory.</p>
+            <a href="index.html#active">Pick courses on Home →</a>
+          </div>
+          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
+            <div class="sem-badge">All ECE Courses</div>
             <div class="sem-line"></div>
           </div>
         `;
         html += otherList.map(generateCourseBlock).join('');
-      } else {
-        html += otherList.map(generateCourseBlock).join('');
       }
 
       container.innerHTML = html;
+      wireBrowseToggle();
+      handleHash();
     }
+
+    function wireBrowseToggle() {
+      const btn = document.getElementById('browse-toggle');
+      const list = document.getElementById('browse-list');
+      if (!btn || !list) return;
+      btn.addEventListener('click', () => {
+        const open = list.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+
+    function handleHash() {
+      const id = (location.hash || '').replace('#', '').trim();
+      if (!id) return;
+      const target = document.getElementById('prof-' + id) || document.getElementById(id);
+      if (!target) return;
+      // If the target is inside the collapsed list, open it first.
+      const list = document.getElementById('browse-list');
+      const btn = document.getElementById('browse-toggle');
+      if (list && list.contains(target) && !list.classList.contains('open')) {
+        list.classList.add('open');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      }
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.classList.add('is-target');
+        setTimeout(() => target.classList.remove('is-target'), 2200);
+      });
+    }
+
+    window.addEventListener('hashchange', handleHash);
 
     buildProfessorsHTML();
 
