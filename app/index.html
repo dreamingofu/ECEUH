@@ -552,6 +552,26 @@
     }
     .picker-btn.save:hover { filter: brightness(1.08); }
 
+    /* Light mode: picker modal */
+    html.light .picker {
+      background: #fff5f3;
+      border-color: rgba(26,26,46,0.14);
+      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.15);
+    }
+    html.light .picker h3 { color: #1A1A2E; }
+    html.light .picker p { color: #475569; }
+    html.light .picker-option {
+      background: rgba(26,26,46,0.04);
+      border-color: rgba(26,26,46,0.12);
+    }
+    html.light .picker-option .title { color: #1A1A2E; }
+    html.light .picker-option .meta { color: #475569; }
+    html.light .picker-option:hover { border-color: rgba(185,74,74,0.4); background: rgba(185,74,74,0.05); }
+    html.light .picker-option:has(input:checked) { border-color: var(--accent); background: rgba(185,74,74,0.08); }
+    html.light .picker-option input:checked ~ div .title { color: var(--accent); }
+    html.light .picker-btn.cancel { color: #475569; border-color: rgba(26,26,46,0.2); }
+    html.light .picker-btn.cancel:hover { color: #1A1A2E; border-color: var(--accent); }
+
     /* Status card link styling */
     a.status-card { text-decoration: none; transition: transform .15s, border-color .15s; }
     a.status-card:hover { transform: translateY(-2px); border-color: rgba(255,99,99,0.3); }
