@@ -804,22 +804,6 @@
       color: var(--text-faint);
     }
 
-    /* ── FAB ── */
-    .fab {
-      position: fixed;
-      right: 32px; bottom: 32px;
-      width: 64px; height: 64px;
-      background: var(--accent);
-      border-radius: 16px;
-      display: grid; place-items: center;
-      box-shadow: var(--shadow-fab);
-      color: var(--text);
-      z-index: 200;
-      transition: transform .2s, filter .2s;
-    }
-    .fab:hover { transform: translateY(-2px); filter: brightness(1.08); }
-    .fab svg { width: 22px; height: 26px; }
-
     /* ── REVEAL ── */
     .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -861,7 +845,6 @@
       .hero-inner { border-radius: 18px; padding: 24px 18px; }
       .palette { padding-left: 48px; }
       .palette input { font-size: 16px; }
-      .fab { right: 16px; bottom: 16px; width: 56px; height: 56px; }
     }
     @media (max-width: 760px) {
       .hero-row { flex-direction: column; align-items: flex-start; }
@@ -1076,10 +1059,6 @@
     </div>
   </div>
 
-  <a href="#archives" class="fab" aria-label="Browse archives">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>
-  </a>
-
   <script>
     // Mobile sidebar toggle
     const sidebar = document.getElementById('sidebar');
@@ -1110,6 +1089,10 @@
       { type: 'Course', title: 'Circuits 2', desc: 'Course hub for phasors, RLC work, files, and references.', href: 'circuits2.html', meta: 'ECE-2202', keywords: ['circuits', 'phasors', 'rlc', 'bode', 'laplace'] },
       { type: 'Course', title: 'Programming with C', desc: 'Course hub for pointers, memory, file library, and references.', href: 'cprog.html', meta: 'ECE-3331', keywords: ['c', 'programming', 'pointers', 'memory', 'algorithms'] },
       { type: 'Reference', title: 'Professor Ratings', desc: 'Faculty ratings and professor reference pages.', href: 'professors.html', meta: 'Faculty', keywords: ['professors', 'faculty', 'ratings', 'rmp'] },
+      { type: 'Professor', title: 'Dr. Xiaonan Shan', desc: 'Circuits 2 (ECE 2202) — 4.5★ overall, 3.5 difficulty, 100% would take again.', href: 'professors.html#circuits2', meta: 'ECE 2202', keywords: ['shan', 'xiaonan', 'circuits 2', 'ece 2202', 'professor'] },
+      { type: 'Professor', title: 'Dr. Deepa Ramachandran', desc: 'Digital Logic Design (ECE 3441) — 4.5★ overall, 2.8 difficulty, 100% would take again.', href: 'professors.html#dld', meta: 'ECE 3441 · ECE 2202', keywords: ['ramachandran', 'deepa', 'dld', 'ece 3441', 'circuits 2', 'professor'] },
+      { type: 'Professor', title: 'Dr. Biresh Kumar Joardar', desc: 'Programming with C (ECE 3331) — 5.0★ overall, 2.0 difficulty, 100% would take again.', href: 'professors.html#cprog', meta: 'ECE 3331', keywords: ['joardar', 'biresh', 'cprog', 'c programming', 'ece 3331', 'professor'] },
+      { type: 'Professor', title: 'Dr. Bhavin R. Sheth', desc: 'Digital Logic Design (ECE 3441) & Programming with C (ECE 3331).', href: 'professors.html#dld', meta: 'ECE 3441 · ECE 3331', keywords: ['sheth', 'bhavin', 'dld', 'cprog', 'ece 3441', 'ece 3331', 'professor'] },
       { type: 'Topics', title: 'DLD Topics', desc: 'Boolean algebra, logic gates, K-maps, sequential logic, and FSMs.', href: 'dld-topics.html', meta: 'Unit map', keywords: ['dld topics', 'kmap', 'logic gates', 'sequential'] },
       { type: 'Files', title: 'DLD File Library', desc: 'Bucket-backed classwork, review packets, and reference docs.', href: 'dld-resources.html', meta: 'R2 files', keywords: ['dld files', 'cw1', 'cw2', 'cw3', 'cw4', 'cw5'] },
       { type: 'Links', title: 'DLD External Resources', desc: 'NandGame, Logic.ly, MIT OCW, and other DLD references.', href: 'dld-links.html', meta: 'External', keywords: ['nandgame', 'logic.ly', 'mit ocw'] },
