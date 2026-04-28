@@ -203,9 +203,6 @@
     .prof-card:hover .prof-avatar { box-shadow: var(--blue-glow); border-color: #4d9fff50; }
 
     .prof-course-tag { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 2px; }
-    .tag-dld   { background: #00ff4110; color: var(--green);  border: 1px solid #00ff4125; }
-    .tag-c2    { background: #ffb70010; color: var(--amber);  border: 1px solid #ffb70025; }
-    .tag-cprog { background: #00ffe710; color: var(--cyan);   border: 1px solid #00ffe725; }
 
     .prof-name { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.3rem; transition: color 0.25s; }
     .prof-card:hover .prof-name { color: var(--blue); }
@@ -237,15 +234,6 @@
     .overall-num { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; line-height: 1; }
     .overall-label { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.2rem; }
 
-    /* ── GUIDE ── */
-    .guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-    .guide-card { background: var(--bg2); padding: 1.6rem; transition: background 0.2s; }
-    .guide-card:hover { background: var(--panel); }
-    .guide-step { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; color: var(--blue); text-shadow: var(--glow-sm); margin-bottom: 0.6rem; display: block; }
-    .guide-title { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-    .guide-desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.65; }
-    .guide-desc code { color: var(--blue); background: #4d9fff10; padding: 0.1rem 0.3rem; border-radius: 2px; font-size: 0.68rem; }
-
     /* ── FOOTER ── */
     footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 1.8rem 3rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.68rem; color: var(--text-dim); }
     footer a { color: var(--blue); text-decoration: none; }
@@ -263,84 +251,31 @@
     ::-webkit-scrollbar-thumb:hover { background: var(--blue-dim); }
 
     @media (max-width: 900px) {
-      .guide-grid { grid-template-columns: 1fr; }
       .topbar, .hero, .wrapper, .disclaimer, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
     }
     @media (max-width: 760px) {
-      .topbar {
-        padding-top: calc(env(safe-area-inset-top, 0px) + 0.9rem);
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      .topbar-left,
-      .topbar-right {
-        width: 100%;
-        flex-wrap: wrap;
-      }
-      .hero {
-        padding: 4rem 1.5rem 2.8rem;
-      }
-      .hero-title {
-        font-size: clamp(2.2rem, 10vw, 3.6rem);
-      }
-      .disclaimer {
-        margin: 0 1.5rem;
-        align-items: flex-start;
-      }
-      .course-block-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-      }
-      .tab-row {
-        overflow-x: auto;
-        scrollbar-width: none;
-      }
+      .topbar { padding-top: calc(env(safe-area-inset-top, 0px) + 0.9rem); align-items: flex-start; gap: 1rem; }
+      .topbar-left, .topbar-right { width: 100%; flex-wrap: wrap; }
+      .hero { padding: 4rem 1.5rem 2.8rem; }
+      .hero-title { font-size: clamp(2.2rem, 10vw, 3.6rem); }
+      .disclaimer { margin: 0 1.5rem; align-items: flex-start; }
+      .course-block-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .tab-row { overflow-x: auto; scrollbar-width: none; }
       .tab-row::-webkit-scrollbar { display: none; }
-      .tab-btn {
-        flex: 0 0 auto;
-        min-width: 120px;
-      }
-      .prof-card {
-        padding: 24px !important;
-      }
-      .prof-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      .overall-score {
-        align-items: flex-start;
-      }
+      .tab-btn { flex: 0 0 auto; min-width: 120px; }
+      .prof-card { padding: 24px !important; }
+      .prof-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .overall-score { align-items: flex-start; }
     }
     @media (max-width: 520px) {
-      .wrapper,
-      .topbar,
-      .hero,
-      .disclaimer,
-      footer {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-      }
-      .hero-bg-text {
-        display: none;
-      }
-      .prof-avatar {
-        width: 48px !important;
-        height: 48px !important;
-      }
-      .prof-name {
-        font-size: 1.8rem !important;
-        line-height: 1.1 !important;
-      }
-      .rating-label-row {
-        gap: 0.75rem;
-      }
+      .wrapper, .topbar, .hero, .disclaimer, footer { padding-left: 1rem !important; padding-right: 1rem !important; }
+      .hero-bg-text { display: none; }
+      .prof-avatar { width: 48px !important; height: 48px !important; }
+      .prof-name { font-size: 1.8rem !important; line-height: 1.1 !important; }
+      .rating-label-row { gap: 0.75rem; }
     }
   
-    /* ╔══ ECEUH REDESIGN OVERRIDE ══╗
-       Remaps original palette to the navy + coral theme.
-       Keeps existing markup intact; toggles still work. */
+    /* ╔══ ECEUH REDESIGN OVERRIDE ══╗ */
     :root {
       --bg:         #1A1A2E !important;
       --bg2:        #261817 !important;
@@ -384,7 +319,6 @@
       --text-mid:   #334155 !important;
     }
 
-    /* Body + decorative kill switches */
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
       cursor: auto !important;
@@ -393,14 +327,10 @@
     .bg-glow, .grid-bg, .particles, .scanlines, .scanline,
     .circuit-bg, .noise-bg, .vignette { display: none !important; }
 
-    /* Typography mapping */
-    h1, h2, h3, h4, h5, h6,
-    .hero-title, .hero-name, .hero-eyebrow,
-    .semester-title, .semester-label,
-    .card-title, .page-title, .sec-header h2,
-    .brand-text, .future-title, .future-label,
-    .topbar-breadcrumb, .topbar-nav a, .badge, .tag,
-    .card-code, .card-status-pill, .divider-label, .topbar-link {
+    h1, h2, h3, h4, h5, h6, .hero-title, .hero-name, .hero-eyebrow,
+    .semester-title, .semester-label, .card-title, .page-title, .sec-header h2,
+    .brand-text, .future-title, .future-label, .topbar-breadcrumb, .topbar-nav a, 
+    .badge, .tag, .card-code, .card-status-pill, .divider-label, .topbar-link {
       font-family: 'Lora', 'Liberation Serif', Georgia, serif !important;
     }
     body, p, li, button, input, textarea, select, .card-desc, .card-meta, .future-card,
@@ -412,7 +342,6 @@
       font-family: 'JetBrains Mono', 'Liberation Mono', ui-monospace, monospace !important;
     }
 
-    /* Brand mark — coral pill */
     .brand-mark {
       background: var(--green) !important;
       color: #67000E !important;
@@ -425,7 +354,6 @@
       animation: none !important;
     }
 
-    /* Topbar — frosted navy */
     .topbar {
       background: rgba(26, 26, 46, 0.85) !important;
       backdrop-filter: blur(8px) !important;
@@ -437,7 +365,6 @@
       border-bottom: 1px solid rgba(26,26,46,0.08) !important;
     }
 
-    /* Theme toggle button */
     .theme-toggle {
       font-family: 'Inter', sans-serif !important;
       border-radius: 8px !important;
@@ -445,26 +372,14 @@
       color: var(--text-dim) !important;
     }
     .theme-toggle:hover { border-color: var(--green) !important; color: var(--green) !important; }
-
-    /* Hero glow text → softer outline */
     .hero-bg-text { -webkit-text-stroke: 1px rgba(255,99,99,0.10) !important; }
-
-    /* Scrollbar */
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12) !important; }
     ::-webkit-scrollbar-thumb:hover { background: var(--green) !important; }
 
-    /* Card and pill rounding for the new system */
-    .course-card, .future-card, .card, .badge, .tag {
-      border-radius: 12px !important;
-    }
+    .course-card, .future-card, .card, .badge, .tag { border-radius: 12px !important; }
     .card-status-pill, .pill { border-radius: 6px !important; }
+    .live-dot, .pill-active .pill-dot, .badge.active .badge-dot { box-shadow: none !important; }
 
-    /* Cursor blink dots stay subtle */
-    .live-dot, .pill-active .pill-dot, .badge.active .badge-dot {
-      box-shadow: none !important;
-    }
-
-    /* ── Professor cards: match the home page bento aesthetic ─────────── */
     .course-block {
       background: #261817 !important;
       border: 1px solid var(--border-2) !important;
@@ -538,10 +453,8 @@
       margin-bottom: 16px !important;
       box-shadow: none !important;
     }
-    .prof-card:hover .prof-avatar {
-      box-shadow: none !important;
-      border: none !important;
-    }
+    .prof-card:hover .prof-avatar { box-shadow: none !important; border: none !important; }
+    
     .prof-name {
       font-family: 'Lora', serif !important;
       font-weight: 700 !important;
@@ -559,6 +472,7 @@
       color: var(--text-dim) !important;
       margin-bottom: 24px !important;
     }
+    
     .prof-course-tag {
       font-family: 'Inter', sans-serif !important;
       font-size: 10px !important;
@@ -570,11 +484,7 @@
       color: #FF6363 !important;
       border: none !important;
     }
-    .tag-dld, .tag-c2, .tag-cprog {
-      background: rgba(255,99,99,0.12) !important;
-      color: #FF6363 !important;
-      border: none !important;
-    }
+
     .ratings { gap: 14px !important; margin-bottom: 24px !important; }
     .rating-label {
       font-family: 'Inter', sans-serif !important;
@@ -597,10 +507,7 @@
     .meter-fill { border-radius: 9999px !important; box-shadow: none !important; }
     .fill-high, .fill-mid, .fill-low { background: #FF6363 !important; box-shadow: none !important; }
 
-    .prof-footer {
-      padding-top: 18px !important;
-      border-top: 1px solid var(--border) !important;
-    }
+    .prof-footer { padding-top: 18px !important; border-top: 1px solid var(--border) !important; }
     .rmp-link {
       font-family: 'Inter', sans-serif !important;
       font-size: 12px !important;
@@ -628,54 +535,10 @@
       font-size: 10px !important;
       letter-spacing: 1px !important;
     }
-
-    /* Guide cards too — match the bento style */
-    .guide-grid {
-      background: transparent !important;
-      border: none !important;
-      gap: 18px !important;
-    }
-    .guide-card {
-      background: #261817 !important;
-      border: 1px solid var(--border-2) !important;
-      border-radius: 18px !important;
-      padding: 24px !important;
-    }
-    html.light .guide-card {
-      background: #fff5f3 !important;
-      border-color: rgba(26,26,46,0.10) !important;
-    }
-    .guide-card:hover { background: #261817 !important; }
-    html.light .guide-card:hover { background: #fff5f3 !important; }
-    .guide-step {
-      font-family: 'Lora', serif !important;
-      font-size: 28px !important;
-      color: #FF6363 !important;
-      text-shadow: none !important;
-    }
-    .guide-title {
-      font-family: 'Lora', serif !important;
-      font-size: 16px !important;
-      letter-spacing: -0.2px !important;
-      text-transform: none !important;
-      color: var(--text) !important;
-    }
-    .guide-desc { font-family: 'Inter', sans-serif !important; line-height: 1.65 !important; }
-    .guide-desc code {
-      font-family: 'JetBrains Mono', monospace !important;
-      color: #FF6363 !important;
-      background: rgba(255,99,99,0.12) !important;
-      border-radius: 4px !important;
-    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="auth.js" defer></script>
   <link rel="stylesheet" href="theme.css" />
 </head>
 <body class="eceuh-shell eceuh-collapsible">
-
-  <div class="bg-glow"></div>
-  <div class="grid-bg"></div>
 
   <nav class="topbar">
     <div class="topbar-left">
@@ -713,141 +576,13 @@
       <div class="sec-header">
         <h2>// Spring 2026</h2>
         <div class="sec-line"></div>
-        <span class="sec-tag">01 — CURRENT_SEMESTER</span>
-      </div>
-      <div class="semester-label-row">
-        <div class="sem-badge active">Active Semester</div>
-        <div class="sem-line"></div>
-        <span style="font-size:0.65rem; color:var(--text-dim);">3 courses tracked</span>
+        <span class="sec-tag" id="course-count">-- courses tracked</span>
       </div>
 
-      <!-- ── DIGITAL LOGIC DESIGN ── -->
-      <div class="course-block">
-        <div class="course-block-header">
-          <span class="course-block-title">Digital Logic Design</span>
-          <span class="prof-course-tag tag-dld">ECE_3441</span>
-        </div>
-        <div class="tab-row">
-          <button class="tab-btn active" onclick="switchTab('dld', 0, this)">Sheth</button>
-          <button class="tab-btn"        onclick="switchTab('dld', 1, this)">Ramachandran</button>
-        </div>
-        <div id="dld-panels">
-          <div class="tab-panel active prof-card">
-            <div class="prof-avatar" id="av-dld-0">BS</div>
-            <div class="prof-name"   id="name-dld-0">Dr. Bhavin R. Sheth</div>
-            <div class="prof-dept"   id="dept-dld-0">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-0-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-dld-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-dld-0">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-          <div class="tab-panel prof-card">
-            <div class="prof-avatar" id="av-dld-1">DR</div>
-            <div class="prof-name"   id="name-dld-1">Dr. Deepa Ramachandran</div>
-            <div class="prof-dept"   id="dept-dld-1">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-dld-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-dld-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-dld-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-dld-1-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-dld-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-dld-1">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── CIRCUITS 2 ── -->
-      <div class="course-block">
-        <div class="course-block-header">
-          <span class="course-block-title">Circuits 2</span>
-          <span class="prof-course-tag tag-c2">ECE_2202</span>
-        </div>
-        <div class="tab-row">
-          <button class="tab-btn active" onclick="switchTab('c2', 0, this)">Shan</button>
-          <button class="tab-btn"        onclick="switchTab('c2', 1, this)">Ramachandran</button>
-        </div>
-        <div id="c2-panels">
-          <div class="tab-panel active prof-card">
-            <div class="prof-avatar" id="av-c2-0">XS</div>
-            <div class="prof-name"   id="name-c2-0">Dr. Xiaonan Shan</div>
-            <div class="prof-dept"   id="dept-c2-0">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-0-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-c2-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-c2-0">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-          <div class="tab-panel prof-card">
-            <div class="prof-avatar" id="av-c2-1">DR</div>
-            <div class="prof-name"   id="name-c2-1">Dr. Deepa Ramachandran</div>
-            <div class="prof-dept"   id="dept-c2-1">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-c2-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-c2-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-c2-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-c2-1-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-c2-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-c2-1">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── PROGRAMMING WITH C ── -->
-      <div class="course-block">
-        <div class="course-block-header">
-          <span class="course-block-title">Programming Apps with C</span>
-          <span class="prof-course-tag tag-cprog">ECE_3331</span>
-        </div>
-        <div class="tab-row">
-          <button class="tab-btn active" onclick="switchTab('cprog', 0, this)">Joardar</button>
-          <button class="tab-btn"        onclick="switchTab('cprog', 1, this)">Sheth</button>
-        </div>
-        <div id="cprog-panels">
-          <div class="tab-panel active prof-card">
-            <div class="prof-avatar" id="av-cprog-0">BJ</div>
-            <div class="prof-name"   id="name-cprog-0">Dr. Biresh Kumar Joardar</div>
-            <div class="prof-dept"   id="dept-cprog-0">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-0-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-0-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-0-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-0-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-cprog-0" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-0">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-          <div class="tab-panel prof-card">
-            <div class="prof-avatar" id="av-cprog-1">BS</div>
-            <div class="prof-name"   id="name-cprog-1">Dr. Bhavin R. Sheth</div>
-            <div class="prof-dept"   id="dept-cprog-1">Electrical Engineering Dept.</div>
-            <div class="ratings">
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val val-none" id="r-cprog-1-overall">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-overall" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val val-none" id="r-cprog-1-diff">— / 5.0</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-diff" style="width:0%"></div></div></div>
-              <div class="rating-row"><div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val val-none" id="r-cprog-1-wta">— %</span></div><div class="meter"><div class="meter-fill fill-none" id="m-cprog-1-wta" style="width:0%"></div></div></div>
-            </div>
-            <div class="prof-footer">
-              <a class="rmp-link disabled" id="link-cprog-1" href="#" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num val-none" id="score-cprog-1">—</span><span class="overall-label">/ 5.0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <div id="professors-container"></div>
+      
     </section>
+  </div>
 
   <footer>
     <span>EE — <a href="professors.html">Professor Ratings</a> · Spring 2026</span>
@@ -857,77 +592,80 @@
 
   <script>
     // ════════════════════════════════════════════
-    //  COURSES DATA — edit this object to update
-    //  profs[0] = first tab, profs[1] = second tab
+    //  COURSES DATA — Edit this list to add or 
+    //  update professor ratings!
     // ════════════════════════════════════════════
-    const COURSES = {
-      dld: {
+    const COURSES = [
+      {
+        id: 'engi1100', code: 'ENGI 1100', title: 'Introduction to Engineering',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'engi1331', code: 'ENGI 1331', title: 'Computing for Engineers',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'engi2304', code: 'ENGI 2304', title: 'Technical Communications',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece2201', code: 'ECE 2201', title: 'Circuits Analysis I',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'circuits2', code: 'ECE 2202', title: 'Circuit Analysis II', // id changed to match homepage active course key
         profs: [
-          {
-            name:       "Dr. Bhavin R. Sheth",
-            initials:   "BS",
-            dept:       "Electrical Engineering Dept.",
-            overall:    3.0,
-            difficulty: 4.0,
-            wouldTake:  70,
-            rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
-          },
-          {
-            name:       "Dr. Deepa Ramachandran",
-            initials:   "DR",
-            dept:       "Electrical Engineering Dept.",
-            overall:    4.5,
-            difficulty: 2.8,
-            wouldTake:  100,
-            rmpUrl:     "https://www.ratemyprofessors.com/professor/2729114",
-          },
+          { name: "Dr. Xiaonan Shan", shortName: "Shan", initials: "XS", dept: "Electrical Engineering Dept.", overall: 4.5, difficulty: 3.5, wouldTake: 100, rmpUrl: "https://www.ratemyprofessors.com/professor/2991318" },
+          { name: "Dr. Deepa Ramachandran", shortName: "Ramachandran", initials: "DR", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null }
         ]
       },
-      c2: {
+      {
+        id: 'ece2100', code: 'ECE 2100', title: 'Circuit Analysis Lab',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'inde2333', code: 'INDE 2333', title: 'Engineering Statistics',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Industrial Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'cprog', code: 'ECE 3331', title: 'Programming Applications in ECE',
         profs: [
-          {
-            name:       "Dr. Xiaonan Shan",
-            initials:   "XS",
-            dept:       "Electrical Engineering Dept.",
-            overall:    4.5,
-            difficulty: 3.5,
-            wouldTake:  100,
-            rmpUrl:     "https://www.ratemyprofessors.com/professor/2991318",
-          },
-          {
-            name:       "Prof. TBD",
-            initials:   "??",
-            dept:       "Electrical Engineering Dept.",
-            overall:    null,
-            difficulty: null,
-            wouldTake:  null,
-            rmpUrl:     null,
-          },
+          { name: "Dr. Biresh Kumar Joardar", shortName: "Joardar", initials: "BJ", dept: "Electrical Engineering Dept.", overall: 5.0, difficulty: 2.0, wouldTake: 100, rmpUrl: "https://www.ratemyprofessors.com/professor/2894356" },
+          { name: "Dr. Bhavin R. Sheth", shortName: "Sheth", initials: "BS", dept: "Electrical Engineering Dept.", overall: 1.5, difficulty: 4.0, wouldTake: 12, rmpUrl: "https://www.ratemyprofessors.com/professor/1585968" }
         ]
       },
-      cprog: {
+      {
+        id: 'dld', code: 'ECE 3441', title: 'Digital Logic Design',
         profs: [
-          {
-            name:       "Dr. Biresh Kumar Joardar",
-            initials:   "BJ",
-            dept:       "Electrical Engineering Dept.",
-            overall:    5.0,
-            difficulty: 2.0,
-            wouldTake:  100,
-            rmpUrl:     "https://www.ratemyprofessors.com/professor/2894356",
-          },
-          {
-            name:       "Dr. Bhavin R. Sheth",
-            initials:   "BS",
-            dept:       "Electrical Engineering Dept.",
-            overall:    1.5,
-            difficulty: 4,
-            wouldTake:  12,
-            rmpUrl:     "https://www.ratemyprofessors.com/professor/1585968",
-          },
+          { name: "Dr. Bhavin R. Sheth", shortName: "Sheth", initials: "BS", dept: "Electrical Engineering Dept.", overall: 3.0, difficulty: 4.0, wouldTake: 70, rmpUrl: "https://www.ratemyprofessors.com/professor/1585968" },
+          { name: "Dr. Deepa Ramachandran", shortName: "Ramachandran", initials: "DR", dept: "Electrical Engineering Dept.", overall: 4.5, difficulty: 2.8, wouldTake: 100, rmpUrl: "https://www.ratemyprofessors.com/professor/2729114" }
         ]
       },
-    };
+      {
+        id: 'ece3155', code: 'ECE 3155', title: 'Electronics Lab',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece3355', code: 'ECE 3355', title: 'Electronics',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece3337', code: 'ECE 3337', title: 'Signals & Systems Analysis',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece3317', code: 'ECE 3317', title: 'Applied EM Waves',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece3436', code: 'ECE 3436', title: 'Microprocessor Systems',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      },
+      {
+        id: 'ece3340', code: 'ECE 3340', title: 'Numerical Methods',
+        profs: [ { name: "Prof. Name", shortName: "TBD", initials: "??", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null } ]
+      }
+    ];
 
     // ── Tab switching ──
     function switchTab(course, idx, btn) {
@@ -957,52 +695,119 @@
       return            { color: 'val-low',  fill: 'fill-low'  };
     }
 
-    function setMeter(meterId, valId, val, max, type, display) {
-      const meter = document.getElementById(meterId);
-      const valEl = document.getElementById(valId);
-      if (!meter || !valEl) return;
-      const cls = getRatingClass(val, type);
-      meter.className   = 'meter-fill ' + cls.fill;
-      valEl.className   = 'rating-val ' + cls.color;
-      valEl.textContent = display;
-      meter.style.width = val !== null ? `${(val / max) * 100}%` : '0%';
+    // ── HTML Generation ──
+    function getActiveCourses() {
+      try { return JSON.parse(localStorage.getItem('eceuh:active-courses') || '[]'); }
+      catch { return []; }
     }
 
-    // ── Render all ──
-    function renderAll() {
-      Object.entries(COURSES).forEach(([course, data]) => {
-        data.profs.forEach((p, idx) => {
-          const key = `${course}-${idx}`;
-          const nameEl = document.getElementById(`name-${key}`);
-          const avEl   = document.getElementById(`av-${key}`);
-          const deptEl = document.getElementById(`dept-${key}`);
-          if (nameEl) nameEl.textContent = p.name;
-          if (avEl)   avEl.textContent   = p.initials;
-          if (deptEl) deptEl.textContent = p.dept;
+    function generateCourseBlock(course) {
+      const tabs = course.profs.map((p, i) => {
+        return `<button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="switchTab('${course.id}', ${i}, this)">${p.shortName}</button>`;
+      }).join('');
 
-          setMeter(`m-${key}-overall`, `r-${key}-overall`, p.overall, 5, 'overall',
-            p.overall !== null ? `${p.overall.toFixed(1)} / 5.0` : '— / 5.0');
-          setMeter(`m-${key}-diff`, `r-${key}-diff`, p.difficulty, 5, 'difficulty',
-            p.difficulty !== null ? `${p.difficulty.toFixed(1)} / 5.0` : '— / 5.0');
-          setMeter(`m-${key}-wta`, `r-${key}-wta`, p.wouldTake, 100, 'wta',
-            p.wouldTake !== null ? `${p.wouldTake}%` : '— %');
+      const panels = course.profs.map((p, i) => {
+        const overallCls = getRatingClass(p.overall, 'overall');
+        const diffCls = getRatingClass(p.difficulty, 'difficulty');
+        const wtaCls = getRatingClass(p.wouldTake, 'wta');
 
-          const scoreEl = document.getElementById(`score-${key}`);
-          if (scoreEl) {
-            const cls = getRatingClass(p.overall, 'overall');
-            scoreEl.className   = 'overall-num ' + cls.color;
-            scoreEl.textContent = p.overall !== null ? p.overall.toFixed(1) : '—';
-          }
-          const linkEl = document.getElementById(`link-${key}`);
-          if (linkEl && p.rmpUrl) {
-            linkEl.href      = p.rmpUrl;
-            linkEl.className = 'rmp-link';
-          }
-        });
-      });
+        const overallDisplay = p.overall !== null ? p.overall.toFixed(1) + ' / 5.0' : '— / 5.0';
+        const diffDisplay = p.difficulty !== null ? p.difficulty.toFixed(1) + ' / 5.0' : '— / 5.0';
+        const wtaDisplay = p.wouldTake !== null ? p.wouldTake + '%' : '— %';
+
+        const overallPct = p.overall !== null ? (p.overall / 5) * 100 : 0;
+        const diffPct = p.difficulty !== null ? (p.difficulty / 5) * 100 : 0;
+        const wtaPct = p.wouldTake !== null ? p.wouldTake : 0;
+
+        const overallNum = p.overall !== null ? p.overall.toFixed(1) : '—';
+        const rmpLinkCls = p.rmpUrl ? 'rmp-link' : 'rmp-link disabled';
+        const rmpHref = p.rmpUrl ? p.rmpUrl : '#';
+
+        return `
+          <div class="tab-panel ${i === 0 ? 'active' : ''} prof-card">
+            <div class="prof-avatar">${p.initials}</div>
+            <div class="prof-name">${p.name}</div>
+            <div class="prof-dept">${p.dept}</div>
+            <div class="ratings">
+              <div class="rating-row">
+                <div class="rating-label-row"><span class="rating-label">Overall Rating</span><span class="rating-val ${overallCls.color}">${overallDisplay}</span></div>
+                <div class="meter"><div class="meter-fill ${overallCls.fill}" style="width:${overallPct}%"></div></div>
+              </div>
+              <div class="rating-row">
+                <div class="rating-label-row"><span class="rating-label">Difficulty</span><span class="rating-val ${diffCls.color}">${diffDisplay}</span></div>
+                <div class="meter"><div class="meter-fill ${diffCls.fill}" style="width:${diffPct}%"></div></div>
+              </div>
+              <div class="rating-row">
+                <div class="rating-label-row"><span class="rating-label">Would Take Again</span><span class="rating-val ${wtaCls.color}">${wtaDisplay}</span></div>
+                <div class="meter"><div class="meter-fill ${wtaCls.fill}" style="width:${wtaPct}%"></div></div>
+              </div>
+            </div>
+            <div class="prof-footer">
+              <a class="${rmpLinkCls}" href="${rmpHref}" target="_blank" rel="noopener">View on RMP ↗</a>
+              <div class="overall-score"><span class="overall-num ${overallCls.color}">${overallNum}</span><span class="overall-label">/ 5.0</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="course-block">
+          <div class="course-block-header">
+            <span class="course-block-title">${course.title}</span>
+            <span class="prof-course-tag">${course.code.replace(' ', '_')}</span>
+          </div>
+          <div class="tab-row">
+            ${tabs}
+          </div>
+          <div id="${course.id}-panels">
+            ${panels}
+          </div>
+        </div>
+      `;
     }
 
-    renderAll();
+    function buildProfessorsHTML() {
+      const container = document.getElementById('professors-container');
+      const activeIds = getActiveCourses();
+
+      const activeList = COURSES.filter(c => activeIds.includes(c.id));
+      const otherList = COURSES.filter(c => !activeIds.includes(c.id));
+
+      document.getElementById('course-count').textContent = COURSES.length + ' courses tracked';
+
+      let html = '';
+
+      if (activeList.length > 0) {
+        html += `
+          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 1rem;">
+            <div class="sem-badge active" style="color: #FF6363; border-color: rgba(255,99,99,0.3); background: rgba(255,99,99,0.1);">★ Your Courses</div>
+            <div class="sem-line"></div>
+          </div>
+        `;
+        html += activeList.map(generateCourseBlock).join('');
+
+        html += `
+          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 3rem;">
+            <div class="sem-badge">Other Courses</div>
+            <div class="sem-line"></div>
+          </div>
+        `;
+        html += otherList.map(generateCourseBlock).join('');
+      } else {
+        html += otherList.map(generateCourseBlock).join('');
+      }
+
+      container.innerHTML = html;
+    }
+
+    buildProfessorsHTML();
+
+    // Re-render if the user changes active courses in another tab
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'eceuh:active-courses') {
+        buildProfessorsHTML();
+      }
+    });
 
     // ── Theme toggle ──
     const btn = document.getElementById('theme-toggle');
@@ -1029,8 +834,5 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   </script>
-<footer class="eceuh-footer">
-  <p>Built for the UH EE Discord community. For students, by a student.</p>
-</footer>
 </body>
 </html>
