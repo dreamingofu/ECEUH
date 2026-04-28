@@ -466,7 +466,7 @@
     }
     .empty-active .pick-cta:hover { filter: brightness(1.08); }
 
-    /* Course picker modal */
+    /* ── COURSE PICKER MODAL (UPDATED WITH SEARCH) ── */
     .picker-backdrop {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.6);
@@ -479,16 +479,18 @@
     }
     .picker-backdrop.open { display: flex; }
     @keyframes pickerFade { from { opacity: 0 } to { opacity: 1 } }
+    
     .picker {
       width: 100%;
-      max-width: 460px;
-      background: #0f0f1c;
+      max-width: 480px;
+      background: var(--bg-card);
       border: 1px solid var(--border-2);
       border-radius: 18px;
       padding: 28px;
       color: var(--text);
       font-family: var(--sans);
       box-shadow: 0 25px 60px -12px rgba(0,0,0,0.6);
+      display: flex; flex-direction: column;
     }
     .picker h3 {
       font-family: var(--serif);
@@ -496,13 +498,43 @@
       font-size: 22px;
       margin-bottom: 6px;
     }
-    .picker p { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
-    .picker .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+    .picker p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+    
+    /* Search Bar Input */
+    .picker-search-bar {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color .15s, background .15s;
+    }
+    .picker-search-bar:focus { border-color: var(--accent); }
+    .picker-search-bar::placeholder { color: var(--text-dim); }
+
+    /* Scrollable Options List */
+    .picker .options { 
+      display: flex; flex-direction: column; gap: 8px; 
+      margin-bottom: 22px; 
+      max-height: 320px; 
+      overflow-y: auto; 
+      padding-right: 6px;
+    }
+    .picker .options::-webkit-scrollbar { width: 6px; }
+    .picker .options::-webkit-scrollbar-track { background: transparent; }
+    .picker .options::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 9999px; }
+    .picker .options::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
     .picker-option {
       display: flex;
       align-items: flex-start;
       gap: 14px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border-2);
       border-radius: 12px;
@@ -510,7 +542,7 @@
       transition: border-color .15s, background .15s;
     }
     .picker-option:hover { border-color: rgba(255,99,99,0.4); }
-    .picker-option input { margin-top: 2px; accent-color: var(--accent); width: 18px; height: 18px; flex: none; }
+    .picker-option input { margin-top: 2px; accent-color: var(--accent); width: 18px; height: 18px; flex: none; cursor: pointer; }
     .picker-option .title {
       font-family: var(--serif);
       font-weight: 700;
@@ -527,6 +559,7 @@
     }
     .picker-option input:checked ~ div .title { color: var(--accent); }
     .picker-option:has(input:checked) { border-color: var(--accent); background: rgba(255,99,99,0.06); }
+    
     .picker-actions { display: flex; gap: 10px; justify-content: flex-end; }
     .picker-btn {
       padding: 10px 18px;
@@ -552,25 +585,34 @@
     }
     .picker-btn.save:hover { filter: brightness(1.08); }
 
-    /* Light mode: picker modal */
+    /* Light mode: picker modal (Preserved from your fixes) */
     html.light .picker {
-      background: #fff5f3;
-      border-color: rgba(26,26,46,0.14);
-      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.15);
+      background: #fff5f3 !important;
+      border-color: rgba(26,26,46,0.14) !important;
+      box-shadow: 0 25px 60px -12px rgba(0,0,0,0.15) !important;
     }
-    html.light .picker h3 { color: #1A1A2E; }
-    html.light .picker p { color: #475569; }
+    html.light .picker h3 { color: #1A1A2E !important; }
+    html.light .picker p { color: #475569 !important; }
+    
+    html.light .picker-search-bar {
+      background: #ffffff !important;
+      border-color: rgba(26,26,46,0.12) !important;
+      color: #1A1A2E !important;
+    }
+    html.light .picker-search-bar:focus { border-color: var(--accent) !important; }
+    html.light .picker-search-bar::placeholder { color: #94A3B8 !important; }
+
     html.light .picker-option {
-      background: rgba(26,26,46,0.04);
-      border-color: rgba(26,26,46,0.12);
+      background: #ffffff !important;
+      border-color: rgba(26,26,46,0.12) !important;
     }
-    html.light .picker-option .title { color: #1A1A2E; }
-    html.light .picker-option .meta { color: #475569; }
-    html.light .picker-option:hover { border-color: rgba(185,74,74,0.4); background: rgba(185,74,74,0.05); }
-    html.light .picker-option:has(input:checked) { border-color: var(--accent); background: rgba(185,74,74,0.08); }
-    html.light .picker-option input:checked ~ div .title { color: var(--accent); }
-    html.light .picker-btn.cancel { color: #475569; border-color: rgba(26,26,46,0.2); }
-    html.light .picker-btn.cancel:hover { color: #1A1A2E; border-color: var(--accent); }
+    html.light .picker-option .title { color: #1A1A2E !important; }
+    html.light .picker-option .meta { color: #475569 !important; }
+    html.light .picker-option:hover { border-color: rgba(185,74,74,0.4) !important; background: rgba(185,74,74,0.05) !important; }
+    html.light .picker-option:has(input:checked) { border-color: var(--accent) !important; background: rgba(185,74,74,0.08) !important; }
+    html.light .picker-option input:checked ~ div .title { color: var(--accent) !important; }
+    html.light .picker-btn.cancel { color: #475569 !important; border-color: rgba(26,26,46,0.2) !important; }
+    html.light .picker-btn.cancel:hover { color: #1A1A2E !important; border-color: var(--accent) !important; }
 
     /* Status card link styling */
     a.status-card { text-decoration: none; transition: transform .15s, border-color .15s; }
@@ -1023,6 +1065,9 @@
     <div class="picker" role="dialog" aria-labelledby="picker-title">
       <h3 id="picker-title">Pick your active courses</h3>
       <p>Select the courses you're currently taking. They'll show up here with progress synced from each course page.</p>
+      
+      <input type="text" id="picker-search" class="picker-search-bar" placeholder="Search course name or code..." autocomplete="off">
+      
       <div class="options" id="picker-options"></div>
       <div class="picker-actions">
         <button type="button" class="picker-btn cancel" id="picker-cancel">Cancel</button>
@@ -1196,11 +1241,25 @@
     document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
 
     /* ── Active Coursework: interactive picker + progress rollup ──────── */
+    // Added ALL 15 courses so they sync with the professors list
     const COURSES = {
-      dld:       { title: 'Digital Logic Design',   desc: 'K-maps, FSMs, and sequential circuit synthesis.',          units: 6, href: 'dld.html' },
-      circuits2: { title: 'Circuits 2',              desc: 'AC analysis, phasors, Bode plots, and second-order RLC.', units: 8, href: 'circuits2.html' },
-      cprog:     { title: 'Programming with C',     desc: 'Pointers, memory, structs, and algorithm design.',         units: 8, href: 'cprog.html' },
+      engi1100:  { title: 'Intro to Engineering',      desc: 'ENGI 1100 · Year 1 fundamentals.', units: 4, href: '#' },
+      engi1331:  { title: 'Computing for Engineers',   desc: 'ENGI 1331 · MATLAB and problem solving.', units: 6, href: '#' },
+      engi2304:  { title: 'Technical Communications',  desc: 'ENGI 2304 · Engineering writing and reports.', units: 4, href: '#' },
+      ece2201:   { title: 'Circuit Analysis I',        desc: 'ECE 2201 · DC circuits, KVL, KCL, Thevenin.', units: 8, href: '#' },
+      circuits2: { title: 'Circuit Analysis II',       desc: 'ECE 2202 · AC analysis, phasors, and RLC.', units: 8, href: 'circuits2.html' },
+      ece2100:   { title: 'Circuit Analysis Lab',      desc: 'ECE 2100 · Practical circuit building and testing.', units: 2, href: '#' },
+      inde2333:  { title: 'Engineering Statistics',    desc: 'INDE 2333 · Probability and data analysis.', units: 6, href: '#' },
+      cprog:     { title: 'Programming Apps in ECE',   desc: 'ECE 3331 · Pointers, memory, structs, algorithms.', units: 8, href: 'cprog.html' },
+      dld:       { title: 'Digital Logic Design',      desc: 'ECE 3441 · K-maps, FSMs, and sequential logic.', units: 6, href: 'dld.html' },
+      ece3155:   { title: 'Electronics Lab',           desc: 'ECE 3155 · Diode and BJT circuit labs.', units: 2, href: '#' },
+      ece3355:   { title: 'Electronics',               desc: 'ECE 3355 · Diodes, BJTs, MOSFETs, and amps.', units: 6, href: '#' },
+      ece3337:   { title: 'Signals & Systems',         desc: 'ECE 3337 · Fourier, Laplace, and Z-transforms.', units: 6, href: '#' },
+      ece3317:   { title: 'Applied EM Waves',          desc: 'ECE 3317 · Maxwells equations and transmission lines.', units: 6, href: '#' },
+      ece3436:   { title: 'Microprocessor Systems',    desc: 'ECE 3436 · Assembly, memory, and microcontrollers.', units: 8, href: '#' },
+      ece3340:   { title: 'Numerical Methods',         desc: 'ECE 3340 · Algorithms for solving engineering problems.', units: 6, href: '#' }
     };
+    
     const ACTIVE_KEY = 'eceuh:active-courses';
     const PROGRESS_KEY = 'eceuh:progress';
 
@@ -1258,8 +1317,13 @@
         if (!c) return '';
         const r = computeRollup(slug);
         const s = statusFor(r.pct);
+        
+        // Prevent broken links for placeholder courses
+        const href = c.href === '#' ? 'javascript:void(0)' : c.href;
+        const style = c.href === '#' ? 'opacity: 0.6; cursor: default;' : '';
+
         return `
-          <a class="status-card" href="${c.href}">
+          <a class="status-card" href="${href}" style="${style}">
             <div class="status-row">
               <span class="pill ${s.cls}">${s.label}</span>
               <span class="status-meta">${r.done}/${r.total} units · ${r.pct}%</span>
@@ -1275,17 +1339,43 @@
     function openPicker() {
       const active = getActive();
       const list = document.getElementById('picker-options');
+      const searchInput = document.getElementById('picker-search');
+      
+      // Clear the search bar every time it opens
+      searchInput.value = '';
+
+      // Generate all 15 checkboxes
       list.innerHTML = Object.entries(COURSES).map(([slug, c]) => `
-        <label class="picker-option">
+        <label class="picker-option" data-search="${c.title.toLowerCase()} ${c.desc.toLowerCase()}">
           <input type="checkbox" value="${slug}" ${active.includes(slug) ? 'checked' : ''} />
           <div>
             <span class="title">${c.title}</span>
-            <span class="meta">${c.units} units · ${c.desc}</span>
+            <span class="meta">${c.desc}</span>
           </div>
         </label>
       `).join('');
+      
       document.getElementById('picker').classList.add('open');
+      
+      // Auto-focus the search bar so the user can start typing immediately
+      setTimeout(() => searchInput.focus(), 100);
     }
+
+    // Modal Search Filter Logic
+    document.getElementById('picker-search').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const options = document.querySelectorAll('.picker-option');
+      
+      options.forEach(opt => {
+        const searchString = opt.getAttribute('data-search');
+        if (searchString.includes(query)) {
+          opt.style.display = 'flex'; // Show matching courses
+        } else {
+          opt.style.display = 'none'; // Hide non-matching courses
+        }
+      });
+    });
+
     function closePicker() {
       document.getElementById('picker').classList.remove('open');
     }
