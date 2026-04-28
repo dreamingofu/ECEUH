@@ -317,6 +317,8 @@
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20v3H2zM4 10v11h16V10M10 14h4"/></svg>' },
       { key: 'faculty',   href: 'professors.html',      label: 'Faculty',
         icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M16 11a4 4 0 0 0 0-8"/></svg>' },
+      { key: 'homework',  href: 'homework-helper.html', label: 'Homework Helper',
+        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L14 8.5L20 9.3L15.5 13.5L16.9 19.5L12 16.8L7.1 19.5L8.5 13.5L4 9.3L10 8.5Z"/></svg>' },
       { key: 'github',    href: 'https://github.com/dreamingofu/eceuh', label: 'GitHub',
         external: true,
         icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.8 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.7.4-1.3.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1 .8 2.1v3c0 .3.2.7.8.6 4.5-1.5 7.8-5.8 7.8-10.9 0-6.3-5.2-11.5-11.5-11.5z"/></svg>' },
@@ -330,6 +332,7 @@
       'circuits2.html': 'archives',
       'cprog.html': 'archives',
       'dld-resources.html': 'archives',
+      'homework-helper.html': 'homework',
     };
     const activeKey = activeMap[here] || '';
 
