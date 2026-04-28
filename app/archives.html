@@ -119,28 +119,31 @@
     @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 540px)  { .grid { grid-template-columns: 1fr; } }
 
+    /* ── SPLIT CARD DESIGN UPDATE ── */
     .archive-card {
       position: relative;
       display: flex; flex-direction: column;
-      gap: 14px;
-      transition: transform .25s;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 10px;
+      transition: transform .25s, border-color .25s;
     }
-    .archive-card:hover { transform: translateY(-4px); }
+    .archive-card:not(.placeholder):hover { 
+      transform: translateY(-4px); 
+      border-color: rgba(255,99,99,0.4);
+    }
     .archive-card.placeholder { opacity: 0.55; }
-    .archive-card.placeholder:hover { transform: none; }
+    .archive-card.placeholder:hover { transform: none; border-color: var(--border); }
 
     .archive-thumb {
       position: relative;
-      aspect-ratio: 1 / 1;
-      border-radius: 18px;
+      aspect-ratio: 16 / 10;
+      border-radius: 12px;
       overflow: hidden;
-      isolation: isolate;
       background: #0d0d18;
-      border: 1px solid var(--border-2);
-      transition: border-color .25s;
     }
-    .archive-card:hover .archive-thumb { border-color: rgba(255,99,99,0.35); }
-    .archive-card.placeholder:hover .archive-thumb { border-color: var(--border-2); }
 
     .archive-art {
       position: absolute; inset: 0;
@@ -149,42 +152,34 @@
       z-index: 0;
     }
     .archive-card:not(.placeholder):hover .archive-art { transform: scale(1.05); }
-    .archive-thumb::after {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        linear-gradient(180deg, rgba(15,13,28,0) 35%, rgba(15,13,28,0.85) 100%),
-        linear-gradient(180deg, rgba(15,13,28,0.35) 0%, rgba(15,13,28,0) 30%);
-      z-index: 1;
-    }
 
     .archive-meta {
-      position: absolute; left: 18px; right: 18px; bottom: 18px;
-      z-index: 2;
-      display: flex; flex-direction: column; gap: 2px;
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 0 6px;
     }
     .archive-code {
       font-family: var(--mono);
-      font-weight: 500;
+      font-weight: 700;
       font-size: 10px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: #FF6363;
+      color: var(--accent);
     }
     .archive-name {
       font-family: var(--serif);
       font-style: italic;
       font-weight: 700;
-      font-size: 17px;
-      line-height: 22px;
-      color: #fff;
+      font-size: 18px;
+      line-height: 24px;
+      color: var(--text);
       letter-spacing: -0.2px;
     }
 
     .archive-stat {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 4px;
+      padding: 0 6px 4px 6px;
       font-size: 11px; line-height: 16px;
+      margin-top: auto;
     }
     .archive-stat .left { color: var(--text-dim); }
     .archive-stat .badge {
@@ -278,10 +273,10 @@
         return wrap(`
           <div class="archive-thumb">
             <div class="archive-art" style="background-image:url('${c.art}');"></div>
-            <div class="archive-meta">
-              <div class="archive-code">${c.code}</div>
-              <div class="archive-name">${c.title}</div>
-            </div>
+          </div>
+          <div class="archive-meta">
+            <div class="archive-code">${c.code}</div>
+            <div class="archive-name">${c.title}</div>
           </div>
           <div class="archive-stat">
             <span class="left">${c.code.split(' ')[0]}</span>
