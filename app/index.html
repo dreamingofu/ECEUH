@@ -5,7 +5,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EE Knowledge Base · UH</title>
+  <title>ECE Knowledge Base · UH</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -876,7 +876,7 @@
         <div class="hero-inner">
           <div class="hero-row">
             <div class="hero-copy">
-              <h1 class="hero-title">EE Coursework, archived.</h1>
+              <h1 class="hero-title">ECE Coursework, archived.</h1>
               <p class="hero-desc">A living record of homework walkthroughs, lab notes, and faculty ratings — built in real time each semester at the University of Houston.</p>
             </div>
             <div class="avatar-stack" aria-hidden="true">
@@ -969,7 +969,7 @@
         <div class="archives-head">
           <div>
             <h2 class="archives-title">Course Archives</h2>
-            <p class="archives-desc">Unit walkthroughs, past exams, and formula sheets for every tracked course.</p>
+            <p class="archives-desc">Quiz walkthroughs, past Exams, Homework, and formula sheets for every tracked course.</p>
           </div>
         </div>
 
@@ -1025,7 +1025,7 @@
               <div class="archive-art" style="background-image:url('./images/ratemyprofessor.jpg');"></div>
             </div>
             <div class="archive-meta">
-              <div class="archive-code">RMP · Spring &rsquo;26</div>
+              <div class="archive-code">RMP</div>
               <div class="archive-name">Professor Ratings</div>
             </div>
             <div class="archive-stat">
@@ -1294,7 +1294,7 @@
         `;
         return;
       }
-      sub.textContent = `Spring 2026 · ${active.length} active course${active.length > 1 ? 's' : ''}`;
+      sub.textContent = `${active.length} active course${active.length > 1 ? 's' : ''}`;
       grid.innerHTML = active.map(slug => {
         const c = COURSES[slug];
         if (!c) return '';
