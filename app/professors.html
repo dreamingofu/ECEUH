@@ -174,7 +174,7 @@
     .sem-badge.active { border-color: #4d9fff30; color: var(--blue); background: #4d9fff08; }
     .sem-line { flex: 1; height: 1px; background: var(--border2); }
 
-    /* ── EMPTY-STATE / BROWSE-ALL TOGGLE ── */
+    /* ── EMPTY-STATE ── */
     .empty-active-card {
       border: 1px dashed rgba(255,99,99,0.30);
       background: rgba(255,99,99,0.06);
@@ -199,23 +199,48 @@
     }
     .empty-active-card a:hover { background: rgba(255,99,99,0.20); border-color: #FF6363; }
 
-    .browse-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 100%; padding: 16px 22px; margin-bottom: 16px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02);
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.3px;
-      color: var(--text); cursor: pointer;
-      transition: border-color .15s, background .15s;
+    /* ── SEARCH & FILTER CONTROLS ── */
+    .prof-controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; animation: fadeUp 0.35s ease; }
+    .prof-search-bar { 
+      width: 100%; 
+      background: rgba(255,255,255,0.03); 
+      border: 1px solid var(--border-2); 
+      border-radius: 12px; 
+      padding: 14px 18px; 
+      color: var(--text); 
+      font-family: 'Inter', sans-serif; 
+      font-size: 15px; 
+      outline: none; 
+      transition: border-color .15s, background .15s, box-shadow .15s; 
     }
-    html.light .browse-toggle { background: rgba(26,26,46,0.03); }
-    .browse-toggle:hover { border-color: rgba(255,99,99,0.40); background: rgba(255,99,99,0.05); }
-    .browse-toggle .chev { transition: transform .2s ease; font-size: 11px; color: var(--text-dim); }
-    .browse-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
-    .browse-toggle .count { color: var(--text-dim); font-weight: 500; margin-left: 10px; }
-    .browse-list { display: none; }
-    .browse-list.open { display: block; animation: fadeUp 0.35s ease; }
+    .prof-search-bar:focus { border-color: #FF6363; box-shadow: 0 0 0 3px rgba(255,99,99,0.15); }
+    .prof-search-bar::placeholder { color: var(--text-dim); }
+    
+    .prof-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+    .filter-chip { 
+      background: rgba(255,255,255,0.03); 
+      border: 1px solid var(--border-2); 
+      border-radius: 9999px; 
+      padding: 8px 16px; 
+      color: var(--text-dim); 
+      font-family: 'Inter', sans-serif; 
+      font-size: 12px; 
+      font-weight: 600; 
+      letter-spacing: 0.5px;
+      cursor: pointer; 
+      transition: all .15s; 
+    }
+    .filter-chip:hover { border-color: rgba(255,99,99,0.4); color: var(--text); }
+    .filter-chip.active { background: rgba(255,99,99,0.12); border-color: #FF6363; color: #FF6363; }
+
+    /* Light Mode Overrides for Filters */
+    html.light .prof-search-bar { background: #ffffff !important; border-color: rgba(26,26,46,0.12) !important; color: #1A1A2E !important; }
+    html.light .prof-search-bar:focus { border-color: #FF6363 !important; box-shadow: 0 0 0 3px rgba(185,74,74,0.15) !important;}
+    html.light .prof-search-bar::placeholder { color: #94A3B8 !important; }
+    html.light .filter-chip { background: #ffffff !important; border-color: rgba(26,26,46,0.12) !important; color: #475569 !important; }
+    html.light .filter-chip:hover { border-color: rgba(185,74,74,0.4) !important; color: #1A1A2E !important; }
+    html.light .filter-chip.active { background: rgba(185,74,74,0.08) !important; border-color: #FF6363 !important; color: #FF6363 !important; }
+
 
     .course-block.is-target {
       box-shadow: 0 0 0 2px rgba(255,99,99,0.55), 0 18px 36px -16px rgba(255,99,99,0.45);
@@ -595,6 +620,22 @@
 </head>
 <body class="eceuh-shell eceuh-collapsible">
 
+  <nav class="topbar">
+    <div class="topbar-left">
+      <a class="back-btn" href="index.html">← Home</a>
+      <div class="breadcrumb">
+        <span>EE Knowledge Base</span>
+        <span style="color:var(--border);">/</span>
+        <span>Professors</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="live"><span class="live-dot"></span> Spring 2026</span>
+      <span id="clock">--:--:--</span>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </nav>
+
   <header class="hero">
     <div class="hero-inner">
       <p class="hero-eyebrow">Electrical Engineering</p>
@@ -628,10 +669,6 @@
   </footer>
 
   <script>
-    // ════════════════════════════════════════════
-    //  COURSES DATA — Edit this list to add or 
-    //  update professor ratings!
-    // ════════════════════════════════════════════
     const COURSES = [
       {
         id: 'engi1100', code: 'ENGI 1100', title: 'Introduction to Engineering',
@@ -665,7 +702,7 @@
         ]
       },
       {
-        id: 'circuits2', code: 'ECE 2202', title: 'Circuit Analysis II', // id changed to match homepage active course key
+        id: 'circuits2', code: 'ECE 2202', title: 'Circuit Analysis II',
         profs: [
           { name: "Dr. Xiaonan Shan", shortName: "Shan", initials: "XS", dept: "Electrical Engineering Dept.", overall: 4.5, difficulty: 3.5, wouldTake: 100, rmpUrl: "https://www.ratemyprofessors.com/professor/2991318" },
           { name: "Dr. Deepa Ramachandran", shortName: "Ramachandran", initials: "DR", dept: "Electrical Engineering Dept.", overall: null, difficulty: null, wouldTake: null, rmpUrl: null },
@@ -746,7 +783,8 @@
       }
     ];
 
-    // ── Tab switching ──
+    let currentFilter = 'all';
+
     function switchTab(course, idx, btn) {
       btn.closest('.tab-row').querySelectorAll('.tab-btn').forEach((b, i) => {
         b.classList.toggle('active', i === idx);
@@ -756,7 +794,6 @@
       });
     }
 
-    // ── Rating helpers ──
     function getRatingClass(val, type) {
       if (val === null) return { color: 'val-none', fill: 'fill-none' };
       if (type === 'difficulty') {
@@ -774,13 +811,17 @@
       return            { color: 'val-low',  fill: 'fill-low'  };
     }
 
-    // ── HTML Generation ──
     function getActiveCourses() {
       try { return JSON.parse(localStorage.getItem('eceuh:active-courses') || '[]'); }
       catch { return []; }
     }
 
     function generateCourseBlock(course) {
+      const match = course.code.match(/\d{4}/);
+      const level = match ? Math.floor(parseInt(match[0]) / 1000) * 1000 : 0;
+      const profNames = course.profs.map(p => p.name + ' ' + p.shortName).join(' ').toLowerCase();
+      const searchStr = `${course.title.toLowerCase()} ${course.code.toLowerCase()} ${profNames}`;
+
       const tabs = course.profs.map((p, i) => {
         return `<button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="switchTab('${course.id}', ${i}, this)">${p.shortName}</button>`;
       }).join('');
@@ -830,7 +871,7 @@
       }).join('');
 
       return `
-        <div class="course-block" id="prof-${course.id}" data-course="${course.id}">
+        <div class="course-block browse-item" id="prof-${course.id}" data-search="${searchStr}" data-level="${level}">
           <div class="course-block-header">
             <span class="course-block-title">${course.title}</span>
             <span class="prof-course-tag">${course.code.replace(' ', '_')}</span>
@@ -843,6 +884,58 @@
           </div>
         </div>
       `;
+    }
+
+    function getControlsHTML() {
+      return `
+        <div class="prof-controls">
+          <input type="text" id="prof-search" class="prof-search-bar" placeholder="Search courses or professors..." autocomplete="off">
+          <div class="prof-filters">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="1000">1000-Level</button>
+            <button class="filter-chip" data-filter="2000">2000-Level</button>
+            <button class="filter-chip" data-filter="3000">3000-Level</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function filterCourses() {
+      const searchInput = document.getElementById('prof-search');
+      const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const blocks = document.querySelectorAll('.browse-item'); 
+
+      blocks.forEach(block => {
+        const searchStr = block.getAttribute('data-search');
+        const level = block.getAttribute('data-level');
+
+        const matchesSearch = searchStr.includes(query);
+        const matchesFilter = currentFilter === 'all' || level === currentFilter;
+
+        if (matchesSearch && matchesFilter) {
+          block.style.display = 'block';
+        } else {
+          block.style.display = 'none';
+        }
+      });
+    }
+
+    function attachFilterListeners() {
+      const searchInput = document.getElementById('prof-search');
+      const chips = document.querySelectorAll('.filter-chip');
+
+      if(searchInput) {
+        searchInput.addEventListener('input', filterCourses);
+      }
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+          chips.forEach(c => c.classList.remove('active'));
+          e.target.classList.add('active');
+          currentFilter = e.target.getAttribute('data-filter');
+          filterCourses();
+        });
+      });
     }
 
     function buildProfessorsHTML() {
@@ -858,50 +951,49 @@
 
       if (activeList.length > 0) {
         html += `
-          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 1rem;">
-            <div class="sem-badge active" style="color: #FF6363; border-color: rgba(255,99,99,0.3); background: rgba(255,99,99,0.1);">★ Your Courses</div>
+          <div style="display: flex; align-items: center; gap: 16px; margin: 1rem 0 2rem; padding: 18px 24px; background: rgba(255, 99, 99, 0.08); border: 1px solid rgba(255, 99, 99, 0.25); border-radius: 16px;">
+            <div style="display: grid; place-items: center; width: 36px; height: 36px; background: #FF6363; color: #fff; border-radius: 8px; flex: none;">
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            </div>
+            <div>
+              <h3 style="font-family: var(--serif); font-size: 22px; font-weight: 700; color: #FF6363; margin: 0 0 2px 0;">Your Active Courses</h3>
+              <p style="font-family: var(--sans); font-size: 13px; color: var(--text-dim); margin: 0;">Professors for the classes you are currently taking.</p>
+            </div>
+          </div>
+        `;
+        // Generate active courses WITHOUT the .browse-item class so they are immune to search filtering
+        html += activeList.map(c => generateCourseBlock(c).replace('browse-item', '')).join('');
+
+        html += `
+          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 4rem;">
+            <div class="sem-badge" style="background: transparent; border-color: transparent; padding-left: 0; font-size: 14px; font-family: var(--serif); font-weight: 700; color: var(--text-dim);">All Other Courses</div>
             <div class="sem-line"></div>
           </div>
         `;
-        html += activeList.map(generateCourseBlock).join('');
+        
+        html += getControlsHTML();
+        html += otherList.map(generateCourseBlock).join('');
 
-        html += `
-          <button type="button" class="browse-toggle" id="browse-toggle" aria-expanded="false" aria-controls="browse-list" style="margin-top: 2.5rem;">
-            <span>Browse all ECE courses<span class="count">· ${otherList.length} more</span></span>
-            <span class="chev">▼</span>
-          </button>
-          <div class="browse-list" id="browse-list">
-            ${otherList.map(generateCourseBlock).join('')}
-          </div>
-        `;
       } else {
         html += `
           <div class="empty-active-card">
             <strong>No active courses picked yet</strong>
             <p>Choose the classes you're taking on the home page and they'll show up at the top here so you don't have to scroll the full directory.</p>
-            <a href="index.html#active">Pick courses on Home →</a>
+            <a href="index.html#active-coursework">Pick courses on Home →</a>
           </div>
-          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
-            <div class="sem-badge">All ECE Courses</div>
+          <div class="semester-label-row" style="margin-bottom: 1.5rem; margin-top: 2rem;">
+            <div class="sem-badge" style="background: transparent; border-color: transparent; padding-left: 0; font-size: 14px; font-family: var(--serif); font-weight: 700; color: var(--text-dim);">All ECE Courses</div>
             <div class="sem-line"></div>
           </div>
         `;
+        
+        html += getControlsHTML();
         html += otherList.map(generateCourseBlock).join('');
       }
 
       container.innerHTML = html;
-      wireBrowseToggle();
+      attachFilterListeners();
       handleHash();
-    }
-
-    function wireBrowseToggle() {
-      const btn = document.getElementById('browse-toggle');
-      const list = document.getElementById('browse-list');
-      if (!btn || !list) return;
-      btn.addEventListener('click', () => {
-        const open = list.classList.toggle('open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
     }
 
     function handleHash() {
@@ -909,13 +1001,6 @@
       if (!id) return;
       const target = document.getElementById('prof-' + id) || document.getElementById(id);
       if (!target) return;
-      // If the target is inside the collapsed list, open it first.
-      const list = document.getElementById('browse-list');
-      const btn = document.getElementById('browse-toggle');
-      if (list && list.contains(target) && !list.classList.contains('open')) {
-        list.classList.add('open');
-        if (btn) btn.setAttribute('aria-expanded', 'true');
-      }
       requestAnimationFrame(() => {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         target.classList.add('is-target');
@@ -933,6 +1018,25 @@
         buildProfessorsHTML();
       }
     });
+
+    // ── Theme toggle ──
+    const btn = document.getElementById('theme-toggle');
+    function applyTheme(theme) {
+      if (theme === 'light') { document.documentElement.classList.add('light'); btn.textContent = '● Dark'; }
+      else { document.documentElement.classList.remove('light'); btn.textContent = '☀ Light'; }
+    }
+    function toggleTheme() {
+      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+      localStorage.setItem('ee-theme', next); applyTheme(next);
+    }
+    applyTheme(localStorage.getItem('ee-theme') || 'dark');
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ee-theme' && e.newValue) applyTheme(e.newValue);
+    });
+
+    // ── Clock ──
+    function tick() { document.getElementById('clock').textContent = new Date().toTimeString().slice(0, 8); }
+    tick(); setInterval(tick, 1000);
 
     // ── Scroll reveal ──
     const obs = new IntersectionObserver(entries => {
