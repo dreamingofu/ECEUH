@@ -550,7 +550,12 @@
       font-size: 13px !important;
       font-weight: 500 !important;
     }
-    .val-high, .val-mid, .val-low { color: #FF6363 !important; }
+    .val-high { color: #4ADE80 !important; }
+    .val-mid  { color: #FBBF24 !important; }
+    .val-low  { color: #FF6363 !important; }
+    html.light .val-high { color: #16a34a !important; }
+    html.light .val-mid  { color: #b45309 !important; }
+    html.light .val-low  { color: #b94a4a !important; }
     .meter {
       height: 6px !important;
       border-radius: 9999px !important;
@@ -558,7 +563,12 @@
     }
     html.light .meter { background: rgba(26,26,46,0.08) !important; }
     .meter-fill { border-radius: 9999px !important; box-shadow: none !important; }
-    .fill-high, .fill-mid, .fill-low { background: #FF6363 !important; box-shadow: none !important; }
+    .fill-high { background: #4ADE80 !important; box-shadow: none !important; }
+    .fill-mid  { background: #FBBF24 !important; box-shadow: none !important; }
+    .fill-low  { background: #FF6363 !important; box-shadow: none !important; }
+    html.light .fill-high { background: #16a34a !important; }
+    html.light .fill-mid  { background: #b45309 !important; }
+    html.light .fill-low  { background: #b94a4a !important; }
 
     .prof-footer { padding-top: 18px !important; border-top: 1px solid var(--border) !important; }
     .rmp-link {
@@ -730,18 +740,18 @@
     function getRatingClass(val, type) {
       if (val === null) return { color: 'val-none', fill: 'fill-none' };
       if (type === 'difficulty') {
-        if (val <= 2.5) return { color: 'val-high', fill: 'fill-high' };
-        if (val <= 3.5) return { color: 'val-mid',  fill: 'fill-mid'  };
-        return             { color: 'val-low',  fill: 'fill-low'  };
+        if (val <= 2.5) return { color: 'val-high', fill: 'fill-high' }; // easy = green
+        if (val <= 3.8) return { color: 'val-mid',  fill: 'fill-mid'  }; // medium = yellow
+        return             { color: 'val-low',  fill: 'fill-low'  };      // hard = red
       }
       if (type === 'wta') {
-        if (val >= 75) return { color: 'val-high', fill: 'fill-high' };
-        if (val >= 50) return { color: 'val-mid',  fill: 'fill-mid'  };
-        return           { color: 'val-low',  fill: 'fill-low'  };
+        if (val >= 76) return { color: 'val-high', fill: 'fill-high' }; // ≥76% = green
+        if (val >= 50) return { color: 'val-mid',  fill: 'fill-mid'  }; // 50–75% = yellow
+        return           { color: 'val-low',  fill: 'fill-low'  };       // <50% = red
       }
-      if (val >= 4.0) return { color: 'val-high', fill: 'fill-high' };
-      if (val >= 3.0) return { color: 'val-mid',  fill: 'fill-mid'  };
-      return            { color: 'val-low',  fill: 'fill-low'  };
+      if (val >= 3.9) return { color: 'val-high', fill: 'fill-high' }; // 3.9–5.0 = green
+      if (val >= 2.6) return { color: 'val-mid',  fill: 'fill-mid'  }; // 2.6–3.8 = yellow
+      return            { color: 'val-low',  fill: 'fill-low'  };        // <2.6 = red
     }
 
     // ── HTML Generation ──
@@ -760,15 +770,15 @@
         const diffCls = getRatingClass(p.difficulty, 'difficulty');
         const wtaCls = getRatingClass(p.wouldTake, 'wta');
 
-        const overallDisplay = p.overall !== null ? p.overall.toFixed(1) + ' / 5.0' : '— / 5.0';
-        const diffDisplay = p.difficulty !== null ? p.difficulty.toFixed(1) + ' / 5.0' : '— / 5.0';
-        const wtaDisplay = p.wouldTake !== null ? p.wouldTake + '%' : '— %';
+        const overallDisplay = p.overall !== null ? p.overall.toFixed(1) + ' / 5.0' : 'First time teaching';
+        const diffDisplay = p.difficulty !== null ? p.difficulty.toFixed(1) + ' / 5.0' : 'First time teaching';
+        const wtaDisplay = p.wouldTake !== null ? p.wouldTake + '%' : 'First time teaching';
 
         const overallPct = p.overall !== null ? (p.overall / 5) * 100 : 0;
         const diffPct = p.difficulty !== null ? (p.difficulty / 5) * 100 : 0;
         const wtaPct = p.wouldTake !== null ? p.wouldTake : 0;
 
-        const overallNum = p.overall !== null ? p.overall.toFixed(1) : '—';
+        const overallNum = p.overall !== null ? p.overall.toFixed(1) : 'New';
         const rmpLinkCls = p.rmpUrl ? 'rmp-link' : 'rmp-link disabled';
         const rmpHref = p.rmpUrl ? p.rmpUrl : '#';
 
@@ -793,7 +803,7 @@
             </div>
             <div class="prof-footer">
               <a class="${rmpLinkCls}" href="${rmpHref}" target="_blank" rel="noopener">View on RMP ↗</a>
-              <div class="overall-score"><span class="overall-num ${overallCls.color}">${overallNum}</span><span class="overall-label">/ 5.0</span></div>
+              <div class="overall-score"><span class="overall-num ${overallCls.color}">${overallNum}</span>${p.overall !== null ? '<span class="overall-label">/ 5.0</span>' : ''}</div>
             </div>
           </div>
         `;
