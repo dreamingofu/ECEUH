@@ -409,3 +409,14 @@ button:active, .signin-cta:active, .fab:active,
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ── Mobile: scroll lock + rubber-band containment ──────────────────────── */
+@media (max-width: 900px) {
+  body.eceuh-sidebar-open { overflow: hidden; }
+  .eceuh-sidebar { overscroll-behavior-y: contain; }
+}
+
+/* ── Safe-area bottom for the sidebar itself ────────────────────────────── */
+.eceuh-sidebar {
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+}

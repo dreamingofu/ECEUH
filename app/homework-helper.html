@@ -54,6 +54,7 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
+      height: 100dvh; /* dynamic viewport height: correct on mobile browsers */
       overflow: hidden;
       background: var(--ch-bg);
     }
@@ -71,6 +72,7 @@
     /* ══ WELCOME SCREEN ══ */
     .ch-welcome {
       min-height: calc(100vh - 108px);
+      min-height: calc(100dvh - 108px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -305,7 +307,7 @@
     /* ══ INPUT AREA ══ */
     .ch-input-zone {
       flex-shrink: 0;
-      padding: 12px 24px 20px;
+      padding: 12px 24px max(20px, env(safe-area-inset-bottom, 0px));
       background: var(--ch-bg);
       border-top: 1px solid var(--ch-border);
     }
@@ -380,10 +382,20 @@
     }
 
     /* ── Responsive ── */
+    @media (max-width: 900px) {
+      /* Clear the hamburger toggle (44px height + 16px top + 16px margin = 76px) */
+      .ch-welcome { padding-top: calc(env(safe-area-inset-top, 0px) + 76px); }
+      .ch-msgs { padding-top: calc(env(safe-area-inset-top, 0px) + 76px); }
+    }
     @media (max-width: 640px) {
       .prompt-grid { grid-template-columns: 1fr; }
+      .prompt-card { padding: 14px 16px; }
       .msg-bubble { max-width: 92%; }
-      .ch-msgs, .ch-input-zone { padding-left: 16px; padding-right: 16px; }
+      .ch-msgs { padding-left: 16px; padding-right: 16px; }
+      .ch-input-zone { padding-left: 16px; padding-right: 16px; }
+      /* Prevent iOS auto-zoom on input focus */
+      #ch-input { font-size: 16px; }
+      .ch-greeting { font-size: clamp(20px, 6vw, 28px); }
     }
   </style>
 </head>
