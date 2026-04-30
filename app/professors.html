@@ -331,10 +331,13 @@
     @media (max-width: 900px) {
       .topbar, .hero, .wrapper, .disclaimer, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
     }
+    @media (max-width: 900px) {
+      .wrapper { padding: 0 1.5rem; }
+    }
     @media (max-width: 760px) {
       .topbar { padding-top: calc(env(safe-area-inset-top, 0px) + 0.9rem); align-items: flex-start; gap: 1rem; }
       .topbar-left, .topbar-right { width: 100%; flex-wrap: wrap; }
-      .hero { padding: 4rem 1.5rem 2.8rem; }
+      .hero { padding: calc(env(safe-area-inset-top, 0px) + 76px) 1.5rem 2.8rem; }
       .hero-title { font-size: clamp(2.2rem, 10vw, 3.6rem); }
       .disclaimer { margin: 0 1.5rem; align-items: flex-start; }
       .course-block-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
@@ -347,6 +350,7 @@
     }
     @media (max-width: 520px) {
       .wrapper, .topbar, .hero, .disclaimer, footer { padding-left: 1rem !important; padding-right: 1rem !important; }
+      .hero { padding-top: calc(env(safe-area-inset-top, 0px) + 72px) !important; }
       .hero-bg-text { display: none; }
       .prof-avatar { width: 48px !important; height: 48px !important; }
       .prof-name { font-size: 1.8rem !important; line-height: 1.1 !important; }

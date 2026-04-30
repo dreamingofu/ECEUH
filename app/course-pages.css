@@ -45,7 +45,7 @@ body.course-ui {
 .course-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: calc(env(safe-area-inset-top, 0px) + 44px) 32px calc(env(safe-area-inset-bottom, 0px) + 72px);
+  padding: calc(env(safe-area-inset-top, 0px) + 76px) 32px calc(env(safe-area-inset-bottom, 0px) + 72px);
 }
 
 .course-back {
