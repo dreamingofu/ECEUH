@@ -319,9 +319,12 @@
 
     /* ── ANIMATIONS ── */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    /* .reveal: never hide content. Only animate the entry transform when .visible
+       is added by the IntersectionObserver. If the observer never fires (Safari
+       edge cases, prefers-reduced-motion, etc.), content remains visible. */
+    .reveal { opacity: 1; transition: transform 0.65s ease; }
     .reveal.d1 { transition-delay: 0.1s; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.visible { transform: translateY(0); }
 
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
@@ -713,7 +716,7 @@
   </div>
 
   <div class="wrapper">
-    <section class="section reveal" id="professors">
+    <section class="section" id="professors">
       <div class="sec-header">
         <div class="sec-line"></div>
         <span class="sec-tag" id="course-count">-- courses tracked</span>

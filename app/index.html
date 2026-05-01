@@ -804,9 +804,11 @@
       color: var(--text-faint);
     }
 
-    /* ── REVEAL ── */
-    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* ── REVEAL ──
+       Never hide content when JS / IntersectionObserver isn't available.
+       Only animate the small upward translate when .visible is added. */
+    .reveal { opacity: 1; transition: transform .6s ease; }
+    .reveal.visible { transform: translateY(0); }
 
     /* ── MOBILE SIDEBAR TOGGLE ── */
     .menu-btn { display: none; }
