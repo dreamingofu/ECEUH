@@ -878,6 +878,8 @@
     }
   </style>
   <script src="professors-data.js"></script>
+  <script src="courses-data.js"></script>
+  <script src="course-files-data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="auth.js" defer></script>
 </head>
@@ -1099,32 +1101,71 @@
       }
     });
 
+    // Static, non-course entries only. Course / Topics / Files / Links / File
+    // entries are appended right below from the shared courses-data.js and
+    // course-files-data.js, so adding a course or a file there flows here.
     const SEARCH_INDEX = [
-      { type: 'Course', title: 'Digital Logic Design', desc: 'Course hub for topics, file library, and external resources.', href: 'dld.html', meta: 'ECE-3441', keywords: ['dld', 'digital logic', 'logic design', 'boolean algebra', 'fsm'] },
-      { type: 'Course', title: 'Circuits 2', desc: 'Course hub for phasors, RLC work, files, and references.', href: 'circuits2.html', meta: 'ECE-2202', keywords: ['circuits', 'phasors', 'rlc', 'bode', 'laplace'] },
-      { type: 'Course', title: 'Programming with C', desc: 'Course hub for pointers, memory, file library, and references.', href: 'cprog.html', meta: 'ECE-3331', keywords: ['c', 'programming', 'pointers', 'memory', 'algorithms'] },
-      { type: 'Reference', title: 'Professor Ratings', desc: 'Faculty ratings and professor reference pages.', href: 'professors.html', meta: 'Faculty', keywords: ['professors', 'faculty', 'ratings', 'rmp'] },
-      { type: 'Topics', title: 'DLD Topics', desc: 'Boolean algebra, logic gates, K-maps, sequential logic, and FSMs.', href: 'dld-topics.html', meta: 'Unit map', keywords: ['dld topics', 'kmap', 'logic gates', 'sequential'] },
-      { type: 'Files', title: 'DLD File Library', desc: 'Bucket-backed classwork, review packets, and reference docs.', href: 'dld-resources.html', meta: 'R2 files', keywords: ['dld files', 'cw1', 'cw2', 'cw3', 'cw4', 'cw5'] },
-      { type: 'Links', title: 'DLD External Resources', desc: 'NandGame, Logic.ly, MIT OCW, and other DLD references.', href: 'dld-links.html', meta: 'External', keywords: ['nandgame', 'logic.ly', 'mit ocw'] },
-      { type: 'Topics', title: 'Circuits 2 Topics', desc: 'Sinusoidal steady-state, impedance, AC power, filters, and Laplace.', href: 'circuits2-topics.html', meta: 'Unit map', keywords: ['circuits topics', 'steady-state', 'ac power', 'filters'] },
-      { type: 'Files', title: 'Circuits 2 File Library', desc: 'Syllabus, homework solutions, review packets, and quiz files.', href: 'circuits2-files.html', meta: 'R2 files', keywords: ['syllabus', 'homework 4', 'quiz 1', 'quiz 2 solution', 'exam 2 formula', 'review problems'] },
-      { type: 'Links', title: 'Circuits 2 External Resources', desc: 'Circuit simulators and study references for AC analysis.', href: 'circuits2-links.html', meta: 'External', keywords: ['falstad', 'ltspice', 'all about circuits', 'khan academy'] },
-      { type: 'Topics', title: 'C Programming Topics', desc: 'Fundamentals, pointers, arrays, memory, structs, file I/O, and algorithms.', href: 'cprog-topics.html', meta: 'Unit map', keywords: ['c topics', 'pointers', 'arrays', 'file io', 'algorithms'] },
-      { type: 'Files', title: 'C Programming File Library', desc: 'Dedicated course file library for quizzes, exams, and reference sheets.', href: 'cprog-files.html', meta: 'Course files', keywords: ['c files', 'quiz', 'exam', 'reference'] },
-      { type: 'Links', title: 'C Programming External Resources', desc: 'cppreference, Valgrind, GCC docs, and debugging tools.', href: 'cprog-links.html', meta: 'External', keywords: ['cppreference', 'valgrind', 'gcc', 'compiler explorer'] },
-      { type: 'File', title: 'ECE3441 SP26 CW1', desc: 'Digital Logic Design classwork PDF from the live Cloudflare R2 bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW1.pdf', meta: 'PDF · R2', keywords: ['cw1', 'ece3441', 'dld pdf'] },
-      { type: 'File', title: 'ECE3441 SP26 CW2', desc: 'Editable DLD classwork DOCX from the live Cloudflare R2 bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW2.docx', meta: 'DOCX · R2', keywords: ['cw2', 'docx', 'ece3441'] },
-      { type: 'File', title: 'ECE3441 SP26 CW3', desc: 'DLD classwork PDF surfaced from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW3-1.pdf', meta: 'PDF · R2', keywords: ['cw3', 'ece3441'] },
-      { type: 'File', title: 'ECE3441 SP26 CW4', desc: 'DLD review-style PDF from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW4-1.pdf', meta: 'PDF · R2', keywords: ['cw4', 'review'] },
-      { type: 'File', title: 'ECE3441 SP26 CW5', desc: 'DLD practice PDF linked from the live bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/dld/ECE3441_SP26_CW5.pdf', meta: 'PDF · R2', keywords: ['cw5', 'practice'] },
-      { type: 'File', title: 'Circuits 2 Syllabus', desc: 'Spring 2026 ECE2202 syllabus file from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Syllabus-S26-ECE2202.pdf', meta: 'PDF · R2', keywords: ['circuits syllabus', 'ece2202', 'spring 2026'] },
-      { type: 'File', title: 'Homework 4 Solutions', desc: 'Circuits 2 homework solutions file from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Homework%204%20solutions.pdf', meta: 'PDF · R2', keywords: ['homework 4', 'circuits solutions'] },
-      { type: 'File', title: 'Circuits 2 Quiz 1 Packet', desc: 'First Circuits 2 quiz packet from the bucket.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Circuits%202_quiz1%201.pdf', meta: 'PDF · R2', keywords: ['quiz 1', 'circuits 2'] },
-      { type: 'File', title: 'Exam 2 Review Problems', desc: 'Tagged review packet for Circuits 2 exam preparation.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Exam%202%20Review%20Problems%20-%20Tagged.pdf', meta: 'PDF · R2', keywords: ['exam 2', 'review problems'] },
-      { type: 'File', title: 'Exam 2 Formula Sheet', desc: 'Editable DOCX formula sheet for Circuits 2.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx', meta: 'DOCX · R2', keywords: ['formula sheet', 'docx', 'exam 2'] },
-      { type: 'File', title: 'Quiz 2 Solution', desc: 'Solution PDF for the second Circuits 2 quiz.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf', meta: 'PDF · R2', keywords: ['quiz 2 solution', 'ece2202'] }
+      { type: 'Reference', title: 'Professor Ratings', desc: 'Faculty ratings and professor reference pages.', href: 'professors.html', meta: 'Faculty', keywords: ['professors', 'faculty', 'ratings', 'rmp'] }
     ];
+
+    // Auto-generate Course/Topics/Files/Links + per-file entries for every
+    // live course in the shared catalog.
+    (function () {
+      if (!window.ECEUH_COURSE_LIST) return;
+      const FILES_BY_SLUG = window.ECEUH_COURSE_FILES || {};
+
+      window.ECEUH_COURSE_LIST.forEach(function (course) {
+        if (!course.isLive || !course.hub) return;
+
+        // Hub
+        SEARCH_INDEX.push({
+          type: 'Course',
+          title: course.hub.searchTitle || course.title,
+          desc:  course.hub.searchDesc,
+          href:  course.hub.href,
+          meta:  course.code,
+          keywords: (course.hub.keywords || []).concat([course.slug, course.code.toLowerCase().replace(/\s+/g, '')])
+        });
+
+        const sections = course.sections || {};
+        const metaByKind = { topics: 'Unit map', files: 'R2 files', links: 'External' };
+        ['topics', 'files', 'links'].forEach(function (kind) {
+          const s = sections[kind];
+          if (!s) return;
+          const typeLabel = kind.charAt(0).toUpperCase() + kind.slice(1);
+          SEARCH_INDEX.push({
+            type: typeLabel,
+            title: s.title,
+            desc:  s.desc,
+            href:  s.href,
+            meta:  metaByKind[kind],
+            keywords: (s.keywords || []).concat([course.slug, course.code.toLowerCase().replace(/\s+/g, '')])
+          });
+        });
+
+        // Per-file entries
+        const files = FILES_BY_SLUG[course.slug] || [];
+        files.forEach(function (f) {
+          const v = (f.versions && f.versions[0]) || {};
+          const url = v.url || '';
+          const ext = (url.split('.').pop() || '').toUpperCase();
+          SEARCH_INDEX.push({
+            type:  'File',
+            title: f.title + ' — ' + course.code,
+            desc:  f.desc,
+            href:  url,
+            meta:  (ext ? ext + ' · ' : '') + 'R2',
+            keywords: [
+              f.title.toLowerCase(),
+              f.type,
+              f.label ? f.label.toLowerCase() : '',
+              course.slug,
+              course.code.toLowerCase().replace(/\s+/g, '')
+            ].filter(Boolean)
+          });
+        });
+      });
+    })();
 
     // Auto-generate professor search entries from the shared professors-data.js.
     // Adding a professor or course to professors-data.js automatically includes it here.
@@ -1282,24 +1323,17 @@
     document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
 
     /* ── Active Coursework: interactive picker + progress rollup ──────── */
-    // Added ALL 15 courses so they sync with the professors list
-    const COURSES = {
-      engi1100:  { title: 'Intro to Engineering',      desc: 'ENGI 1100 · Year 1 fundamentals.', units: 4, href: '#' },
-      engi1331:  { title: 'Computing for Engineers',   desc: 'ENGI 1331 · MATLAB and problem solving.', units: 6, href: '#' },
-      engi2304:  { title: 'Technical Communications',  desc: 'ENGI 2304 · Engineering writing and reports.', units: 4, href: '#' },
-      ece2201:   { title: 'Circuit Analysis I',        desc: 'ECE 2201 · DC circuits, KVL, KCL, Thevenin.', units: 8, href: '#' },
-      circuits2: { title: 'Circuit Analysis II',       desc: 'ECE 2202 · AC analysis, phasors, and RLC.', units: 8, href: 'circuits2.html' },
-      ece2100:   { title: 'Circuit Analysis Lab',      desc: 'ECE 2100 · Practical circuit building and testing.', units: 2, href: '#' },
-      inde2333:  { title: 'Engineering Statistics',    desc: 'INDE 2333 · Probability and data analysis.', units: 6, href: '#' },
-      cprog:     { title: 'Programming Apps in ECE',   desc: 'ECE 3331 · Pointers, memory, structs, algorithms.', units: 8, href: 'cprog.html' },
-      dld:       { title: 'Digital Logic Design',      desc: 'ECE 3441 · K-maps, FSMs, and sequential logic.', units: 6, href: 'dld.html' },
-      ece3155:   { title: 'Electronics Lab',           desc: 'ECE 3155 · Diode and BJT circuit labs.', units: 2, href: '#' },
-      ece3355:   { title: 'Electronics',               desc: 'ECE 3355 · Diodes, BJTs, MOSFETs, and amps.', units: 6, href: '#' },
-      ece3337:   { title: 'Signals & Systems',         desc: 'ECE 3337 · Fourier, Laplace, and Z-transforms.', units: 6, href: '#' },
-      ece3317:   { title: 'Applied EM Waves',          desc: 'ECE 3317 · Maxwells equations and transmission lines.', units: 6, href: '#' },
-      ece3436:   { title: 'Microprocessor Systems',    desc: 'ECE 3436 · Assembly, memory, and microcontrollers.', units: 8, href: '#' },
-      ece3340:   { title: 'Numerical Methods',         desc: 'ECE 3340 · Algorithms for solving engineering problems.', units: 6, href: '#' }
-    };
+    // Built from the shared courses-data.js so the picker and the archive
+    // grid stay in sync. Adding a course there shows up here automatically.
+    const COURSES = window.ECEUH_COURSE_LIST.reduce((acc, c) => {
+      acc[c.slug] = {
+        title: c.title,
+        desc:  c.desc,
+        units: c.units,
+        href:  c.isLive && c.hub ? c.hub.href : '#'
+      };
+      return acc;
+    }, {});
     
     const ACTIVE_KEY = 'eceuh:active-courses';
     const PROGRESS_KEY = 'eceuh:progress';

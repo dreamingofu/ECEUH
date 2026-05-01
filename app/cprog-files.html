@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="theme.css" />
   <link rel="stylesheet" href="course-pages.css" />
+  <script src="course-files-data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js" defer></script>
   <script src="course-pages.js" defer></script>
@@ -37,7 +38,7 @@
             <div>
               <div class="section-kicker">01 // Practice Files</div>
               <h2 class="section-title">Course Downloads</h2>
-              <p class="section-subtitle">Once files land in the bucket, drop them into the FILE_DATA array at the bottom of this page and they show up here automatically.</p>
+              <p class="section-subtitle">Once files land in the bucket, add them to <code>ECEUH_COURSE_FILES.cprog</code> in <code>course-files-data.js</code> and they show up here automatically.</p>
             </div>
           </div>
 
@@ -55,18 +56,9 @@
   </main>
 
   <script>
-    /* When real files land in the bucket, replace the BUCKET base + entries below.
-       Each entry just needs { type, label, title, desc, date, versions: [{label, url}] }. */
-    const BUCKET = 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/cprog';
-
-    window.FILE_DATA = [
-      // Placeholder. Drop a real entry like this once a file is uploaded:
-      // {
-      //   type: 'quiz', label: 'Quiz',
-      //   title: 'Quiz 1', desc: 'C fundamentals & pointers.', date: 'S26',
-      //   versions: [{ label: 'PDF', url: BUCKET + '/quiz1.pdf' }]
-      // },
-    ];
+    // FILE_DATA comes from the shared course-files-data.js — drop new files
+    // into ECEUH_COURSE_FILES.cprog there and they appear here automatically.
+    window.FILE_DATA = window.ECEUH_COURSE_FILES.cprog;
 
     // Empty-state when no files yet.
     document.addEventListener('DOMContentLoaded', () => {
