@@ -877,6 +877,7 @@
       .picker .options { max-height: 36svh; }
     }
   </style>
+  <script src="professors-data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="auth.js" defer></script>
 </head>
@@ -1103,10 +1104,6 @@
       { type: 'Course', title: 'Circuits 2', desc: 'Course hub for phasors, RLC work, files, and references.', href: 'circuits2.html', meta: 'ECE-2202', keywords: ['circuits', 'phasors', 'rlc', 'bode', 'laplace'] },
       { type: 'Course', title: 'Programming with C', desc: 'Course hub for pointers, memory, file library, and references.', href: 'cprog.html', meta: 'ECE-3331', keywords: ['c', 'programming', 'pointers', 'memory', 'algorithms'] },
       { type: 'Reference', title: 'Professor Ratings', desc: 'Faculty ratings and professor reference pages.', href: 'professors.html', meta: 'Faculty', keywords: ['professors', 'faculty', 'ratings', 'rmp'] },
-      { type: 'Professor', title: 'Dr. Xiaonan Shan', desc: 'Circuits 2 (ECE 2202) — 4.5★ overall, 3.5 difficulty, 100% would take again.', href: 'professors.html#circuits2', meta: 'ECE 2202', keywords: ['shan', 'xiaonan', 'circuits 2', 'ece 2202', 'professor'] },
-      { type: 'Professor', title: 'Dr. Deepa Ramachandran', desc: 'Digital Logic Design (ECE 3441) — 4.5★ overall, 2.8 difficulty, 100% would take again.', href: 'professors.html#dld', meta: 'ECE 3441 · ECE 2202', keywords: ['ramachandran', 'deepa', 'dld', 'ece 3441', 'circuits 2', 'professor'] },
-      { type: 'Professor', title: 'Dr. Biresh Kumar Joardar', desc: 'Programming with C (ECE 3331) — 5.0★ overall, 2.0 difficulty, 100% would take again.', href: 'professors.html#cprog', meta: 'ECE 3331', keywords: ['joardar', 'biresh', 'cprog', 'c programming', 'ece 3331', 'professor'] },
-      { type: 'Professor', title: 'Dr. Bhavin R. Sheth', desc: 'Digital Logic Design (ECE 3441) & Programming with C (ECE 3331).', href: 'professors.html#dld', meta: 'ECE 3441 · ECE 3331', keywords: ['sheth', 'bhavin', 'dld', 'cprog', 'ece 3441', 'ece 3331', 'professor'] },
       { type: 'Topics', title: 'DLD Topics', desc: 'Boolean algebra, logic gates, K-maps, sequential logic, and FSMs.', href: 'dld-topics.html', meta: 'Unit map', keywords: ['dld topics', 'kmap', 'logic gates', 'sequential'] },
       { type: 'Files', title: 'DLD File Library', desc: 'Bucket-backed classwork, review packets, and reference docs.', href: 'dld-resources.html', meta: 'R2 files', keywords: ['dld files', 'cw1', 'cw2', 'cw3', 'cw4', 'cw5'] },
       { type: 'Links', title: 'DLD External Resources', desc: 'NandGame, Logic.ly, MIT OCW, and other DLD references.', href: 'dld-links.html', meta: 'External', keywords: ['nandgame', 'logic.ly', 'mit ocw'] },
@@ -1128,6 +1125,53 @@
       { type: 'File', title: 'Exam 2 Formula Sheet', desc: 'Editable DOCX formula sheet for Circuits 2.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/Formula%20Sheet%20Exam%202.docx', meta: 'DOCX · R2', keywords: ['formula sheet', 'docx', 'exam 2'] },
       { type: 'File', title: 'Quiz 2 Solution', desc: 'Solution PDF for the second Circuits 2 quiz.', href: 'https://pub-8a57ce7900574340969d1b3eb5bcdc1e.r2.dev/circuits%20II/ECE2202_Quiz2_spring2026_solution.pdf', meta: 'PDF · R2', keywords: ['quiz 2 solution', 'ece2202'] }
     ];
+
+    // Auto-generate professor search entries from the shared professors-data.js.
+    // Adding a professor or course to professors-data.js automatically includes it here.
+    (function() {
+      if (!window.ECEUH_COURSES) return;
+      const seenNames = new Set();
+      window.ECEUH_COURSES.forEach(function(course) {
+        course.profs.forEach(function(prof) {
+          // Skip unnamed placeholder entries
+          if (prof.name === 'Prof. Name' || prof.shortName === 'TBD') return;
+          if (seenNames.has(prof.name)) return;
+          seenNames.add(prof.name);
+
+          // All courses this professor teaches
+          const allCourses = window.ECEUH_COURSES.filter(function(c) {
+            return c.profs.some(function(p) { return p.name === prof.name; });
+          });
+          const firstCourse = allCourses[0];
+          const courseCodes = allCourses.map(function(c) { return c.code; }).join(' · ');
+
+          // Desc: show ratings if available, otherwise list courses
+          var desc;
+          if (prof.overall !== null) {
+            desc = firstCourse.title + ' (' + firstCourse.code + ') — ' +
+                   prof.overall + '★ overall, ' + prof.difficulty + ' difficulty, ' +
+                   prof.wouldTake + '% would take again.';
+          } else {
+            desc = allCourses.map(function(c) { return c.title + ' (' + c.code + ')'; }).join(' & ');
+          }
+
+          // Keywords: all name parts + all course codes/titles/ids
+          var nameParts = prof.name.toLowerCase().split(/\s+/).filter(function(p) { return p.length > 1; });
+          var courseKeywords = allCourses.reduce(function(acc, c) {
+            return acc.concat([c.code.toLowerCase(), c.title.toLowerCase(), c.id]);
+          }, []);
+
+          SEARCH_INDEX.push({
+            type: 'Professor',
+            title: prof.name,
+            desc: desc,
+            href: 'professors.html#' + firstCourse.id,
+            meta: courseCodes,
+            keywords: nameParts.concat(courseKeywords).concat(['professor', 'faculty'])
+          });
+        });
+      });
+    })();
 
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
