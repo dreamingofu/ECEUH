@@ -246,7 +246,6 @@ body.eceuh-shell { padding-left: 256px !important; padding-top: 0 !important; }
 html.light .eceuh-toggle { background: rgba(244, 236, 234, 0.92); color: #1A1A2E; }
 .eceuh-toggle:hover { background: rgba(255, 99, 99, 0.2); }
 body.eceuh-collapsible .eceuh-toggle { display: inline-flex; }
-body.eceuh-shell:not(.eceuh-collapsible) .eceuh-toggle { display: none; }
 @media (max-width: 900px) {
   body.eceuh-shell .eceuh-toggle { display: inline-flex; }
   .eceuh-sidebar {
